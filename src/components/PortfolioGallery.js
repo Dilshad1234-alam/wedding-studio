@@ -1,0 +1,1 @@
+export default function PortfolioGallery() { return <div>PortfolioGallery</div>; }

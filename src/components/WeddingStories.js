@@ -1,0 +1,1 @@
+export default function WeddingStories() { return <div>WeddingStories</div>; }

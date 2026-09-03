@@ -1,0 +1,1 @@
+export default function ShootsPage() { return <div>Shoots</div>; }

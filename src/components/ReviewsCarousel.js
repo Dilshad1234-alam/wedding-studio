@@ -1,0 +1,1 @@
+export default function ReviewsCarousel() { return <div>Reviews</div>; }

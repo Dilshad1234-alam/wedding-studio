@@ -1,1 +1,0 @@
-export default function WhatsAppModal() { return <div>WhatsApp Modal</div>; }

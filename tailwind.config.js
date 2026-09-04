@@ -7,6 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['var(--font-cormorant)', 'Georgia', 'serif'],
+        sans: ['var(--font-montserrat)', 'sans-serif'],
+      },
       colors: {
         champagne: {
           bg: '#F7F4EB',
@@ -14,9 +18,9 @@ module.exports = {
           border: '#DFD9CB',
         },
         bronze: {
-          400: '#C7A263',
+          400: '#FAF4E8',
           500: '#B38F4D',
-          600: '#9E7738',
+          600: '#B38F4D',
         },
         espresso: {
           DEFAULT: '#1E1E1E',

@@ -64,22 +64,25 @@ export default function ReviewsSection() {
   };
 
   return (
-    <section className="py-20 bg-champagne-bg overflow-hidden relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 md:py-32 bg-[#212639] overflow-hidden relative">
+      {/* Background Radial Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#B38F4D]/5 blur-[150px] rounded-full pointer-events-none" />
+      
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Center Header */}
-        <div className="flex flex-col items-center justify-center text-center mb-16 space-y-4">
-          <div className="flex items-center space-x-2 mb-2">
+        <div className="flex flex-col items-center justify-center text-center mb-24 space-y-4">
+          <div className="flex items-center space-x-2 mb-4">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} size={28} className="fill-bronze-500 text-bronze-500 drop-shadow-sm" />
+              <Star key={i} size={28} className="fill-[#B38F4D] text-[#B38F4D] drop-shadow-[0_0_8px_rgba(179,143,77,0.4)]" />
             ))}
           </div>
-          <h2 className="text-3xl md:text-5xl font-light tracking-tight text-espresso font-serif">
-            5 Stars <span className="italic">On Google</span>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-white font-serif">
+            5 Stars <span className="text-[#B38F4D] italic">On Google</span>
           </h2>
-          <div className="inline-flex items-center space-x-2 bg-white px-5 py-2 rounded-full shadow-sm border border-champagne-border mt-4">
+          <div className="inline-flex items-center space-x-2 bg-white/[0.02] backdrop-blur-md px-6 py-2.5 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.2)] border border-white/5 mt-6">
             <GoogleIcon size={20} />
-            <span className="text-sm font-semibold text-espresso-light uppercase tracking-wider">Verified Reviews</span>
+            <span className="text-xs font-semibold text-white uppercase tracking-widest">Verified Reviews</span>
           </div>
         </div>
 
@@ -88,14 +91,14 @@ export default function ReviewsSection() {
           {/* Navigation Buttons */}
           <button 
             onClick={() => scroll('left')}
-            className="absolute -left-5 md:-left-12 top-1/2 -translate-y-1/2 z-10 bg-white border border-champagne-border hover:border-bronze-500 text-espresso hover:text-bronze-600 rounded-full p-3 shadow-lg opacity-0 md:group-hover:opacity-100 transition-all focus:outline-none hidden md:flex items-center justify-center"
+            className="absolute -left-5 md:-left-12 top-1/2 -translate-y-1/2 z-10 bg-[#2B3147] border border-white/10 hover:border-bronze-500 text-white hover:text-bronze-600 rounded-full p-3 shadow-lg opacity-0 md:group-hover:opacity-100 transition-all focus:outline-none hidden md:flex items-center justify-center"
           >
             <ChevronLeft size={24} />
           </button>
           
           <button 
             onClick={() => scroll('right')}
-            className="absolute -right-5 md:-right-12 top-1/2 -translate-y-1/2 z-10 bg-white border border-champagne-border hover:border-bronze-500 text-espresso hover:text-bronze-600 rounded-full p-3 shadow-lg opacity-0 md:group-hover:opacity-100 transition-all focus:outline-none hidden md:flex items-center justify-center"
+            className="absolute -right-5 md:-right-12 top-1/2 -translate-y-1/2 z-10 bg-[#2B3147] border border-white/10 hover:border-bronze-500 text-white hover:text-bronze-600 rounded-full p-3 shadow-lg opacity-0 md:group-hover:opacity-100 transition-all focus:outline-none hidden md:flex items-center justify-center"
           >
             <ChevronRight size={24} />
           </button>
@@ -112,31 +115,31 @@ export default function ReviewsSection() {
                 key={review.id} 
                 className="snap-center flex-none w-[90vw] md:w-[calc(50%-12px)] h-full"
               >
-                <div className="h-full flex flex-col bg-white border border-champagne-border rounded-2xl p-8 hover:border-bronze-500/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 shadow-md">
+                <div className="h-full flex flex-col bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-3xl p-10 hover:bg-white/[0.04] hover:border-[#B38F4D]/30 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:-translate-y-1 transition-all duration-500">
                   
                   {/* Top Stars & Google Icon */}
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center space-x-1">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={16} className="fill-bronze-500 text-bronze-500" />
+                        <Star key={i} size={16} className="fill-[#B38F4D] text-[#B38F4D]" />
                       ))}
                     </div>
                     <GoogleIcon size={20} />
                   </div>
 
                   {/* Review Text */}
-                  <p className="text-espresso font-light leading-relaxed text-base italic flex-grow mb-8">
+                  <p className="text-gray-300 font-light leading-relaxed text-base italic flex-grow mb-10">
                     "{review.content}"
                   </p>
                   
                   {/* Bottom Avatar & Info */}
-                  <div className="flex items-center space-x-4 border-t border-champagne-border/60 pt-6">
-                    <div className="w-12 h-12 rounded-full bg-champagne-card border border-champagne-border flex items-center justify-center text-bronze-600 font-serif text-xl shadow-sm">
+                  <div className="flex items-center space-x-4 border-t border-white/5 pt-6 mt-auto">
+                    <div className="w-12 h-12 rounded-full bg-[#B38F4D]/10 border border-[#B38F4D]/20 flex items-center justify-center text-[#B38F4D] font-serif text-xl shadow-lg shadow-black/20">
                       {review.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="text-espresso font-medium text-base tracking-wide">{review.name}</h4>
-                      <p className="text-xs text-espresso-light mt-0.5">{review.date}</p>
+                      <h4 className="text-white font-serif text-lg tracking-wide">{review.name}</h4>
+                      <p className="text-[10px] font-semibold text-[#B38F4D] uppercase tracking-widest mt-1">{review.date}</p>
                     </div>
                   </div>
 
@@ -147,8 +150,8 @@ export default function ReviewsSection() {
         </div>
 
         {/* Pagination Dots */}
-        <div className="flex justify-center mt-6">
-          <div className="flex space-x-2 bg-white/50 px-3 py-2 rounded-full border border-champagne-border/50">
+        <div className="flex justify-center mt-12">
+          <div className="flex space-x-2 bg-white/[0.02] backdrop-blur-md px-4 py-3 rounded-full border border-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
             {[...Array(Math.ceil(REVIEWS.length / 2))].map((_, i) => (
               <button 
                 key={i} 
@@ -157,7 +160,7 @@ export default function ReviewsSection() {
                   scrollRef.current.scrollTo({ left: width * i, behavior: 'smooth' });
                   setActiveIndex(i);
                 }}
-                className={`h-2 rounded-full transition-all duration-300 ${activeIndex === i ? 'w-8 bg-bronze-500' : 'w-2 bg-champagne-border hover:bg-bronze-400'}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${activeIndex === i ? 'w-8 bg-[#B38F4D]' : 'w-2 bg-white/20 hover:bg-white/40'}`}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}

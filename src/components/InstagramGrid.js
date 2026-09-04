@@ -19,33 +19,37 @@ export default function InstagramGrid() {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-champagne-bg px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-24 md:py-32 bg-[#212639] overflow-hidden relative">
+      <div className="max-w-screen-2xl mx-auto px-4">
         
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#B35471] tracking-tight drop-shadow-sm">
-            A bit of Insta...
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-normal text-white tracking-tight">
+            Follow <span className="text-[#B38F4D] italic">@weddingpur</span>
           </h2>
+          <div className="w-12 h-[1px] bg-[#B38F4D] mx-auto opacity-80 mt-6" />
         </div>
 
         {/* 6-Photo Masonry Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-1 mb-20">
           {images.map((src, index) => (
             <a 
               key={index}
-              href="https://instagram.com"
+              href="https://www.instagram.com/weddingpur/"
               target="_blank"
               rel="noopener noreferrer"
-              className="relative aspect-square w-full bg-champagne-card overflow-hidden group cursor-pointer"
+              className="relative aspect-square w-full overflow-hidden group cursor-pointer"
             >
               <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] ease-out group-hover:scale-110"
                 style={{ backgroundImage: `url('${src}')` }}
               />
-              {/* Subtle Hover Overlay */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform scale-75 group-hover:scale-100 text-white drop-shadow-lg">
+              {/* Subtle Dark Vignette */}
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/60 transition-colors duration-700 pointer-events-none" />
+              
+              {/* Overlay with Icon */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                <div className="transform translate-y-4 group-hover:translate-y-0 transition-all duration-700 text-[#B38F4D]">
                   <InstaIcon size={40} />
                 </div>
               </div>
@@ -55,17 +59,17 @@ export default function InstagramGrid() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <button className="w-full sm:w-auto px-10 py-3.5 border-2 border-espresso text-espresso rounded-full font-medium uppercase tracking-widest text-xs hover:bg-espresso hover:text-white transition-all duration-300">
+          <button className="w-full sm:w-auto px-10 py-3.5 border border-white/20 text-white rounded-full font-semibold uppercase tracking-[0.2em] text-[10px] hover:bg-white/[0.05] hover:border-white/40 transition-all duration-500 backdrop-blur-md">
             Load More
           </button>
           
           <a 
-            href="https://instagram.com"
+            href="https://www.instagram.com/weddingpur/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-3.5 bg-bronze-600 border-2 border-bronze-600 text-white rounded-full font-medium uppercase tracking-widest text-xs hover:bg-bronze-500 hover:border-bronze-500 transition-all duration-300 shadow-md shadow-bronze-600/20"
+            className="w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-3.5 bg-[#B38F4D]/10 border border-[#B38F4D]/50 text-[#B38F4D] rounded-full font-semibold uppercase tracking-[0.2em] text-[10px] hover:bg-[#B38F4D] hover:text-white hover:border-[#B38F4D] transition-all duration-500 shadow-[0_4px_20px_rgba(179,143,77,0.15)] hover:shadow-[0_8px_32px_rgba(179,143,77,0.3)] backdrop-blur-md"
           >
-            <InstaIcon size={18} />
+            <InstaIcon size={16} />
             Follow on Instagram
           </a>
         </div>

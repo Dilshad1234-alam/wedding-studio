@@ -37,58 +37,53 @@ const WhatsAppIcon = ({ size = 32 }) => (
 export default function Footer() {
   return (
     <>
-      <footer className="bg-[#0D0D0D] text-white pt-24 pb-12 border-t border-champagne-border/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+      {/* Footer Container */}
+      <footer className="bg-[#0B0D13] text-[#EDEAE4] py-12 px-6 sm:px-12 border-t border-white/10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           
-          {/* Top Column / Informations */}
-          <div className="mb-16">
-            <h4 className="text-xl font-serif text-white mb-8 tracking-wide">Informations</h4>
-            <ul className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-x-12 gap-y-6">
-              <li>
-                <Link href="#privacy" className="text-gray-400 hover:text-bronze-400 font-light tracking-wide transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="#terms" className="text-gray-400 hover:text-bronze-400 font-light tracking-wide transition-colors">
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link href="/" className="text-gray-400 hover:text-bronze-400 font-light tracking-wide transition-colors">
-                  LumenWeddings.com
-                </Link>
-              </li>
-              <li>
-                <Link href="#contact" className="text-gray-400 hover:text-bronze-400 font-light tracking-wide transition-colors">
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
+          {/* Left Side: Informations Block */}
+          <div>
+            <h4 className="font-serif text-lg tracking-wider text-white font-medium mb-5 pb-2 border-b border-white/20 inline-block">
+              Informations
+            </h4>
+            <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-xs sm:text-sm text-gray-300">
+              {/* Left Col */}
+              <div className="flex flex-col gap-3">
+                <Link href="/privacy-policy" className="hover:text-[#B38F4D] transition">Privacy Policy</Link>
+                <Link href="/terms" className="hover:text-[#B38F4D] transition">Terms & Conditions</Link>
+              </div>
+              {/* Right Col */}
+              <div className="flex flex-col gap-3">
+                <a href="https://weddingpurindia.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#B38F4D] transition">
+                  weddingpurindia.com
+                </a>
+                <Link href="/contact" className="hover:text-[#B38F4D] transition">Contact Us</Link>
+              </div>
+            </div>
           </div>
 
-          {/* Social Media Icons Row */}
-          <div className="flex justify-center space-x-5 mb-12">
-            {[
-              { icon: <InstagramIcon />, label: "Instagram" },
-              { icon: <YoutubeIcon />, label: "YouTube" },
-              { icon: <PinterestIcon />, label: "Pinterest" },
-              { icon: <FacebookIcon />, label: "Facebook" }
-            ].map((social, idx) => (
-              <a 
-                key={idx}
-                href="#"
-                aria-label={social.label}
-                className="w-12 h-12 rounded-full border border-bronze-600 flex items-center justify-center text-bronze-500 hover:bg-bronze-600 hover:text-white transition-all duration-300 shadow-sm"
-              >
-                {social.icon}
-              </a>
-            ))}
-          </div>
-
-          {/* Copyright Line */}
-          <div className="text-gray-600 text-sm font-light tracking-wide">
-            Copyright {new Date().getFullYear()}. All rights reserved.
+          {/* Right Side: Social Badges & Copyright */}
+          <div className="flex flex-col items-start md:items-end gap-3">
+            <div className="flex space-x-3">
+              {[
+                { icon: <InstagramIcon size={18} />, label: "Instagram", href: "https://www.instagram.com/weddingpur/" },
+                { icon: <YoutubeIcon size={18} />, label: "YouTube", href: "https://www.youtube.com/@weddingpur" },
+                { icon: <PinterestIcon size={18} />, label: "Pinterest", href: "https://in.pinterest.com/weddingpur/" },
+                { icon: <FacebookIcon size={18} />, label: "Facebook", href: "https://www.facebook.com/weddingpur/" }
+              ].map((social, idx) => (
+                <a 
+                  key={idx}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="w-9 h-9 rounded-full bg-[#B38F4D] text-white flex items-center justify-center hover:bg-[#987538] transition shadow"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 tracking-wide mt-1">Copyright 2026. Weddingpur</p>
           </div>
 
         </div>

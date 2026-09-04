@@ -1,28 +1,19 @@
 import mongoose from 'mongoose';
 
-const teamMemberSchema = new mongoose.Schema({
-  name: { 
-    type: String, 
-    required: true 
+const TeamMemberSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    role: { 
+      type: String, 
+      enum: ['Lead Photographer', 'Candid Specialist', 'Cinematographer', 'Drone Operator', 'Post-Production Editor'], 
+      default: 'Lead Photographer' 
+    },
+    phone: { type: String, required: true },
+    instagram: { type: String, default: '' },
+    gear: { type: String, default: 'Sony A7IV' },
+    status: { type: String, enum: ['Available', 'On Shoot'], default: 'Available' },
   },
-  role: { 
-    type: String, 
-    enum: ['Lead Cinematographer', 'Candid Photographer', 'Traditional Photographer', 'Drone Pilot', 'Editor', 'Assistant'], 
-    required: true 
-  },
-  phone: { 
-    type: String, 
-    required: true 
-  },
-  email: { 
-    type: String 
-  },
-  status: { 
-    type: String, 
-    enum: ['Available', 'On Shoot', 'Traveling', 'Off Duty'], 
-    default: 'Available' 
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const TeamMember = mongoose.models.TeamMember || mongoose.model('TeamMember', teamMemberSchema);
-export default TeamMember;
+export default mongoose.models.TeamMember || mongoose.model('TeamMember', TeamMemberSchema);

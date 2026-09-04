@@ -40,3 +40,15 @@ export async function DELETE(req) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export async function PATCH(req) {
+  try {
+    const { id, status } = await req.json();
+    await connectMongo();
+    const updatedMember = await TeamMember.findByIdAndUpdate(id, { status }, { new: true });
+    return NextResponse.json({ success: true, member: updatedMember }, { status: 200 });
+  } catch (error) {
+    console.error('Update Member Status Error:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}

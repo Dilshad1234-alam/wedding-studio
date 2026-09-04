@@ -38,10 +38,32 @@ export default function ContactPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your inquiry! Our studio director will connect with you shortly.');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert('Thank you for your inquiry! Our studio director will connect with you shortly.');
+        setFormData({ name: '', mobile: '', email: '', service: '', date: '', location: '', budget: '' });
+      } else {
+        alert('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Failed to submit inquiry. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

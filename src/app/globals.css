@@ -2,8 +2,8 @@
 @config "../../tailwind.config.js";
 
 :root {
-  --background: #212639;
-  --foreground: #EDEAE4;
+  --background: #FAF8F5;
+  --foreground: #1E221D;
 }
 
 body {
@@ -18,8 +18,8 @@ html {
 }
 
 ::selection {
-  background-color: #B38F4D;
-  color: #ffffff;
+  background-color: #626C59;
+  color: #FAF8F5;
 }
 
 @layer base {

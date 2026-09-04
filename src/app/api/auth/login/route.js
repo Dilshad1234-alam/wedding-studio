@@ -29,20 +29,31 @@ export async function POST(req) {
     const tokenPayload = {
       userId: user._id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'client',
     };
 
     const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '1d' });
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       user: {
+        id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: user.role || 'client',
       },
       token
     }, { status: 200 });
+
+    response.cookies.set({
+      name: 'token',
+      value: token,
+      httpOnly: true,
+      path: '/',
+      maxAge: 60 * 60 * 24, // 1 day
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Login Error:', error);

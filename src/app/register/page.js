@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -14,6 +15,8 @@ export default function RegisterPage() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -55,127 +58,124 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#212639] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md bg-[#2B324B] border border-white/10 rounded-2xl shadow-2xl p-8">
+    <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center px-6 py-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
+      <div className="w-full max-w-md bg-white border border-[#E8E4DC] rounded-3xl shadow-lg p-8 sm:p-12 relative overflow-hidden">
         
-        <div className="flex justify-center mb-6">
-          <Link href="/" className="focus:outline-none">
-            <svg 
-              width="250" 
-              height="48" 
-              viewBox="0 0 250 48" 
-              fill="none" 
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-auto"
+        {/* Soft Sage Background Decor */}
+        <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-[#ECEFEA] to-transparent pointer-events-none" />
+
+        <div className="relative z-10">
+          <div className="flex justify-center mb-8">
+            <Link href="/" className="flex flex-col items-center focus:outline-none">
+              <div className="text-center font-serif">
+                <span className="text-xl sm:text-2xl font-light tracking-[0.25em] text-[#1E221D] block leading-none mb-1.5">
+                  WEDDINGPUR
+                </span>
+                <span className="text-[9px] tracking-[0.4em] text-[#626C59] uppercase font-sans leading-none block text-center">
+                  STUDIO & CINEMA
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-serif text-[#1E221D] mb-2 italic">Create an Account</h1>
+            <p className="text-[#5F6757] font-light text-sm tracking-wide">Join Weddingpur to manage your memories</p>
+          </div>
+
+          {error && (
+            <div className="mb-6 p-3 bg-red-50/50 border border-red-200 text-red-600 text-[11px] uppercase tracking-wider rounded-xl text-center font-medium">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Full Name</label>
+              <input 
+                type="text" 
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3.5 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition"
+                placeholder="John Doe"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Email Address</label>
+              <input 
+                type="email" 
+                name="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3.5 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition"
+                placeholder="hello@example.com"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Password</label>
+              <div className="relative">
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  name="password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3.5 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition pr-12"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9EA598] hover:text-[#5B6454] transition-colors focus:outline-none"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Confirm Password</label>
+              <div className="relative">
+                <input 
+                  type={showConfirmPassword ? "text" : "password"} 
+                  name="confirmPassword"
+                  required
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3.5 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition pr-12"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9EA598] hover:text-[#5B6454] transition-colors focus:outline-none"
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={loading}
+              className="w-full bg-[#5B6454] text-[#FAF8F5] font-medium tracking-[0.25em] text-[11px] uppercase rounded-full px-4 py-4 mt-8 hover:bg-[#4E5646] transition shadow-md disabled:opacity-50"
             >
-              <circle cx="20" cy="24" r="14" stroke="#B38F4D" strokeWidth="1.5" fill="none"/>
-              <circle cx="20" cy="24" r="7" stroke="#EDEAE4" strokeWidth="1.2" fill="none"/>
-              <circle cx="20" cy="24" r="2.5" fill="#B38F4D"/>
-              <text 
-                x="44" 
-                y="27" 
-                fontFamily="Playfair Display, Georgia, serif" 
-                fontSize="20" 
-                fontWeight="700" 
-                letterSpacing="0.06em" 
-                fill="#EDEAE4"
-              >
-                WEDDING<tspan fill="#B38F4D">PUR</tspan>
-              </text>
-              <text 
-                x="45" 
-                y="38" 
-                fontFamily="Montserrat, sans-serif" 
-                fontSize="7" 
-                fontWeight="500" 
-                letterSpacing="0.28em" 
-                fill="#A39E93"
-              >
-                STUDIO &amp; CINEMA
-              </text>
-            </svg>
-          </Link>
+              {loading ? 'Creating Account...' : 'Register'}
+            </button>
+          </form>
+
+          <p className="text-center text-[#5F6757] font-light text-sm mt-8">
+            Already have an account?{' '}
+            <Link href="/login" className="text-[#1E221D] font-medium hover:text-[#5B6454] transition-colors">
+              Sign In
+            </Link>
+          </p>
         </div>
-
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-serif text-[#B38F4D] mb-2 tracking-wide">Create an Account</h1>
-          <p className="text-gray-300 text-sm tracking-wider">Join Weddingpur to manage your memories</p>
-        </div>
-
-        {error && (
-          <div className="mb-6 p-3 bg-red-900/50 border border-red-500/50 text-red-200 text-sm rounded-lg text-center">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Full Name</label>
-            <input 
-              type="text" 
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full bg-[#212639] border border-white/10 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-[#B38F4D] transition-colors"
-              placeholder="John Doe"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Email Address</label>
-            <input 
-              type="email" 
-              name="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full bg-[#212639] border border-white/10 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-[#B38F4D] transition-colors"
-              placeholder="hello@example.com"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Password</label>
-            <input 
-              type="password" 
-              name="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full bg-[#212639] border border-white/10 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-[#B38F4D] transition-colors"
-              placeholder="••••••••"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Confirm Password</label>
-            <input 
-              type="password" 
-              name="confirmPassword"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full bg-[#212639] border border-white/10 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-[#B38F4D] transition-colors"
-              placeholder="••••••••"
-            />
-          </div>
-
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="w-full bg-[#B38F4D] text-white font-medium tracking-wide rounded-lg px-4 py-3 mt-4 hover:bg-[#987538] transition-colors disabled:opacity-50"
-          >
-            {loading ? 'Creating Account...' : 'Register'}
-          </button>
-        </form>
-
-        <p className="text-center text-gray-400 text-sm mt-8">
-          Already have an account?{' '}
-          <Link href="/login" className="text-[#B38F4D] hover:text-white transition-colors">
-            Sign In
-          </Link>
-        </p>
 
       </div>
     </div>

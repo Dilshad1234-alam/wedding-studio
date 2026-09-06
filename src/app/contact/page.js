@@ -67,7 +67,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] pt-32 pb-24 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
+    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] pt-16 pb-24 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-16 lg:gap-24">
         
         {/* Left Column: Get In Touch */}

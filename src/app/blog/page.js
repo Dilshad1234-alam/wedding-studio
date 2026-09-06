@@ -14,51 +14,51 @@ export default function BlogPage() {
       id: 2,
       category: "Real Weddings",
       title: "A Royal Heritage Celebration in Jaipur's City Palace",
-      image: "https://images.unsplash.com/photo-1544627836-822bfea45826?q=80&w=800&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop",
       slug: "royal-heritage-jaipur"
     },
     {
       id: 3,
       category: "Cinematography",
       title: "Why You Need a Dedicated Cinematographer for the Haldi",
-      image: "https://images.unsplash.com/photo-1595981267035-7b04d84b52df?q=80&w=800&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=800&auto=format&fit=crop",
       slug: "dedicated-cinematographer-haldi"
     },
     {
       id: 4,
       category: "Inspiration",
       title: "Minimalist Decor Trends for the Modern Indian Bride",
-      image: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg",
+      image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop",
       slug: "minimalist-decor-trends"
     },
     {
       id: 5,
       category: "Real Weddings",
       title: "Intimate Beach Vows: A Sunset Celebration in Goa",
-      image: "https://images.unsplash.com/photo-1583939411023-14783179e581?q=80&w=800&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
       slug: "intimate-beach-vows-goa"
     },
     {
       id: 6,
       category: "Planning",
       title: "Building Your Perfect Wedding Timeline with Your Photographer",
-      image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?q=80&w=800&auto=format&fit=crop",
       slug: "perfect-wedding-timeline"
     }
   ];
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] pt-32 pb-24 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
+    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] pt-0 -mt-10 pb-28 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
       
       {/* Header */}
-      <section className="max-w-4xl mx-auto text-center mb-20">
-        <span className="block text-center text-[10px] uppercase tracking-[0.35em] text-[#626C59] font-medium mb-3">
+      <section className="max-w-4xl mx-auto text-center mb-16">
+        <span className="block text-center text-[10px] uppercase tracking-[0.4em] text-[#5B6454] font-semibold mb-3">
           Journal & Features
         </span>
-        <h1 className="text-center font-serif text-5xl sm:text-6xl text-[#1E221D] font-normal mb-6">
+        <h1 className="text-center font-serif text-5xl sm:text-6xl md:text-7xl italic text-[#1E221D] font-normal mb-4">
           The Editorial
         </h1>
-        <p className="text-[#4A5243] text-sm font-light leading-relaxed max-w-xl mx-auto">
+        <p className="text-[#525B4C] text-xs sm:text-sm font-light leading-relaxed max-w-xl mx-auto">
           Curated insights, real wedding stories, and expert guidance to inspire your timeless celebration.
         </p>
       </section>
@@ -74,10 +74,11 @@ export default function BlogPage() {
             >
               
               {/* Arched Image */}
-              <div className="w-full aspect-[3/4] overflow-hidden relative border-b-4 border-white">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-[6s] group-hover:scale-105"
-                  style={{ backgroundImage: `url('${post.image}')` }}
+              <div className="w-full aspect-[4/5] overflow-hidden relative border-b-4 border-[#FAF8F5] bg-[#ECEFEA]">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover transition-transform duration-[6s] group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
               </div>

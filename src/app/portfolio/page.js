@@ -1,57 +1,149 @@
-'use client';
+"use client";
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function PortfolioPage() {
-  const images = [
-    { src: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg", aspect: "aspect-[3/4]" },
-    { src: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop", aspect: "aspect-square" },
-    { src: "https://images.unsplash.com/photo-1595981267035-7b04d84b52df?q=80&w=800&auto=format&fit=crop", aspect: "aspect-[4/5]" },
-    { src: "https://images.unsplash.com/photo-1583939411023-14783179e581?q=80&w=800&auto=format&fit=crop", aspect: "aspect-[3/4]" },
-    { src: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop", aspect: "aspect-square" },
-    { src: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg", aspect: "aspect-[4/5]" },
+  const [activeFilter, setActiveFilter] = useState('all');
+
+  const categories = [
+    { label: "ALL WORKS", key: "all" },
+    { label: "WEDDING", key: "wedding" },
+    { label: "PRE-WEDDING", key: "pre-wedding" },
+    { label: "HALDI & SANGEET", key: "haldi-sangeet" }
   ];
 
+  const galleryItems = [
+    {
+      title: "Royal Rajputana Vows",
+      category: "wedding",
+      location: "Jaipur Palace",
+      img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg"
+    },
+    {
+      title: "Monsoon Garland Celebration",
+      category: "wedding",
+      location: "Patna Greens",
+      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      title: "Heirloom Bridal Jewelry",
+      category: "wedding",
+      location: "Heritage Courtyard",
+      img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      title: "Golden Hour Whispers",
+      category: "pre-wedding",
+      location: "Varanasi Ghats",
+      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      title: "Marigold Symphony",
+      category: "haldi-sangeet",
+      location: "Shangri-La Palace",
+      img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      title: "Midnight Sangeet Beats",
+      category: "haldi-sangeet",
+      location: "Hotel Maurya",
+      img: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      title: "Timeless Traditions",
+      category: "wedding",
+      location: "Udaipur Fort",
+      img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1000&q=85"
+    },
+    {
+      title: "Ethereal Moments",
+      category: "pre-wedding",
+      location: "Taj Lake Palace",
+      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1000&q=85"
+    }
+  ];
+
+  const filteredItems = activeFilter === 'all'
+    ? galleryItems
+    : galleryItems.filter(item => item.category === activeFilter);
+
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1F231D] font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5] pt-32 pb-24">
+    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
-      {/* Header */}
-      <section className="container mx-auto px-4 text-center mb-20 max-w-4xl">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-[#555D4E] font-semibold block mb-4">
+      {/* 1. PORTFOLIO HERO HEADER */}
+      <section className="pt-0 -mt-10 pb-12 px-6 text-center max-w-4xl mx-auto">
+        {/* <span className="text-[10px] uppercase tracking-[0.4em] text-[#5B6454] font-semibold block mb-3">
           PORTFOLIO
-        </span>
-        <h1 className="font-serif text-5xl md:text-7xl text-[#1F231D] mb-8 leading-tight">
-          Recent <span className="italic">Captures</span>
+        </span> */}
+        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#1E221D] tracking-tight mb-4">
+          Recent Captures
         </h1>
-        <p className="text-[#4C5346] text-sm font-light leading-relaxed max-w-2xl mx-auto">
+        <p className="text-xs sm:text-sm text-[#525B4C] max-w-xl mx-auto font-light leading-relaxed">
           A curated selection of our favorite moments from recent celebrations across the globe.
         </p>
 
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mt-12">
-          {['All Works', 'Wedding', 'Pre-Wedding', 'Haldi & Sangeet'].map((filter, i) => (
-            <button 
-              key={i}
-              className={`px-6 py-2 rounded-full text-[10px] tracking-widest uppercase font-medium transition-colors ${i === 0 ? 'bg-[#5B6454] text-[#FAF8F5]' : 'bg-transparent border border-[#555D4E]/20 text-[#555D4E] hover:border-[#555D4E]'}`}
-            >
-              {filter}
-            </button>
-          ))}
+        {/* Category Pill Filters */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-10">
+          {categories.map((cat) => {
+            const isActive = activeFilter === cat.key;
+            return (
+              <button
+                key={cat.key}
+                onClick={() => setActiveFilter(cat.key)}
+                className={`px-6 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer ${
+                  isActive
+                    ? 'bg-[#5B6454] text-[#FAF8F5] shadow-sm'
+                    : 'border border-[#DDD7CD] text-[#7A8275] hover:border-[#5B6454] hover:text-[#5B6454]'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
       </section>
 
-      {/* Masonry / Grid Showcase */}
-      <section className="w-full px-4 sm:px-6 md:px-12">
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-          {images.map((img, index) => (
-            <div 
-              key={index} 
-              className={`relative overflow-hidden group cursor-pointer border border-[#E8E4DC] ${img.aspect} ${index % 3 === 1 ? 'rounded-t-full rounded-b-xl' : 'rounded-xl'}`}
+      {/* 2. BALANCED GALLERY GRID (UNIFORM HEIGHT & CLEAN BOTTOM MARGIN) */}
+      <section className="px-6 sm:px-12 w-full max-w-[1600px] mx-auto pb-28">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {filteredItems.map((item, idx) => (
+            <div
+              key={idx}
+              className="group flex flex-col justify-between bg-white rounded-3xl p-3 border border-[#DDD7CD] shadow-sm hover:shadow-xl hover:border-[#5B6454]/40 transition-all duration-500"
             >
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-[4s] group-hover:scale-110"
-                style={{ backgroundImage: `url('${img.src}')` }}
-              />
-              <div className="absolute inset-0 bg-[#555D4E]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Strict aspect ratio container locks every card to the identical height */}
+              <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#ECEFEA]">
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                />
+                
+                {/* Subtle vignette hover gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                  <div className="text-white">
+                    <span className="text-[10px] uppercase tracking-widest text-[#ECEFEA]/80 block">
+                      {item.location}
+                    </span>
+                    <h3 className="font-serif text-2xl italic">{item.title}</h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* Minimalist Card Details Below Image */}
+              <div className="pt-4 pb-2 px-3 flex items-center justify-between">
+                <div>
+                  <h4 className="font-serif text-lg text-[#1E221D] group-hover:text-[#5B6454] transition-colors">
+                    {item.title}
+                  </h4>
+                  <p className="text-[10px] uppercase tracking-widest text-[#7A8275]">
+                    {item.location}
+                  </p>
+                </div>
+                <Link aria-label="Book a shoot" className="w-9 h-9 rounded-full border border-[#5B6454]/40 flex items-center justify-center text-[#5B6454] hover:bg-[#5B6454] hover:text-white transition-all text-xs" href="/contact">
+                  ↗
+                </Link>
+              </div>
             </div>
           ))}
         </div>

@@ -1,97 +1,193 @@
-'use client';
+"use client";
+import React from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 
 export default function StoriesPage() {
-  const stories = [
+  const weddingStories = [
     {
-      couple: "Arjun & Maya",
-      title: "A Royal Affair in Udaipur",
-      location: "City Palace, Udaipur",
-      excerpt: "Against the backdrop of the serene Lake Pichola, Maya and Arjun celebrated their union in a majestic three-day extravaganza full of vibrant colors and royal traditions.",
-      image: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg"
+      couple: "Rishabh & Shivani",
+      subtitle: "LOVE STORY & SACRED VOWS • PATNA",
+      desc: "Rishav and Shivani's wedding journey began long before the wedding day. As a love marriage, their story already had a strong foundation of friendship, comfort, and understanding. Having captured their engagement earlier, we also loved covering their wedding story from the first celebrations to the final bride welcome ceremony.",
+      featuredImg: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80"
+      ]
     },
     {
-      couple: "Rohan & Priya",
-      title: "Intimate Beach Vows",
-      location: "Taj Exotica, Goa",
-      excerpt: "Sun, sand, and vows whispered under a floral canopy. Rohan and Priya's intimate destination wedding was a masterclass in modern, relaxed elegance.",
-      image: "https://images.unsplash.com/photo-1544627836-822bfea45826?q=80&w=1000&auto=format&fit=crop"
+      couple: "Ruchi & Abhishek",
+      subtitle: "A JOYFUL MARWADI REVERIE • JAIPUR",
+      desc: "Some weddings are beautiful. Some are unforgettable. Abhishek and Ruchi's wedding was one of a kind. A Marwadi wedding full of life, laughter, and love that every single frame told a story worth saving forever. Click on the button to feel every moment of this beautiful union.",
+      featuredImg: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80"
+      ]
     },
     {
-      couple: "Vikram & Ananya",
-      title: "Heritage Glamour in Jaipur",
-      location: "Rambagh Palace, Jaipur",
-      excerpt: "A grand celebration deeply rooted in tradition. From the vibrant Haldi to the emotional Pheras under the stars, every moment was beautifully curated.",
-      image: "https://images.unsplash.com/photo-1595981267035-7b04d84b52df?q=80&w=1000&auto=format&fit=crop"
+      couple: "Akshat & Shivangi",
+      subtitle: "TWO STATES, ONE CELEBRATION • THE MAVERICK RESORT",
+      desc: "Few weddings bring together not just two people and their families, but also two cultures and two beautiful traditions. Akshat and Shivangi's wedding at The Maverick Resort was one such celebration, where love and traditions from two states came together to create something truly special.",
+      featuredImg: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80"
+      ]
+    },
+    {
+      couple: "Divya & Nikhil",
+      subtitle: "A VALENTINE'S UNION • VRINDAVAN GARDEN, PATNA",
+      desc: "Some love stories seem to be timeless, Divya and Nikhil's story was exactly the same. They finalized Valentine's Day for their engagement and this made the moment even more memorable for them. The wedding was in Vrindavan Garden, Patna. In the presence of their close family members and friends, they tied their knot.",
+      featuredImg: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80"
+      ]
+    },
+    {
+      couple: "Aprajita & Abhinav",
+      subtitle: "FROM ZOOM CALL TO FOREVER • THE PARK PRIDE, PATNA",
+      desc: "An intimate arranged wedding filled with love, laughter, and happiness. Aprajita and Abhinav started their new journey from THE PARK PRIDE hotel, Patna. Witness their magical journey from Rishta, Zoom call, 2 mins of first meet, proposal, engagement, and wedding.",
+      featuredImg: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80"
+      ]
+    },
+    {
+      couple: "Minakshi & Rahul",
+      subtitle: "SERENE HEIRLOOMS • ANAND INTERNATIONAL, BODHGAYA",
+      desc: "In the heart of Bodhgaya, Minakshi and Rahul exchanged vows at Anand International Hotel, Bihar. The intimate ceremony radiated love as the couple embarked on their journey together. With joyous hearts and a serene backdrop, their union blossomed, creating memories to cherish for a lifetime.",
+      featuredImg: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80"
+      ]
+    },
+    {
+      couple: "Sakshi & Manish",
+      subtitle: "6-DAY CELEBRATION • BODHGAYA TO SILIGURI",
+      desc: "An intimate wedding happened in Bodhgaya, Bihar. A wedding full of masti, fun & enjoyment. We also travelled Siliguri for their reception event. A wedding of six days including engagement, pool party, sangeet, haldi, mehendi, tilak and wedding. View their entire story here.",
+      featuredImg: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80"
+      ]
+    },
+    {
+      couple: "Vageesha & Ritesh",
+      subtitle: "BIHAR MEETS UP • LEMON TREE PREMIER, PATNA",
+      desc: "We covered a beautiful wedding at Lemontree Premier Hotel, Patna. Ritesh and Vageesha, they both share a beautiful love story. Bride from Uttar Pradesh and groom from Bihar, two families united together for the union of this beautiful couple. Checkout their entire wedding story.",
+      featuredImg: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80",
+      gridImgs: [
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80"
+      ]
     }
   ];
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1F231D] font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5] pt-32 pb-24">
+    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
-      {/* Header */}
-      <section className="container mx-auto px-4 text-center mb-24 max-w-4xl">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-[#555D4E] font-semibold block mb-4">
-          JOURNAL
+      {/* 1. EDITORIAL HEADER */}
+      <section className="pt-4 pb-16 px-6 text-center max-w-4xl mx-auto">
+        <span className="text-[10px] uppercase tracking-[0.4em] text-[#5B6454] font-semibold block mb-3">
+          JOURNAL & ARCHIVES
         </span>
-        <h1 className="font-serif text-5xl md:text-7xl text-[#1F231D] mb-8 leading-tight">
-          Wedding <span className="italic">Stories</span>
+        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#1E221D] tracking-tight mb-4">
+          Wedding Stories
         </h1>
-        <div className="w-12 h-[1px] bg-[#555D4E] mx-auto mb-8 opacity-50" />
-        <p className="text-[#4C5346] text-sm font-light leading-relaxed max-w-2xl mx-auto">
-          Step into the pages of our editorial journal, where real celebrations are transformed into timeless, cinematic narratives.
-        </p>
       </section>
 
-      {/* Stories Spread */}
-      <section className="container mx-auto px-4 max-w-6xl space-y-32">
-        {stories.map((story, index) => {
+      {/* 2. STORIES FEED (ALTERNATING EDITORIAL SPREADS) */}
+      <section className="pb-28 px-6 sm:px-12 max-w-7xl mx-auto space-y-20">
+        {weddingStories.map((story, index) => {
           const isReversed = index % 2 !== 0;
           return (
-            <article key={index} className={`flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12 lg:gap-24`}>
-              
-              {/* Image Frame */}
-              <div className="w-full md:w-1/2">
-                <div className={`w-full ${index % 2 === 0 ? 'rounded-t-full rounded-b-xl' : 'rounded-b-full rounded-t-xl'} overflow-hidden shadow-2xl border-4 border-white aspect-[3/4] relative group cursor-pointer`}>
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[5s] group-hover:scale-105"
-                    style={{ backgroundImage: `url('${story.image}')` }}
-                  />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-700" />
+            <div
+              key={index}
+              className="bg-white border border-[#DDD7CD] rounded-3xl p-6 sm:p-12 shadow-sm hover:shadow-md transition-shadow duration-500"
+            >
+              <div className={`grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center ${isReversed ? 'lg:flex-row-reverse' : ''}`}>
+                
+                {/* Visual Side: Featured Arch + Mini Collage */}
+                <div className={`lg:col-span-6 space-y-4 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-[#ECEFEA]">
+                    <img
+                      src={story.featuredImg}
+                      alt={story.couple}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+
+                  {/* 4 Mini Collage Shots */}
+                  <div className="grid grid-cols-4 gap-2">
+                    {story.gridImgs.map((img, i) => (
+                      <div key={i} className="aspect-square rounded-xl overflow-hidden bg-[#ECEFEA] border border-[#EAE6DE]">
+                        <img
+                          src={img}
+                          alt={`${story.couple} moment ${i + 1}`}
+                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Text Content */}
-              <div className={`w-full md:w-1/2 ${isReversed ? 'text-left md:text-right md:pl-0 pr-0 md:pr-12' : 'text-left md:pr-0 pl-0 md:pl-12'}`}>
-                <span className="text-[10px] uppercase tracking-[0.3em] text-[#555D4E] font-semibold block mb-6">
-                  {story.location}
-                </span>
-                
-                <h2 className="font-serif text-3xl md:text-5xl text-[#1F231D] mb-4 leading-tight">
-                  {story.title}
-                </h2>
-                
-                <h3 className="font-serif italic text-2xl text-[#8C7A6B] mb-8">
-                  {story.couple}
-                </h3>
-                
-                <p className="text-[#4C5346] text-sm font-light leading-relaxed mb-10 max-w-md">
-                  {story.excerpt}
-                </p>
-                
-                <Link 
-                  href={`/stories/${story.couple.toLowerCase().replace(' & ', '-')}`} 
-                  className={`inline-flex items-center gap-3 text-[10px] uppercase tracking-widest text-[#1F231D] font-semibold hover:text-[#555D4E] transition-colors group/link ${isReversed ? 'md:justify-end' : ''}`}
-                >
-                  Read Full Story
-                  <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
-                </Link>
-              </div>
+                {/* Narrative Side */}
+                <div className={`lg:col-span-6 space-y-5 text-center lg:text-left ${isReversed ? 'lg:order-1' : 'lg:order-2'}`}>
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#5B6454] font-semibold block">
+                    {story.subtitle}
+                  </span>
+                  
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#1E221D] italic font-normal">
+                    {story.couple}
+                  </h2>
 
-            </article>
+                  <p className="text-xs sm:text-sm text-[#525B4C] leading-relaxed font-light">
+                    {story.desc}
+                  </p>
+
+                  <div className="pt-3">
+                    <Link className="inline-block border border-[#5B6454] text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] px-8 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer" href="/contact">
+                      View Story
+                    </Link>
+                  </div>
+                </div>
+
+              </div>
+            </div>
           );
         })}
+      </section>
+
+      {/* 3. BOTTOM COMMISSION CTA */}
+      <section className="py-20 px-6 bg-[#ECEFEA] text-center border-t border-[#DDD7CD]">
+        <h3 className="font-serif text-3xl sm:text-4xl text-[#1E221D] italic mb-3">
+          Have a Story Waiting to Be Told?
+        </h3>
+        <p className="text-xs text-[#525B4C] uppercase tracking-widest mb-6">
+          Limited dates available for 2026 & 2027 wedding commissions
+        </p>
+        <Link className="inline-block bg-[#5B6454] hover:bg-[#485042] text-[#FAF8F5] px-10 py-3.5 rounded-full text-xs uppercase tracking-[0.25em] font-medium shadow-md transition-all duration-300" href="/contact">
+          Check Date Availability
+        </Link>
       </section>
 
     </main>

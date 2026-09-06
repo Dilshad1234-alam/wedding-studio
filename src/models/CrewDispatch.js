@@ -23,8 +23,8 @@ const crewDispatchSchema = new mongoose.Schema({
   },
   status: { 
     type: String, 
-    enum: ['Dispatched', 'On Duty', 'Returned'], 
-    default: 'Dispatched' 
+    enum: ['Draft', 'Traveling', 'On Shoot', 'Production Completed', 'Dispatched', 'On Duty', 'Returned'], 
+    default: 'Draft' 
   }
 }, { timestamps: true });
 

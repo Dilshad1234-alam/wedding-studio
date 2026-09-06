@@ -9,11 +9,14 @@ export default function LayoutWrapper({ children }) {
 
   // Define routes where Navbar and Footer must be hidden
   const hideHeaderFooter = pathname === '/login' || pathname === '/register' || pathname.startsWith('/admin');
+  
+  // Define routes where we want the content to flow under the transparent navbar (no top padding)
+  const isHomePage = pathname === '/';
 
   return (
     <>
       {!hideHeaderFooter && <Navbar />}
-      <main className={!hideHeaderFooter ? 'flex-grow pt-32' : 'flex-grow'}>
+      <main className={!hideHeaderFooter ? (isHomePage ? 'flex-grow' : 'flex-grow pt-32') : 'flex-grow'}>
         {children}
       </main>
       {!hideHeaderFooter && <Footer />}

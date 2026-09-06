@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isKnowMoreOpen, setIsKnowMoreOpen] = useState(false);
   const [isMobileKnowMoreOpen, setIsMobileKnowMoreOpen] = useState(false);
@@ -29,6 +30,22 @@ export default function Navbar() {
     window.location.href = '/';
   };
 
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (pathname === '/' || pathname === '/landing') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    } else {
+      router.push('/');
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   const navLinks = [
     { name: 'Stories', href: '/stories' },
     { name: 'Photography', href: '/portfolio' },
@@ -48,57 +65,61 @@ export default function Navbar() {
             
             {/* Left: Brand Identity */}
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="flex flex-col items-center lg:items-start focus:outline-none">
-                <div className="text-center lg:text-left font-serif">
-                  <span className="text-xl sm:text-2xl font-light tracking-[0.25em] text-[#1E221D] block leading-none mb-1.5">
-                    WEDDINGPUR
-                  </span>
-                  <span className="text-[9px] tracking-[0.4em] text-[#626C59] uppercase font-sans leading-none block text-center lg:text-left">
-                    STUDIO & CINEMA
-                  </span>
-                </div>
-              </Link>
+              <a
+                href="/"
+                onClick={handleLogoClick}
+                className="flex flex-col items-center lg:items-start text-left group cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02] focus:outline-none"
+              >
+                <span className="font-serif tracking-[0.28em] text-xl sm:text-2xl font-semibold text-[#1E221D] group-hover:text-[#5B6454] transition-colors duration-300 leading-none">
+                  WEDDINGPUR
+                </span>
+                <span className="text-[9px] uppercase tracking-[0.38em] text-[#3D4537] font-medium mt-1 group-hover:text-[#5B6454] transition-colors duration-300 text-center lg:text-left">
+                  Studio & Cinema
+                </span>
+              </a>
             </div>
             
-            {/* Center Links */}
-            <div className="hidden xl:flex items-center justify-center space-x-8 text-xs uppercase tracking-[0.2em] font-medium flex-1 px-8">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.name} 
-                  href={link.href} 
-                  className={`transition-colors duration-300 ${pathname === link.href ? 'text-[#626C59] font-semibold' : 'text-[#3E453A] hover:text-[#626C59]'}`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+            {/* Center Nav Links with Button-Style Pill Hover & Active State */}
+            <div className="hidden xl:flex items-center justify-center gap-1.5 flex-1 px-8">
+              {navLinks.map((link, idx) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link 
+                    key={idx} 
+                    href={link.href} 
+                    className={`px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${isActive ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Right CTAs */}
             <div className="hidden lg:flex items-center space-x-6 shrink-0">
               {currentUser ? (
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center gap-2">
                   {currentUser.role === 'admin' ? (
-                    <Link href="/admin" className="text-[#626C59] hover:text-[#1E221D] transition text-xs uppercase tracking-widest font-semibold">
+                    <Link href="/admin" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/admin' ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}>
                       Admin OS
                     </Link>
                   ) : (
-                    <span className="text-[#1E221D] text-xs uppercase tracking-widest font-medium">
+                    <span className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-widest font-medium border border-[#DDD7CD] text-[#1E221D]">
                       {currentUser.name}
                     </span>
                   )}
-                  <span className="text-[#3E453A]/30">|</span>
-                  <button onClick={handleLogout} className="text-[#3E453A] hover:text-[#1E221D] transition text-xs uppercase tracking-[0.2em] font-medium focus:outline-none">
+                  <button onClick={handleLogout} className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454] focus:outline-none">
                     Logout
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-4">
-                  <Link href="/login" className="text-[#3E453A] hover:text-[#626C59] transition text-xs uppercase tracking-[0.2em] font-medium">
-                    LOGIN
+                <div className="flex items-center gap-3">
+                  <Link href="/login" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/login' ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}>
+                    Login
                   </Link>
-                  <span className="text-[#3E453A]/30">|</span>
-                  <Link href="/register" className="text-[#3E453A] hover:text-[#626C59] transition text-xs uppercase tracking-[0.2em] font-medium">
-                    REGISTER
+                  <span className="text-[#DDD7CD] text-xs">|</span>
+                  <Link href="/register" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/register' ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}>
+                    Register
                   </Link>
                 </div>
               )}

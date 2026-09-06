@@ -30,24 +30,24 @@ const FacebookIcon = ({ size = 18 }) => (
 
 export default function Footer() {
   return (
-    <footer className="bg-[#242A22] text-[#ECEAE4] py-16 px-6 sm:px-12 font-sans">
+    <footer className="bg-[#0B0D0E]/90 backdrop-blur-md border-t border-[#2B2519] text-[#F5F5F5] py-16 px-6 sm:px-12 font-sans relative z-10">
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
         
         {/* Left: Informations */}
         <div className="flex flex-col">
-          <h4 className="text-[10px] tracking-[0.3em] uppercase text-[#889082] font-semibold mb-6">
+          <h4 className="text-[10px] tracking-[0.3em] uppercase text-[#C5B388] font-semibold mb-6">
             INFORMATIONS
           </h4>
-          <div className="flex flex-col sm:flex-row gap-6 sm:gap-16 text-xs text-[#C6C9C4] font-light">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-16 text-xs text-[#F5F5F5]/70 font-light">
             <div className="flex flex-col gap-4">
-              <Link href="/privacy-policy" className="hover:text-[#FAF8F5] transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-[#FAF8F5] transition-colors">Terms & Conditions</Link>
+              <Link href="/privacy-policy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-[#D4AF37] transition-colors">Terms & Conditions</Link>
             </div>
             <div className="flex flex-col gap-4">
-              <a href="https://weddingpurindia.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#FAF8F5] transition-colors">
+              <a href="https://weddingpurindia.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
                 weddingpurindia.com
               </a>
-              <Link href="/contact" className="hover:text-[#FAF8F5] transition-colors">Contact Us</Link>
+              <Link href="/contact" className="hover:text-[#D4AF37] transition-colors">Contact Us</Link>
             </div>
           </div>
         </div>
@@ -67,13 +67,13 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="w-10 h-10 rounded-full border border-[#4C5346] text-[#C6C9C4] flex items-center justify-center hover:border-[#626C59] hover:bg-[#626C59] hover:text-[#FAF8F5] transition-all"
+                className="w-10 h-10 rounded-full border border-[#2B2519] text-[#C5B388] flex items-center justify-center hover:border-[#D4AF37] hover:bg-[#121518] hover:text-[#D4AF37] transition-all"
               >
                 {social.icon}
               </a>
             ))}
           </div>
-          <p className="text-[10px] text-[#889082] tracking-[0.2em] uppercase">Copyright 2026. Weddingpur</p>
+          <p className="text-[10px] text-[#C5B388] tracking-[0.2em] uppercase">Copyright 2026. Weddingpur</p>
         </div>
 
       </div>

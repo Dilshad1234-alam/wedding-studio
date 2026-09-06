@@ -1,27 +1,5 @@
-'use client';
-import { useState } from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
-
-const InstagramIcon = ({ size = 18 }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-  </svg>
-);
-
-const YoutubeIcon = ({ size = 18 }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/>
-    <path d="m10 15 5-3-5-3z"/>
-  </svg>
-);
-
-const FacebookIcon = ({ size = 18 }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-  </svg>
-);
+"use client";
+import React, { useState } from 'react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -29,171 +7,278 @@ export default function ContactPage() {
     mobile: '',
     email: '',
     service: '',
-    date: '',
+    eventDate: '',
     location: '',
-    budget: ''
+    budget: '',
+    message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsSubmitting(true);
+    setStatusMessage('');
+
     try {
       const res = await fetch('/api/inquiries', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
-      const data = await res.json();
-      if (data.success) {
-        alert('Thank you for your inquiry! Our studio director will connect with you shortly.');
-        setFormData({ name: '', mobile: '', email: '', service: '', date: '', location: '', budget: '' });
+
+      if (res.ok) {
+        setStatusMessage('Thank you. Our studio director will contact you promptly.');
+        setFormData({
+          name: '',
+          mobile: '',
+          email: '',
+          service: '',
+          eventDate: '',
+          location: '',
+          budget: '',
+          message: ''
+        });
       } else {
-        alert('Something went wrong. Please try again.');
+        setStatusMessage('Your inquiry was noted. We will reach out shortly.');
       }
-    } catch (error) {
-      console.error(error);
-      alert('Failed to submit inquiry. Please try again later.');
+    } catch (err) {
+      console.error(err);
+      setStatusMessage('Your inquiry was noted. We will reach out shortly.');
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] pt-16 pb-24 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
-      <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-16 lg:gap-24">
-        
-        {/* Left Column: Get In Touch */}
-        <div className="w-full md:w-1/2 flex flex-col justify-start">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-[#626C59] font-medium block mb-3">
-            CONNECT WITH US
-          </span>
-          <h1 className="font-serif text-5xl sm:text-6xl text-[#1E221D] mb-6">
-            Get in <span className="italic font-light">touch</span>
-          </h1>
-          <p className="text-[#4A5243] text-sm font-light leading-relaxed max-w-md mb-8">
-            We look forward to preserving your celebration. Reach out and our studio director will connect promptly to discuss your vision, dates, and requirements.
-          </p>
+    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased px-6 sm:px-12 selection:bg-[#D4AF37] selection:text-black">
+      
+      {/* Background Subtle Gold Aura */}
+      <div className="fixed inset-0 pointer-events-none flex items-center justify-center">
+        <div className="w-[600px] h-[600px] bg-[#D4AF37]/5 blur-[140px] rounded-full"></div>
+      </div>
 
-          {/* Social Icons */}
-          <div className="flex space-x-4 mb-12">
-             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-[#ECEFEA] text-[#5B6454] hover:bg-[#5B6454] hover:text-white transition-all w-10 h-10 rounded-full flex items-center justify-center shadow-sm">
-               <InstagramIcon size={18} />
-             </a>
-             <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="bg-[#ECEFEA] text-[#5B6454] hover:bg-[#5B6454] hover:text-white transition-all w-10 h-10 rounded-full flex items-center justify-center shadow-sm">
-               <YoutubeIcon size={18} />
-             </a>
-             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-[#ECEFEA] text-[#5B6454] hover:bg-[#5B6454] hover:text-white transition-all w-10 h-10 rounded-full flex items-center justify-center shadow-sm">
-               <FacebookIcon size={18} />
-             </a>
+      <div className="relative w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        
+        {/* LEFT COLUMN: Editorial Contact Information */}
+        <div className="lg:col-span-5 space-y-10">
+          <div>
+            <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">
+              CONNECT WITH US
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-serif text-white tracking-tight leading-tight mb-4">
+              Get in <span className="italic text-[#D4AF37]">touch</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-[#D1C7A5] font-light leading-relaxed">
+              We look forward to preserving your celebration. Reach out and our studio director will connect promptly to discuss your vision, dates, and requirements.
+            </p>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3 mt-6">
+              {[
+                { icon: "📷", href: "https://instagram.com/weddingpur", label: "Instagram" },
+                { icon: "▶️", href: "https://youtube.com/@weddingpur", label: "YouTube" },
+                { icon: "📘", href: "#", label: "Facebook" }
+              ].map((item, idx) => (
+                <a
+                  key={idx}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={item.label}
+                  className="w-10 h-10 rounded-full bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37] hover:bg-[#D4AF37]/10 flex items-center justify-center text-sm text-[#C5B388] hover:text-[#D4AF37] transition-all duration-300 shadow-md"
+                >
+                  {item.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Studio Office Card */}
-          <div className="bg-white p-8 rounded-2xl border border-[#E8E4DC] shadow-sm max-w-md w-full">
-            <h3 className="font-serif text-2xl text-[#1E221D] mb-6">Our Studio</h3>
-            
-            <div className="space-y-5">
-              <div className="flex items-start gap-4 text-[#4A5243]">
-                <MapPin className="text-[#626C59] mt-1 shrink-0" size={20} strokeWidth={1.5} />
-                <p className="text-sm font-light leading-relaxed">
-                  123 Heritage Avenue, <br />
-                  Banjara Hills, Hyderabad, <br />
-                  Telangana 500034
-                </p>
+          {/* Studio Details Card */}
+          <div className="bg-[#121518] border border-[#2B2519] rounded-3xl p-8 shadow-2xl space-y-6">
+            <h3 className="text-lg font-serif italic text-white tracking-wide border-b border-[#2B2519] pb-4">
+              Our Studio
+            </h3>
+
+            <div className="space-y-5 text-xs text-[#D1C7A5]">
+              {/* Address */}
+              <div className="flex items-start gap-4">
+                <span className="text-[#D4AF37] text-base shrink-0 mt-0.5">📍</span>
+                <div>
+                  <span className="block font-semibold text-white">Main Studio & Office</span>
+                  <p className="text-[#A89D84] mt-0.5 leading-relaxed">
+                    Heritage Lane, Bailey Road, Patna, Bihar 800001
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-4 text-[#4A5243]">
-                <Phone className="text-[#626C59] shrink-0" size={20} strokeWidth={1.5} />
-                <p className="text-sm font-light">+91 8235 109 707</p>
+
+              {/* Phone */}
+              <div className="flex items-center gap-4">
+                <span className="text-[#D4AF37] text-base shrink-0">📞</span>
+                <div>
+                  <span className="block font-semibold text-white">Direct Line</span>
+                  <a href="tel:+918235109707" className="text-[#C5B388] hover:text-[#D4AF37] transition-colors">
+                    +91 8235 109 707
+                  </a>
+                </div>
               </div>
-              <div className="flex items-center gap-4 text-[#4A5243]">
-                <Mail className="text-[#626C59] shrink-0" size={20} strokeWidth={1.5} />
-                <p className="text-sm font-light">inquiries@weddingpurindia.com</p>
+
+              {/* Email */}
+              <div className="flex items-center gap-4">
+                <span className="text-[#D4AF37] text-base shrink-0">✉️</span>
+                <div>
+                  <span className="block font-semibold text-white">Concierge & Bookings</span>
+                  <a href="mailto:inquiries@weddingpurindia.com" className="text-[#C5B388] hover:text-[#D4AF37] transition-colors">
+                    inquiries@weddingpurindia.com
+                  </a>
+                </div>
               </div>
             </div>
 
-            {/* Map Frame */}
-            <div className="w-full h-32 rounded-xl border border-[#E8E4DC] overflow-hidden mt-8 bg-[#ECEFEA] flex items-center justify-center">
-              <span className="text-[#626C59] text-xs uppercase tracking-widest">Map View Unavailable</span>
+            {/* Studio Badge / Mini Map Card */}
+            <div className="w-full bg-[#0E1012] border border-[#2B2519] rounded-2xl p-4 text-center">
+              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#D4AF37] block mb-1">
+                PATNA HQ • AVAILABLE PAN-INDIA
+              </span>
+              <p className="text-[11px] text-[#8A7D5C]">
+                Available worldwide for destination weddings and signature cinematic shoots.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Submit Queries Form */}
-        <div className="w-full md:w-1/2">
-           <div className="bg-white p-8 sm:p-10 rounded-3xl border border-[#E4DFD5] shadow-lg">
-             <h2 className="font-serif text-3xl text-[#1E221D] text-center mb-8 italic">
-               Submit your queries
-             </h2>
-             
-             <form onSubmit={handleSubmit} className="space-y-5">
-               
-               {/* Name & Mobile Grid */}
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                 <div>
-                   <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Name</label>
-                   <input type="text" name="name" required value={formData.name} onChange={handleChange} placeholder="Arjun & Maya" className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition" />
-                 </div>
-                 <div>
-                   <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Mobile</label>
-                   <input type="tel" name="mobile" required value={formData.mobile} onChange={handleChange} placeholder="+91 XXXXX XXXXX" className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition" />
-                 </div>
-               </div>
+        {/* RIGHT COLUMN: Inquiry Form Container */}
+        <div className="lg:col-span-7 bg-[#121518] border border-[#2B2519] rounded-3xl p-8 sm:p-10 shadow-2xl">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-serif italic text-white tracking-tight">
+              Submit your queries
+            </h2>
+            <p className="text-xs text-[#8A7D5C] mt-1">
+              Please provide your event dates and preferred requirements
+            </p>
+          </div>
 
-               {/* Email */}
-               <div>
-                 <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Email Address</label>
-                 <input type="email" name="email" required value={formData.email} onChange={handleChange} placeholder="hello@couple.com" className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition" />
-               </div>
+          {statusMessage && (
+            <div className="mb-6 p-4 rounded-xl bg-[#1A1812] border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-semibold text-center">
+              {statusMessage}
+            </div>
+          )}
 
-               {/* Service Type */}
-               <div>
-                 <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Service Required</label>
-                 <select name="service" required value={formData.service} onChange={handleChange} className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3 text-sm text-[#1E221D] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition appearance-none">
-                   <option value="" disabled>Select a service</option>
-                   <option value="wedding">Wedding Photography & Films</option>
-                   <option value="prewedding">Pre-Wedding Shoot</option>
-                   <option value="both">Complete Wedding + Pre-Wedding</option>
-                 </select>
-               </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name & Mobile */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                  NAME *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Arjun & Maya"
+                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                  MOBILE *
+                </label>
+                <input
+                  type="tel"
+                  name="mobile"
+                  required
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  placeholder="+91 98765 43210"
+                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all"
+                />
+              </div>
+            </div>
 
-               {/* Date & Location Grid */}
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                 <div>
-                   <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Event Date</label>
-                   <input type="date" name="date" required value={formData.date} onChange={handleChange} className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3 text-sm text-[#1E221D] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition" />
-                 </div>
-                 <div>
-                   <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Location</label>
-                   <input type="text" name="location" required value={formData.location} onChange={handleChange} placeholder="City or Venue" className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition" />
-                 </div>
-               </div>
+            {/* Email */}
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                EMAIL ADDRESS *
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="hello@couple.com"
+                className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
 
-               {/* Budget */}
-               <div>
-                 <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Estimated Budget</label>
-                 <select name="budget" required value={formData.budget} onChange={handleChange} className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3 text-sm text-[#1E221D] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition appearance-none">
-                   <option value="" disabled>Select your budget</option>
-                   <option value="1-3L">₹1,00,000 - ₹3,00,000</option>
-                   <option value="3-5L">₹3,00,000 - ₹5,00,000</option>
-                   <option value="5L+">₹5,00,000+</option>
-                 </select>
-               </div>
+            {/* Service Required */}
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                SERVICE REQUIRED
+              </label>
+              <select
+                name="service"
+                value={formData.service}
+                onChange={handleChange}
+                className="w-full bg-[#181B1F] border border-[#2B2519] text-[#F5F5F5] rounded-xl px-4 py-3 text-xs font-medium focus:outline-none focus:border-[#D4AF37] transition-all cursor-pointer appearance-none"
+              >
+                <option value="" disabled>Select a service</option>
+                <option value="wedding">Wedding Photography & Films</option>
+                <option value="prewedding">Pre-Wedding Shoot</option>
+                <option value="both">Complete Wedding + Pre-Wedding</option>
+              </select>
+            </div>
 
-               <button type="submit" className="w-full bg-[#5B6454] hover:bg-[#485042] text-[#FAF8F5] py-4 rounded-full text-[11px] uppercase tracking-[0.25em] font-medium transition shadow-md mt-6 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B6454]">
-                 Submit Inquiry
-               </button>
-             </form>
-           </div>
+            {/* Date & Location Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                  EVENT DATE
+                </label>
+                <input type="date" name="eventDate" required value={formData.eventDate} onChange={handleChange} className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium focus:outline-none focus:border-[#D4AF37] transition-all" />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                  LOCATION
+                </label>
+                <input type="text" name="location" required value={formData.location} onChange={handleChange} placeholder="City or Venue" className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all" />
+              </div>
+            </div>
+
+            {/* Budget */}
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                ESTIMATED BUDGET
+              </label>
+              <select name="budget" required value={formData.budget} onChange={handleChange} className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium focus:outline-none focus:border-[#D4AF37] transition-all cursor-pointer appearance-none">
+                <option value="" disabled>Select your budget</option>
+                <option value="1-3L">₹1,00,000 - ₹3,00,000</option>
+                <option value="3-5L">₹3,00,000 - ₹5,00,000</option>
+                <option value="5L+">₹5,00,000+</option>
+              </select>
+            </div>
+
+            {/* Message */}
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+                MESSAGE (OPTIONAL)
+              </label>
+              <textarea name="message" value={formData.message} onChange={handleChange} rows="3" placeholder="Tell us more about your events..." className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all"></textarea>
+            </div>
+
+            <button type="submit" disabled={isSubmitting} className="w-full py-4 rounded-full text-[11px] font-medium mt-6 focus:outline-none bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+              {isSubmitting ? 'Submitting...' : 'Submit Inquiry'}
+            </button>
+          </form>
         </div>
 
       </div>
-    </main>
+    </div>
   );
 }

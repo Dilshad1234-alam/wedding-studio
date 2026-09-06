@@ -67,7 +67,7 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
+    <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-[#0B0D0E] to-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
       
       {/* 1. CINEMATIC PATNA HERO */}
       <section className="relative min-h-[92vh] flex flex-col justify-center items-center text-center px-6 overflow-hidden">
@@ -81,34 +81,34 @@ export default function LandingPage() {
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
-          <span className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-[#ECEFEA] font-medium mb-3">
+          <span className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-[#C5B388] font-medium mb-3">
             WEDDINGPUR — BESPOKE WEDDING CINEMA & STILLS
           </span>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#FAF8F5] tracking-tight leading-[1.12] drop-shadow-md">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#F5F5F5] tracking-tight leading-[1.12] drop-shadow-md">
             Best Wedding Photographers <br className="hidden sm:inline" />
-            <span className="italic font-light">In Patna, Bihar</span>
+            <span className="italic font-light text-[#D4AF37]">In Patna, Bihar</span>
           </h1>
 
-          <p className="text-[#FAF8F5]/90 text-sm sm:text-lg font-light tracking-wide max-w-2xl mx-auto mt-6 mb-4">
+          <p className="text-[#F5F5F5]/90 text-sm sm:text-lg font-light tracking-wide max-w-2xl mx-auto mt-6 mb-4">
             We capture timeless weddings for modern couples who want their story told beautifully.
           </p>
 
           <div className="flex flex-wrap gap-4 justify-center items-center mt-6">
-            <Link className="border border-[#FAF8F5]/80 hover:bg-[#FAF8F5] hover:text-[#1E221D] text-[#FAF8F5] px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/portfolio">
+            <Link className="border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/portfolio">
               Explore Portfolio
             </Link>
-            <Link className="bg-[#5B6454] hover:bg-[#485042] text-[#FAF8F5] px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium shadow-md transition-all duration-300" href="/contact">
+            <Link className="bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium shadow-md transition-all duration-300 font-black" href="/contact">
               Contact Us
             </Link>
           </div>
 
-          <span className="text-[10px] tracking-[0.3em] uppercase text-[#ECEFEA]/70 mt-10">
+          <span className="text-[10px] tracking-[0.3em] uppercase text-[#C5B388] mt-10">
             Patna • Varanasi • Jaipur • Goa
           </span>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
-          <svg className="relative block w-full h-12 sm:h-16 text-[#FAF8F5] fill-current" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <svg className="relative block w-full h-12 sm:h-16 text-[#F5F5F5] fill-current" viewBox="0 0 1200 120" preserveAspectRatio="none">
             <path d="M0,0 C300,90 900,90 1200,0 L1200,120 L0,120 Z"></path>
           </svg>
         </div>
@@ -120,7 +120,7 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           <div className="lg:col-span-6 flex justify-center">
-            <div className="relative w-full max-w-md aspect-[3/4] rounded-t-full rounded-b-3xl overflow-hidden shadow-2xl border-8 border-white bg-[#ECEFEA]">
+            <div className="relative w-full max-w-md aspect-[3/4] rounded-t-full rounded-b-3xl overflow-hidden shadow-2xl border-8 border-[#2B2519] bg-[#121518]">
               <img 
                 src="https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg" 
                 alt="Royal Wedding Couple" 
@@ -130,34 +130,34 @@ export default function LandingPage() {
           </div>
 
           <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#5B6454] font-semibold block">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
               OUR EDITORIAL PHILOSOPHY
             </span>
-            <h2 className="font-serif text-5xl sm:text-6xl text-[#1E221D] font-normal leading-[1.12]">
+            <h2 className="font-serif text-5xl sm:text-6xl text-white font-normal leading-[1.12]">
               Unposed. Pure. <br />
-              <span className="italic font-light">Poetic.</span>
+              <span className="italic font-light text-[#D4AF37]">Poetic.</span>
             </h2>
-            <p className="text-[#5F6757] text-base leading-relaxed max-w-lg mx-auto lg:mx-0 font-light">
+            <p className="text-[#C5B388] text-base leading-relaxed max-w-lg mx-auto lg:mx-0 font-light">
               We believe the most breathtaking images are the ones you didn't know were being taken. Our documentary approach focuses on the raw, unscripted emotion of your day—capturing what poses simply cannot. We blend into your celebration to document your legacy as it organically unfolds.
             </p>
 
-            <div className="grid grid-cols-3 gap-6 pt-4 max-w-md mx-auto lg:mx-0 border-t border-[#E8E4DB]">
+            <div className="grid grid-cols-3 gap-6 pt-4 max-w-md mx-auto lg:mx-0 border-t border-[#2B2519]">
               <div>
-                <span className="font-serif text-3xl text-[#1E221D] block">150+</span>
-                <span className="text-[9px] uppercase tracking-wider text-[#7A8275]">Weddings Documented</span>
+                <span className="font-serif text-3xl text-white block">150+</span>
+                <span className="text-[9px] uppercase tracking-wider text-[#C5B388]">Weddings Documented</span>
               </div>
               <div>
-                <span className="font-serif text-3xl text-[#1E221D] block">10+</span>
-                <span className="text-[9px] uppercase tracking-wider text-[#7A8275]">Awards Won</span>
+                <span className="font-serif text-3xl text-white block">10+</span>
+                <span className="text-[9px] uppercase tracking-wider text-[#C5B388]">Awards Won</span>
               </div>
               <div>
-                <span className="font-serif text-3xl text-[#1E221D] block">100%</span>
-                <span className="text-[9px] uppercase tracking-wider text-[#7A8275]">Raw Emotion</span>
+                <span className="font-serif text-3xl text-white block">100%</span>
+                <span className="text-[9px] uppercase tracking-wider text-[#C5B388]">Raw Emotion</span>
               </div>
             </div>
 
             <div className="pt-4">
-              <Link className="inline-block border border-[#5B6454] text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] px-9 py-3 rounded-full text-xs tracking-[0.25em] uppercase font-medium transition shadow-sm" href="/about">
+              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-9 py-3 rounded-full text-xs tracking-[0.25em] uppercase font-medium transition shadow-sm" href="/about">
                 Our Story & Crew
               </Link>
             </div>
@@ -168,13 +168,13 @@ export default function LandingPage() {
 
 
       {/* 3. FEATURED WEDDINGS (MAGAZINE SHOWCASE) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#FAF8F5] border-t border-[#EAE6DE]">
+      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] border-t border-[#2B2519]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-serif text-4xl sm:text-5xl text-[#1E221D] font-normal mb-2">
+            <h2 className="font-serif text-4xl sm:text-5xl text-white font-normal mb-2">
               Featured Weddings
             </h2>
-            <p className="text-xs text-[#7A8275] tracking-[0.25em] uppercase">Curated weddings captured with cinematic depth</p>
+            <p className="text-xs text-[#C5B388] tracking-[0.25em] uppercase">Curated weddings captured with cinematic depth</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -199,27 +199,27 @@ export default function LandingPage() {
               }
             ].map((story, i) => (
               <div key={i} className="group cursor-pointer flex flex-col items-start text-left">
-                <div className="aspect-[4/5] rounded-2xl overflow-hidden mb-5 bg-[#ECEFEA] border border-[#E3DFD5] w-full">
+                <div className="aspect-[4/5] rounded-2xl overflow-hidden mb-5 bg-[#121518] border border-[#2B2519] w-full">
                   <img 
                     src={story.img} 
                     alt={story.names} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                   />
                 </div>
-                <h3 className="font-serif text-2xl text-[#1E221D] mb-1">{story.names}</h3>
-                <p className="text-[10px] tracking-[0.25em] uppercase text-[#7A8275] mb-2">{story.sub}</p>
+                <h3 className="font-serif text-2xl text-white mb-1">{story.names}</h3>
+                <p className="text-[10px] tracking-[0.25em] uppercase text-[#C5B388] mb-2">{story.sub}</p>
                 
                 {story.description ? (
                   <>
-                    <p className="text-[#7A8275] text-[13px] leading-[1.8] mt-3 mb-6 pr-4">
+                    <p className="text-[#C5B388] text-[13px] leading-[1.8] mt-3 mb-6 pr-4">
                       {story.description}
                     </p>
-                    <Link href={`/stories/${story.slug || ''}`} className="inline-block border border-[#5B6454] text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] hover:border-[#5B6454] px-7 py-2.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer">
+                    <Link href={`/stories/${story.slug || ''}`} className="inline-block border border-[#D4AF37]/50 text-[#C5B388] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:font-black hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] px-7 py-2.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer">
                       View Story
                     </Link>
                   </>
                 ) : (
-                  <span className="text-[11px] uppercase tracking-wider text-[#5B6454] group-hover:underline inline-flex items-center gap-1 mt-2">
+                  <span className="text-[11px] uppercase tracking-wider text-[#D4AF37] group-hover:underline inline-flex items-center gap-1 mt-2">
                     View Complete Story ↗
                   </span>
                 )}
@@ -230,14 +230,14 @@ export default function LandingPage() {
       </section>
 
       {/* 4. STUDIO PILLARS & SERVICES (4 Editorial Grid Cards with Mini Photo Collages) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#ECEFEA] border-t border-[#DDD7CD]/70">
+      <section className="py-24 px-6 sm:px-12 bg-[#121518] border-t border-[#2B2519]">
         <div className="max-w-7xl mx-auto">
           
           <div className="text-center mb-16">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#5B6454] font-semibold block mb-2">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
               OUR OFFERINGS
             </span>
-            <h2 className="font-serif text-4xl sm:text-5xl text-[#1E221D] italic font-normal">
+            <h2 className="font-serif text-4xl sm:text-5xl text-white italic font-normal">
               Studio Pillars & Services
             </h2>
             <div className="w-16 h-[1px] bg-[#5B6454]/40 mx-auto mt-4"></div>
@@ -247,14 +247,14 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             
             {/* CARD 1: Destination Wedding Photography */}
-            <div className="bg-white rounded-3xl p-6 border border-[#DDD7CD] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
+            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
               <div>
-                <h3 className="font-serif text-xl text-[#1E221D] min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
+                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
                   Destination Wedding <br />Photography
                 </h3>
 
                 {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#FAF8F5] border border-[#EAE6DE]">
+                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
                   {[
                     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
@@ -265,31 +265,31 @@ export default function LandingPage() {
                     "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80"
                   ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-gray-100">
+                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
                       <img src={img} alt="Destination shoot" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                     </div>
                   ))}
                 </div>
 
-                <p className="text-xs text-[#525B4C] font-light leading-relaxed mb-6">
+                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
                   If you want your wedding to be a thing outside the world, then a destination wedding is the right choice for you.
                 </p>
               </div>
 
-              <Link className="inline-block border border-[#5B6454]/60 text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
+              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
                 Learn More
               </Link>
             </div>
 
             {/* CARD 2: Candid Style Wedding Photography */}
-            <div className="bg-white rounded-3xl p-6 border border-[#DDD7CD] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
+            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
               <div>
-                <h3 className="font-serif text-xl text-[#1E221D] min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
+                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
                   Candid Style Wedding <br />Photography
                 </h3>
 
                 {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#FAF8F5] border border-[#EAE6DE]">
+                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
                   {[
                     "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
@@ -300,31 +300,31 @@ export default function LandingPage() {
                     "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80"
                   ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-gray-100">
+                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
                       <img src={img} alt="Candid shoot" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                     </div>
                   ))}
                 </div>
 
-                <p className="text-xs text-[#525B4C] font-light leading-relaxed mb-6">
+                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
                   Candid photography is nothing but capturing real moments, feelings and expressions rather than posed ones.
                 </p>
               </div>
 
-              <Link className="inline-block border border-[#5B6454]/60 text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
+              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
                 Learn More
               </Link>
             </div>
 
             {/* CARD 3: Wedding Cinematography & Films */}
-            <div className="bg-white rounded-3xl p-6 border border-[#DDD7CD] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
+            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
               <div>
-                <h3 className="font-serif text-xl text-[#1E221D] min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
+                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
                   Wedding Cinematography & <br />Films
                 </h3>
 
                 {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#FAF8F5] border border-[#EAE6DE]">
+                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
                   {[
                     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
@@ -335,31 +335,31 @@ export default function LandingPage() {
                     "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80"
                   ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-gray-100">
+                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
                       <img src={img} alt="Cinema visual" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                     </div>
                   ))}
                 </div>
 
-                <p className="text-xs text-[#525B4C] font-light leading-relaxed mb-6">
+                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
                   A wedding is like a movie of so many beautiful things coming together into one big happy story that is timeless.
                 </p>
               </div>
 
-              <Link className="inline-block border border-[#5B6454]/60 text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
+              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
                 Learn More
               </Link>
             </div>
 
             {/* CARD 4: Prewedding Photography & Videos */}
-            <div className="bg-white rounded-3xl p-6 border border-[#DDD7CD] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
+            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
               <div>
-                <h3 className="font-serif text-xl text-[#1E221D] min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
+                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
                   Prewedding Photography & <br />Videos
                 </h3>
 
                 {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#FAF8F5] border border-[#EAE6DE]">
+                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
                   {[
                     "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
@@ -370,18 +370,18 @@ export default function LandingPage() {
                     "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
                     "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80"
                   ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-gray-100">
+                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
                       <img src={img} alt="Prewedding visual" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                     </div>
                   ))}
                 </div>
 
-                <p className="text-xs text-[#525B4C] font-light leading-relaxed mb-6">
+                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
                   Your unmatched love story with you and your beloved in the frame captured months before your big celebration.
                 </p>
               </div>
 
-              <Link className="inline-block border border-[#5B6454]/60 text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
+              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
                 Learn More
               </Link>
             </div>
@@ -393,18 +393,18 @@ export default function LandingPage() {
 
 
       {/* 5. CINEMATIC WEDDING FILMS SHOWCASE (WEDDINGPUR YOUTUBE REEL) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#FAF8F5] border-t border-[#EAE6DE]">
+      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] border-t border-[#2B2519]">
         <div className="max-w-7xl mx-auto">
           
           {/* Header */}
           <div className="text-center mb-16">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#5B6454] font-semibold block mb-2">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
               MOTION & SOUND STORIES
             </span>
-            <h2 className="font-serif text-4xl sm:text-5xl text-[#1E221D] italic font-normal">
+            <h2 className="font-serif text-4xl sm:text-5xl text-white italic font-normal">
               Cinematic Wedding Films
             </h2>
-            <p className="text-xs text-[#7A8275] tracking-[0.25em] uppercase mt-2">
+            <p className="text-xs text-[#C5B388] tracking-[0.25em] uppercase mt-2">
               Teasers & 4K highlight films streaming on YouTube
             </p>
             <div className="w-16 h-[1px] bg-[#5B6454]/40 mx-auto mt-4"></div>
@@ -416,7 +416,7 @@ export default function LandingPage() {
               href="https://www.youtube.com/@WeddingPur"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black cursor-pointer"
+              className="group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-black cursor-pointer"
             >
               <img
                 src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85"
@@ -440,7 +440,7 @@ export default function LandingPage() {
               {/* Bottom Film Title Tag */}
               <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2">
                 <div>
-                  <span className="text-[10px] tracking-widest uppercase text-amber-300 font-semibold block mb-1">Featured Teaser • 4K Film</span>
+                  <span className="text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">Featured Teaser • 4K Film</span>
                   <h3 className="font-serif text-2xl sm:text-3xl italic">Sandhya & Pratik — Vishwanath Farms, Patna</h3>
                 </div>
                 <span className="text-xs text-white/70 tracking-wider">Streaming in 4K UHD</span>
@@ -481,7 +481,7 @@ export default function LandingPage() {
                 href={film.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white border border-[#DDD7CD] rounded-3xl p-4 shadow-sm hover:shadow-xl hover:border-[#5B6454] transition-all duration-300 block"
+                className="group bg-[#121518] border border-[#2B2519] rounded-3xl p-4 shadow-sm hover:shadow-xl hover:border-[#D4AF37] transition-all duration-300 block"
               >
                 <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black mb-4">
                   <img
@@ -509,10 +509,10 @@ export default function LandingPage() {
                 </div>
 
                 <div className="px-2 pb-2">
-                  <h4 className="font-serif text-xl text-[#1E221D] italic mb-1 group-hover:text-[#5B6454] transition-colors">
+                  <h4 className="font-serif text-xl text-white italic mb-1 group-hover:text-[#D4AF37] transition-colors">
                     {film.couple}
                   </h4>
-                  <p className="text-[11px] uppercase tracking-wider text-[#7A8275]">
+                  <p className="text-[11px] uppercase tracking-wider text-[#C5B388]">
                     {film.subtitle}
                   </p>
                 </div>
@@ -526,7 +526,7 @@ export default function LandingPage() {
               href="https://www.youtube.com/@WeddingPur"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#5B6454] hover:bg-[#485042] text-[#FAF8F5] px-10 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium shadow-md transition-all duration-300"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
             >
               <span>Subscribe & Watch More Films</span>
               <span>↗</span>
@@ -534,8 +534,8 @@ export default function LandingPage() {
           </div>
 
           {/* Editorial Quote */}
-          <div className="text-center pt-14 border-t border-[#EAE6DE] mt-16">
-            <blockquote className="font-serif text-2xl sm:text-3xl text-[#1E221D] italic max-w-2xl mx-auto">
+          <div className="text-center pt-14 border-t border-[#2B2519] mt-16">
+            <blockquote className="font-serif text-2xl sm:text-3xl text-white italic max-w-2xl mx-auto">
               "You will forget the flowers and the food, but you will never forget how it felt."
             </blockquote>
           </div>
@@ -545,15 +545,15 @@ export default function LandingPage() {
 
 
       {/* 6. VERIFIED GOOGLE REVIEWS SECTION (REAL CLIENT FEEDBACK) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#1E221D] text-[#FAF8F5]">
+      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] text-[#F5F5F5]">
         <div className="max-w-7xl mx-auto">
           
           {/* Header */}
           <div className="text-center mb-16">
-            <div className="flex justify-center items-center gap-1 text-[#E6B85C] text-sm mb-2 tracking-widest">
+            <div className="flex justify-center items-center gap-1 text-[#D4AF37] text-sm mb-2 tracking-widest">
               ★★★★★
             </div>
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#A2ADA0] font-semibold block mb-2">
+            <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
               VERIFIED 5-STAR GOOGLE REVIEWS
             </span>
             <h2 className="font-serif text-4xl sm:text-5xl italic font-normal text-white">
@@ -571,7 +571,7 @@ export default function LandingPage() {
             {/* Left Button */}
             <button 
               onClick={handlePrevReview}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-12 w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-[#E6B85C] hover:border-[#E6B85C] transition-all z-10"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-12 w-10 h-10 rounded-full border border-[#2B2519] flex items-center justify-center text-white/50 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all z-10"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" /></svg>
             </button>
@@ -583,26 +583,26 @@ export default function LandingPage() {
                   key={idx}
                   className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === reviewIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                 >
-                  <div className="flex flex-col justify-between h-full border-l border-white/15 pl-8 py-4">
+                  <div className="flex flex-col justify-between h-full border-l border-[#2B2519] pl-8 py-4">
                     <div>
-                      <div className="flex items-center gap-1 text-[#E6B85C] text-sm mb-4">
+                      <div className="flex items-center gap-1 text-[#D4AF37] text-sm mb-4">
                         ★★★★★
                       </div>
-                      <p className="text-sm sm:text-base md:text-lg text-gray-300 italic leading-relaxed mb-8 font-light">
+                      <p className="text-sm sm:text-base md:text-lg text-[#C5B388] italic leading-relaxed mb-8 font-light">
                         "{review.text}"
                       </p>
                     </div>
 
-                    <div className="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <div className="pt-6 border-t border-[#2B2519] flex items-center justify-between">
                       <div>
-                        <span className="text-xs uppercase tracking-wider font-semibold block text-[#ECEFEA]">
+                        <span className="text-xs uppercase tracking-wider font-semibold block text-[#C5B388]">
                           {review.name}
                         </span>
-                        <span className="text-[10px] text-[#A2ADA0] block tracking-wide">
+                        <span className="text-[10px] text-[#C5B388] block tracking-wide">
                           {review.date} • {review.role}
                         </span>
                       </div>
-                      <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center p-1.5 shrink-0">
+                      <div className="w-6 h-6 rounded-full bg-[#121518]/10 flex items-center justify-center p-1.5 shrink-0">
                         <svg viewBox="0 0 24 24" className="w-full h-full">
                           <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
                           <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
@@ -619,7 +619,7 @@ export default function LandingPage() {
             {/* Right Button */}
             <button 
               onClick={handleNextReview}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-12 w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-[#E6B85C] hover:border-[#E6B85C] transition-all z-10"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-12 w-10 h-10 rounded-full border border-[#2B2519] flex items-center justify-center text-white/50 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all z-10"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" /></svg>
             </button>
@@ -630,15 +630,15 @@ export default function LandingPage() {
                 <button
                   key={idx}
                   onClick={() => setReviewIndex(idx)}
-                  className={`h-1.5 rounded-full transition-all duration-500 ${idx === reviewIndex ? 'w-6 bg-[#E6B85C]' : 'w-2 bg-white/20 hover:bg-white/40'}`}
+                  className={`h-1.5 rounded-full transition-all duration-500 ${idx === reviewIndex ? 'w-6 bg-[#D4AF37]' : 'w-2 bg-[#121518]/20 hover:bg-[#121518]/40'}`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}
             </div>          </div>
 
           {/* Bottom Footer Rating Summary */}
-          <div className="mt-16 pt-8 border-t border-white/10 text-center">
-            <span className="text-[11px] uppercase tracking-widest text-[#A2ADA0] hover:text-white transition cursor-pointer inline-flex items-center gap-2">
+          <div className="mt-16 pt-8 border-t border-[#2B2519] text-center">
+            <span className="text-[11px] uppercase tracking-widest text-[#C5B388] hover:text-white transition cursor-pointer inline-flex items-center gap-2">
               Rated 4.9 / 5.0 across 120+ Verified Google Reviews ↗
             </span>
           </div>
@@ -648,12 +648,12 @@ export default function LandingPage() {
 
 
       {/* 6.5. FREQUENTLY ASKED QUESTIONS */}
-      <section className="bg-[#FAF8F5] py-24 px-6 sm:px-12 border-t border-[#EAE6DE]">
+      <section className="bg-[#0B0D0E] py-24 px-6 sm:px-12 border-t border-[#2B2519]">
         <div className="max-w-3xl mx-auto">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-[#5B6454] font-semibold block mb-2 text-center">
+          <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
             FAQS
           </span>
-          <h2 className="font-serif text-4xl sm:text-5xl text-[#1E221D] font-normal text-center mb-14">
+          <h2 className="font-serif text-4xl sm:text-5xl text-white font-normal text-center mb-14">
             Frequently Asked Questions
           </h2>
 
@@ -678,14 +678,14 @@ export default function LandingPage() {
             ].map((faq, index) => (
               <div 
                 key={index}
-                className="bg-white border border-[#DDD7CD] rounded-2xl shadow-sm overflow-hidden mb-4 transition-all duration-300 hover:border-[#5B6454]/60"
+                className="bg-[#121518] border border-[#2B2519] rounded-2xl shadow-sm overflow-hidden mb-4 transition-all duration-300 hover:border-[#D4AF37]"
               >
                 <button 
                   className="w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none"
                   onClick={() => toggleFaq(index)}
                 >
-                  <h3 className="text-sm font-semibold text-[#1E221D]">{faq.q}</h3>
-                  <span className={`text-[#5B6454] transition-transform duration-300 flex-shrink-0 ml-4 ${openFaq === index ? 'rotate-180' : ''}`}>
+                  <h3 className="text-sm font-semibold text-white">{faq.q}</h3>
+                  <span className={`text-[#D4AF37] transition-transform duration-300 flex-shrink-0 ml-4 ${openFaq === index ? 'rotate-180' : ''}`}>
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
                     </svg>
@@ -694,7 +694,7 @@ export default function LandingPage() {
                 <div 
                   className={`px-6 overflow-hidden transition-all duration-500 ease-in-out ${openFaq === index ? 'max-h-40 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
                 >
-                  <p className="text-xs text-[#525B4C] font-light leading-relaxed border-t border-[#EAE6DE] pt-4">
+                  <p className="text-xs text-[#C5B388] font-light leading-relaxed border-t border-[#2B2519] pt-4">
                     {faq.a}
                   </p>
                 </div>
@@ -706,7 +706,7 @@ export default function LandingPage() {
 
 
       {/* 7. LIVE INSTAGRAM FEED SHOWCASE (@weddingpur) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#FAF8F5] border-t border-[#EAE6DE]">
+      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] border-t border-[#2B2519]">
         <div className="max-w-7xl mx-auto">
           
           {/* Instagram Profile Header */}
@@ -718,20 +718,20 @@ export default function LandingPage() {
               className="group flex flex-col items-center"
             >
               <div className="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 mb-3 group-hover:scale-105 transition-transform duration-300">
-                <div className="w-full h-full rounded-full bg-white p-0.5 overflow-hidden">
-                  <div className="w-full h-full rounded-full bg-[#FAF8F5] flex items-center justify-center font-serif font-bold text-xl text-[#1E221D]">
+                <div className="w-full h-full rounded-full bg-[#121518] p-0.5 overflow-hidden">
+                  <div className="w-full h-full rounded-full bg-[#0B0D0E] flex items-center justify-center font-serif font-bold text-xl text-white">
                     W
                   </div>
                 </div>
               </div>
-              <h3 className="font-semibold text-lg text-[#1E221D] tracking-wide flex items-center gap-1.5 group-hover:text-[#5B6454] transition-colors">
+              <h3 className="font-semibold text-lg text-white tracking-wide flex items-center gap-1.5 group-hover:text-[#D4AF37] transition-colors">
                 weddingpur
                 <span className="text-blue-500 text-xs">✓</span>
               </h3>
             </a>
 
             {/* Bio Badges from reference image */}
-            <p className="text-xs text-[#525B4C] max-w-2xl mx-auto mt-2 leading-relaxed font-light">
+            <p className="text-xs text-[#C5B388] max-w-2xl mx-auto mt-2 leading-relaxed font-light">
               🏆 Couples Choice Award 2024 Winner • 🏆 Wedding Awards 2025 Winner • 💍 Wedding Films Expert • 🌍 Available Worldwide
             </p>
 
@@ -739,7 +739,7 @@ export default function LandingPage() {
               href="https://www.instagram.com/weddingpur/"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-2 border border-[#5B6454]/70 text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] px-7 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition duration-300"
+              className="mt-4 inline-flex items-center gap-2 border border-[#5B6454]/70 text-[#D4AF37] hover:bg-[#5B6454] hover:text-[#F5F5F5] px-7 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition duration-300"
             >
               <span>Follow on Instagram</span>
               <span>↗</span>
@@ -779,7 +779,7 @@ export default function LandingPage() {
                 href="https://www.instagram.com/weddingpur/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative aspect-square bg-[#ECEFEA] rounded-2xl overflow-hidden shadow-sm block"
+                className="group relative aspect-square bg-[#121518] rounded-2xl overflow-hidden shadow-sm block"
               >
                 <img
                   src={post.img}
@@ -796,7 +796,7 @@ export default function LandingPage() {
                 </div>
 
                 {/* Hover Glass Veil with Instagram Logo */}
-                <div className="absolute inset-0 bg-[#1E221D]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white p-4">
+                <div className="absolute inset-0 bg-[#0B0D0E]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white p-4">
                   <svg className="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                   </svg>

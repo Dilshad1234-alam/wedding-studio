@@ -2,8 +2,8 @@
 @config "../../tailwind.config.js";
 
 :root {
-  --background: #FAF8F5;
-  --foreground: #1E221D;
+  --background: #0B0D0E;
+  --foreground: #F5F5F5;
 }
 
 body {
@@ -18,8 +18,8 @@ html {
 }
 
 ::selection {
-  background-color: #626C59;
-  color: #FAF8F5;
+  background-color: #D4AF37;
+  color: #000000;
 }
 
 @layer base {
@@ -28,4 +28,38 @@ html {
     letter-spacing: -0.01em;
     font-weight: 500;
   }
+}
+
+/* ==========================================================================
+   ROYALE GOLD HOVER SYSTEM OVERRIDES (NO GREEN / EMERALD ON HOVER)
+   ========================================================================== */
+
+/* Catch any residual Tailwind emerald/green hover utility classes */
+[class*="hover:bg-emerald"],
+[class*="hover:bg-green"] {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+[class*="hover:bg-emerald"]:hover,
+[class*="hover:bg-green"]:hover {
+  background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 100%) !important;
+  color: #0A0C10 !important;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.45) !important;
+}
+
+[class*="hover:border-emerald"]:hover,
+[class*="hover:border-green"]:hover {
+  border-color: #D4AF37 !important;
+}
+
+[class*="hover:text-emerald"]:hover,
+[class*="hover:text-green"]:hover {
+  color: #F3E5AB !important;
+}
+
+/* Global Button & Anchor Micro-Interactions */
+button, 
+a.button-link,
+[role="button"] {
+  transition: all 0.2s ease-in-out;
 }

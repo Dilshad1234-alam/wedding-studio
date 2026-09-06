@@ -1,152 +1,231 @@
-'use client';
-import { useState } from 'react';
-import { ChevronDown, Trophy, Star } from 'lucide-react';
+"use client";
+import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function AboutPage() {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openFaq, setOpenFaq] = useState(0);
 
-  const toggleFaq = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const stats = [
+    { value: "850+", label: "WEDDINGS PRESERVED", desc: "Across Bihar, Rajasthan & Delhi NCR" },
+    { value: "10+", label: "YEARS OF HERITAGE", desc: "Crafting timeless visual heirlooms" },
+    { value: "4.9★", label: "CLIENT SATISFACTION", desc: "Over 600+ verified couple testimonials" },
+    { value: "65+", label: "DESTINATIONS COVERED", desc: "Pan-India & international shoots" }
+  ];
+
+  const awards = [
+    {
+      title: "Fearless Awards",
+      year: "2025",
+      desc: "Ranked among Top 50 Wedding Photographers in India for documentary excellence.",
+      icon: "🏆"
+    },
+    {
+      title: "WedSutra Premium",
+      year: "2024",
+      desc: "Recognized for Best Cinematic Film of the Year across destination circuits.",
+      icon: "⭐"
+    },
+    {
+      title: "Asia Wedding Pro",
+      year: "2023",
+      desc: "Honored with the Crown of Excellence in Traditional & Heritage Photography.",
+      icon: "🏆"
+    }
+  ];
 
   const faqs = [
     {
       q: "Do you only do Photography/Cinematography or both?",
-      a: "We specialize in both luxury photography and cinematic films. When booked for both sides, we deploy a synchronized team to capture cohesive timelines without duplicate costs."
+      a: "We provide comprehensive, end-to-end coverage across both candid photography and master 4K cinematography. Our creative directors ensure consistent color grading and emotional cadence across all your films and stills."
     },
     {
       q: "What deliverables form part of the package?",
-      a: "Packages typically include raw coverage, edited candid high-res photos, 3-5 min cinematic teaser, 30-45 min highlight film, and handcrafted lay-flat photo albums."
+      a: "Our signature package includes a 3–5 minute Cinematic Teaser, a 25–35 minute Master Wedding Film, an online gallery with 800+ graded high-resolution stills, and handcrafted leather-bound archival heirloom albums."
     },
     {
       q: "What is the expected time for the delivery?",
-      a: "Teasers and Instagram reels are delivered within 7 to 10 days. The complete edited photo gallery and full wedding film take approximately 4 to 6 weeks."
+      a: "You receive an instant 25-frame sneak peek within 48 hours for immediate celebrations and social sharing. The complete cinematic edit and archival photo suite are delivered within 4 to 6 weeks."
     },
     {
       q: "How many crew members do you provide?",
-      a: "A typical team consists of 4 to 6 professionals (Candid Photographer, Traditional Photographer, Cinematographer, Drone Pilot). Customization is available based on your event scale."
+      a: "Depending on your celebration scale, our crew ranges from a tight 4-member candid unit to a full 10-member production team featuring dedicated drone pilots, steadicam operators, and lighting masters."
     },
     {
       q: "How much do you charge?",
-      a: "Our packages are customized based on the number of days, locations, and deliverables. Contact us directly for a personalized transparent quotation."
+      a: "Our bespoke wedding commissions typically begin at ₹1.5L for single-day coverage and scale up for multi-day grand destination productions. Custom quotes are tailored based on dates, crew scale, and destinations."
     }
   ];
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1F231D] font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5] pt-32 pb-24">
+    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased py-12 px-6 sm:px-10 lg:px-16 selection:bg-[#D4AF37] selection:text-black">
       
-      {/* 1. Studio Story */}
-      <section className="container mx-auto px-4 max-w-[1200px] mb-32">
-        <div className="flex flex-col md:flex-row items-center gap-16 md:gap-24">
-          <div className="w-full md:w-1/2">
-             <div className="w-full aspect-[4/5] rounded-t-full rounded-b-2xl overflow-hidden shadow-2xl border-4 border-white relative">
-              <img 
-                src="https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg" 
-                alt="Our Studio" 
-                className="absolute inset-0 w-full h-full object-cover"
+      {/* Background Subtle Gold Aura */}
+      <div className="fixed inset-0 pointer-events-none flex items-center justify-center">
+        <div className="w-[650px] h-[650px] bg-[#D4AF37]/5 blur-[150px] rounded-full"></div>
+      </div>
+
+      <div className="relative w-full max-w-[1440px] mx-auto space-y-24 pt-10">
+        
+        {/* 1. HERO STORY & ARCH PHOTO */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          
+          {/* Left: Arch Photo */}
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="relative w-full max-w-[420px] aspect-[3/4] rounded-t-[140px] rounded-b-3xl overflow-hidden border border-[#2B2519] shadow-2xl bg-[#121518]">
+              <img
+                src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200&auto=format&fit=crop"
+                alt="Weddingpur Couple"
+                className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700 hover:scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D0E]/80 via-transparent to-transparent"></div>
+              <div className="absolute bottom-6 left-6 right-6 text-center">
+                <span className="text-[9px] uppercase font-black tracking-[0.3em] text-[#D4AF37]">
+                  PATNA • BIHAR • PAN-INDIA
+                </span>
+              </div>
             </div>
           </div>
-          
-          <div className="w-full md:w-1/2 text-center md:text-left">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#555D4E] font-semibold block mb-4">
-              OUR JOURNEY
-            </span>
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#1F231D] mb-8 leading-tight">
-              Crafting Legacy <br/>
-              <span className="italic text-[#8C7A6B]">Since 2016.</span>
-            </h1>
-            <div className="space-y-6 text-[#4C5346] text-sm font-light leading-relaxed max-w-lg mx-auto md:mx-0">
+
+          {/* Right: Narrative & Stats */}
+          <div className="lg:col-span-7 space-y-6">
+            <div>
+              <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">
+                OUR JOURNEY
+              </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-white tracking-tight leading-[1.1]">
+                Crafting Legacy <br />
+                <span className="italic text-[#D4AF37]">Since 2016.</span>
+              </h1>
+            </div>
+
+            <div className="space-y-4 text-xs sm:text-sm text-[#D1C7A5] font-light leading-relaxed">
               <p>
-                Founded on the belief that every love story deserves to be treated as a work of fine art. Over the past seven years, we have had the privilege of documenting over 550 celebrations across India and beyond.
+                Founded on the belief that every love story deserves to be treated as a work of fine art. Over the past decade, we have had the privilege of documenting over 850 celebrations across India and beyond.
               </p>
               <p>
                 We are a collective of visual storytellers, cinematic directors, and fine-art editors dedicated to preserving the authentic, unscripted moments of your most important day.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* 2. Awards & Recognition */}
-      <section className="bg-[#EAECE8] py-24 mb-32">
-        <div className="container mx-auto px-4 max-w-6xl text-center">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#555D4E] font-semibold block mb-4">
-            RECOGNITION
-          </span>
-          <h2 className="font-serif text-4xl sm:text-5xl text-[#1F231D] mb-16">
-            Global Acclaim
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-             <div className="bg-[#FAF8F5] p-10 rounded-2xl border border-white flex flex-col items-center">
-               <Trophy size={32} className="text-[#8C7A6B] mb-6" strokeWidth={1.5} />
-               <h3 className="font-serif text-2xl text-[#1F231D] mb-2">Fearless Awards</h3>
-               <p className="text-[#4C5346] text-sm font-light">Top 50 Wedding Photographers 2025</p>
-             </div>
-             
-             <div className="bg-[#FAF8F5] p-10 rounded-2xl border border-white flex flex-col items-center">
-               <Star size={32} className="text-[#8C7A6B] mb-6" strokeWidth={1.5} />
-               <h3 className="font-serif text-2xl text-[#1F231D] mb-2">WedSutra Premium</h3>
-               <p className="text-[#4C5346] text-sm font-light">Best Cinematic Film of the Year</p>
-             </div>
-             
-             <div className="bg-[#FAF8F5] p-10 rounded-2xl border border-white flex flex-col items-center">
-               <Trophy size={32} className="text-[#8C7A6B] mb-6" strokeWidth={1.5} />
-               <h3 className="font-serif text-2xl text-[#1F231D] mb-2">Asia Wedding Pro</h3>
-               <p className="text-[#4C5346] text-sm font-light">Excellence in Destination Photography</p>
-             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. FAQ Section */}
-      <section className="container mx-auto px-4 max-w-3xl mb-12">
-        <div className="text-center mb-16">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#555D4E] font-semibold block mb-4">
-            FAQS
-          </span>
-          <h2 className="font-serif text-4xl sm:text-5xl text-[#1F231D]">
-            Frequently Asked
-          </h2>
-        </div>
-        
-        <div className="space-y-4">
-          {faqs.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <div 
-                key={index} 
-                className={`border bg-white rounded-2xl transition-all duration-300 overflow-hidden ${isOpen ? 'border-[#555D4E] shadow-lg' : 'border-[#E8E4DC] hover:border-[#555D4E]/50'}`}
-              >
-                <button 
-                  onClick={() => toggleFaq(index)}
-                  className="w-full text-left px-6 py-5 sm:px-8 sm:py-6 flex items-center justify-between focus:outline-none"
-                >
-                  <h3 className={`font-serif text-lg sm:text-xl pr-8 transition-colors ${isOpen ? 'text-[#555D4E]' : 'text-[#1F231D]'}`}>
-                    {faq.q}
-                  </h3>
-                  <div className={`flex-shrink-0 transition-transform duration-500 ${isOpen ? 'rotate-180 text-[#555D4E]' : 'text-[#8C9385]'}`}>
-                    <ChevronDown size={20} strokeWidth={1.5} />
-                  </div>
-                </button>
-                
-                <div 
-                  className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
-                >
-                  <div className="px-6 pb-6 sm:px-8 sm:pb-8 pt-0">
-                    <div className="h-[1px] w-full bg-[#E8E4DC] mb-6" />
-                    <p className="text-[#4C5346] font-light leading-relaxed text-sm">
-                      {faq.a}
-                    </p>
-                  </div>
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-[#2B2519]">
+              {stats.map((s, idx) => (
+                <div key={idx} className="bg-[#121518] border border-[#2B2519] p-3.5 rounded-2xl">
+                  <span className="text-xl sm:text-2xl font-black text-[#D4AF37] block">
+                    {s.value}
+                  </span>
+                  <span className="text-[9px] uppercase font-black tracking-wider text-white block mt-0.5">
+                    {s.label}
+                  </span>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+              ))}
+            </div>
 
-    </main>
+            {/* CTAs */}
+            <div className="pt-2 flex items-center gap-4 flex-wrap">
+              <Link className="px-8 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs uppercase tracking-[0.2em] font-black shadow-lg shadow-[#D4AF37]/20 transition-all cursor-pointer" href="/contact">
+                SCHEDULE CONSULTATION
+              </Link>
+              <Link className="px-7 py-3 rounded-full border border-[#2B2519] hover:border-[#D4AF37] text-[#C5B388] hover:text-white text-xs uppercase tracking-[0.2em] font-bold transition-all" href="/stories">
+                EXPLORE STORIES ↗
+              </Link>
+            </div>
+          </div>
+
+        </div>
+
+        {/* 2. RECOGNITION / GLOBAL ACCLAIM */}
+        <div className="space-y-8">
+          <div className="text-center">
+            <span className="text-[10px] uppercase font-black tracking-[0.3em] text-[#D4AF37] block mb-1">
+              RECOGNITION
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-serif italic text-white">
+              Global Acclaim
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {awards.map((award, i) => (
+              <div 
+                key={i} 
+                className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/50 rounded-2xl p-8 text-center transition-all duration-300 shadow-xl group"
+              >
+                <div className="text-3xl mb-3 text-[#D4AF37] group-hover:scale-110 transition-transform">
+                  {award.icon}
+                </div>
+                <span className="text-[10px] uppercase font-mono tracking-widest text-[#D4AF37] block mb-1">
+                  HONORED • {award.year}
+                </span>
+                <h3 className="text-base font-bold text-white mb-2 tracking-wide">
+                  {award.title}
+                </h3>
+                <p className="text-xs text-[#A89D84] font-light leading-relaxed">
+                  {award.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. FAQS SECTION */}
+        <div className="space-y-8">
+          <div className="text-center">
+            <span className="text-[10px] uppercase font-black tracking-[0.3em] text-[#D4AF37] block mb-1">
+              FAQS
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-serif italic text-white">
+              Frequently Asked
+            </h2>
+          </div>
+
+          <div className="max-w-4xl mx-auto space-y-3">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div 
+                  key={idx} 
+                  className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/40 rounded-2xl transition-all overflow-hidden shadow-md"
+                >
+                  <button 
+                    onClick={() => setOpenFaq(isOpen ? -1 : idx)} 
+                    className="w-full flex items-center justify-between p-5 text-left cursor-pointer"
+                  >
+                    <span className="text-sm font-semibold text-white tracking-wide pr-4">
+                      {faq.q}
+                    </span>
+                    <span className="text-[#D4AF37] text-xs font-mono shrink-0 transition-transform">
+                      {isOpen ? "▲" : "▼"}
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-5 text-xs text-[#D1C7A5] leading-relaxed border-t border-[#1C1F24] pt-3 font-light">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 4. LUXURY BOTTOM BOOKING BANNER */}
+        <div className="bg-gradient-to-r from-[#121518] via-[#171B21] to-[#121518] border border-[#2B2519] rounded-3xl p-8 sm:p-12 text-center shadow-2xl">
+          <span className="text-[10px] uppercase font-black tracking-[0.3em] text-[#D4AF37] block mb-2">
+            RESERVE YOUR CHAPTER
+          </span>
+          <h3 className="text-2xl sm:text-3xl font-serif italic text-white mb-3">
+            Commission Weddingpur For Your Sacred Day
+          </h3>
+          <p className="text-xs text-[#A89D84] max-w-xl mx-auto mb-6 leading-relaxed">
+            We limit our calendar to a selected number of weddings per season to maintain uncompromised fine-art standards.
+          </p>
+          <Link className="inline-block px-8 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs uppercase tracking-[0.2em] font-black shadow-lg shadow-[#D4AF37]/20 transition-all cursor-pointer" href="/contact">
+            INQUIRE DATES & AVAILABILITY ↗
+          </Link>
+        </div>
+
+      </div>
+    </div>
   );
 }

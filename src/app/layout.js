@@ -25,7 +25,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${montserrat.variable}`}>
-      <body className="bg-[#FAF8F5] text-[#1E221D] m-0 p-0 antialiased min-h-screen flex flex-col font-sans selection:bg-[#626C59] selection:text-[#FAF8F5]">
+      <body className="bg-[#0B0D0E] text-[#F5F5F5] m-0 p-0 antialiased min-h-screen flex flex-col font-sans selection:bg-[#D4AF37] selection:text-black">
         <LayoutWrapper>
           {children}
         </LayoutWrapper>

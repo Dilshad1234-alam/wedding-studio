@@ -38,6 +38,54 @@ export default function FilmsPage() {
       duration: "02:50 MIN",
       img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1400&q=85",
       youtubeUrl: "https://www.youtube.com/@WeddingPur"
+    },
+    teasers: {
+      tag: "CINEMATIC TEASER • 4K UHD",
+      title: "Aditya & Riya's Sacred Pheras",
+      location: "TAJ NADESAR PALACE, VARANASI",
+      duration: "04:12 MIN",
+      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=85",
+      youtubeUrl: "https://www.youtube.com/@WeddingPur"
+    },
+    feature: {
+      tag: "FULL CINEMA FEATURE • 4K UHD",
+      title: "Sandhya & Pratik — Forever Beginnings",
+      location: "VISHWANATH FARMS, PATNA",
+      duration: "24:30 MIN",
+      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1400&q=85",
+      youtubeUrl: "https://www.youtube.com/@WeddingPur"
+    },
+    'pre-wedding': {
+      tag: "PRE-WEDDING CINEMA • 4K UHD",
+      title: "Ghats of Eternity — Whispers of Ganga",
+      location: "ASSI GHAT & CHET SINGH FORT, VARANASI",
+      duration: "02:50 MIN",
+      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1400&q=85",
+      youtubeUrl: "https://www.youtube.com/@WeddingPur"
+    },
+    teasers: {
+      tag: "CINEMATIC TEASER • 4K UHD",
+      title: "Aditya & Riya's Sacred Pheras",
+      location: "TAJ NADESAR PALACE, VARANASI",
+      duration: "04:12 MIN",
+      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=85",
+      youtubeUrl: "https://www.youtube.com/@WeddingPur"
+    },
+    feature: {
+      tag: "FULL CINEMA FEATURE • 4K UHD",
+      title: "Sandhya & Pratik — Forever Beginnings",
+      location: "VISHWANATH FARMS, PATNA",
+      duration: "24:30 MIN",
+      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1400&q=85",
+      youtubeUrl: "https://www.youtube.com/@WeddingPur"
+    },
+    'pre-wedding': {
+      tag: "PRE-WEDDING CINEMA • 4K UHD",
+      title: "Ghats of Eternity — Whispers of Ganga",
+      location: "ASSI GHAT & CHET SINGH FORT, VARANASI",
+      duration: "02:50 MIN",
+      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1400&q=85",
+      youtubeUrl: "https://www.youtube.com/@WeddingPur"
     }
   };
 
@@ -112,17 +160,14 @@ export default function FilmsPage() {
     : filmsList.filter(film => film.category === activeCategory);
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
+    <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
       {/* 1. CINEMA HEADER */}
-      <section className="pt-0 -mt-10 pb-10 px-6 text-center max-w-4xl mx-auto">
+      <section className="pt-10 -mt-10 pb-10 px-6 text-center max-w-4xl mx-auto">
   
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#1E221D] tracking-tight mb-4">
+        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
           Moving Portraits
         </h1>
-        <p className="text-xs sm:text-sm text-[#525B4C] max-w-xl mx-auto font-light leading-relaxed">
-          We don't just record events; we weave emotions, spoken vows, and subtle glances into a cinematic documentary that feels like a timeless movie.
-        </p>
 
         {/* Category Pill Filters */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-10">
@@ -134,8 +179,8 @@ export default function FilmsPage() {
                 onClick={() => setActiveCategory(cat.key)}
                 className={`px-6 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? 'bg-[#5B6454] text-[#FAF8F5] shadow-sm'
-                    : 'border border-[#DDD7CD] text-[#7A8275] hover:border-[#5B6454] hover:text-[#5B6454]'
+                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black shadow-md shadow-[#D4AF37]/20 border-transparent'
+                    : 'bg-[#121518] border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37]/40'
                 }`}
               >
                 {cat.label}
@@ -146,9 +191,9 @@ export default function FilmsPage() {
       </section>
 
       {/* 2. DYNAMIC FEATURED HERO SHOWCASE (CHANGES WITH ACTIVE CATEGORY) */}
-      <section className="px-6 sm:px-12 max-w-7xl mx-auto mb-20">
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 mb-20">
         <div className="text-center mb-6">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#5B6454] font-semibold">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">
             FEATURED CINEMA REEL
           </span>
         </div>
@@ -158,7 +203,7 @@ export default function FilmsPage() {
           href={currentHero.youtubeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black cursor-pointer animate-fadeIn transition-all duration-700"
+          className="w-full group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-[#121518] cursor-pointer animate-fadeIn transition-all duration-700 mb-12"
         >
           <img
             src={currentHero.img}
@@ -169,8 +214,8 @@ export default function FilmsPage() {
 
           {/* Animated Center Play Button */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-md border border-white/40 group-hover:bg-[#5B6454] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-white ml-1" viewBox="0 0 24 24">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#121518]/20 backdrop-blur-md border border-[#2B2519] group-hover:bg-gradient-to-r group-hover:from-[#F3E5AB] group-hover:to-[#D4AF37] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-white group-hover:fill-black ml-1" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
             </div>
@@ -182,7 +227,7 @@ export default function FilmsPage() {
           {/* Dynamic Film Meta Info */}
           <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2">
             <div>
-              <span className="text-[10px] tracking-widest uppercase text-amber-300 font-semibold block mb-1">
+              <span className="text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">
                 {currentHero.tag}
               </span>
               <h3 className="font-serif text-2xl sm:text-4xl italic">
@@ -200,15 +245,15 @@ export default function FilmsPage() {
       </section>
 
       {/* 3. 2-COLUMN LUXURY FILM GRID */}
-      <section className="px-6 sm:px-12 max-w-7xl mx-auto pb-28">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
           {filteredFilms.map((film, idx) => (
             <a
               key={idx}
               href={film.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-white rounded-3xl p-5 border border-[#DDD7CD] shadow-sm hover:shadow-xl hover:border-[#5B6454]/50 transition-all duration-500 block"
+              className="group bg-[#121518] rounded-3xl p-5 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40/50 transition-all duration-500 block"
             >
               <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black mb-5">
                 <img
@@ -228,8 +273,8 @@ export default function FilmsPage() {
                 </div>
 
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-white/30 backdrop-blur-sm border border-white/50 group-hover:bg-[#5B6454] flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                    <svg className="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 rounded-full bg-[#121518]/30 backdrop-blur-sm border border-[#2B2519] group-hover:bg-gradient-to-r group-hover:from-[#F3E5AB] group-hover:to-[#D4AF37] flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
+                    <svg className="w-5 h-5 fill-white group-hover:fill-black ml-0.5" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
@@ -243,15 +288,15 @@ export default function FilmsPage() {
 
               <div className="px-2 pb-2 flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="font-serif text-2xl text-[#1E221D] italic mb-1 group-hover:text-[#5B6454] transition-colors">
+                  <h3 className="font-serif text-2xl text-[#F5F5F5] italic mb-1 group-hover:text-[#D4AF37] transition-colors">
                     {film.title}
                   </h3>
-                  <p className="text-[10px] uppercase tracking-widest text-[#7A8275]">
+                  <p className="text-[10px] uppercase tracking-widest text-[#C5B388]">
                     {film.location}
                   </p>
                 </div>
 
-                <div className="w-9 h-9 rounded-full border border-[#5B6454]/40 flex items-center justify-center text-[#5B6454] group-hover:bg-[#5B6454] group-hover:text-white transition-all text-xs shrink-0 mt-1">
+                <div className="w-9 h-9 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] group-hover:bg-gradient-to-r group-hover:from-[#F3E5AB] group-hover:to-[#D4AF37] group-hover:text-black group-hover:shadow-[0_0_15px_rgba(212,175,55,0.45)] transition-all text-xs shrink-0 mt-1">
                   ↗
                 </div>
               </div>
@@ -260,17 +305,17 @@ export default function FilmsPage() {
         </div>
 
         {/* Bottom Commission Box */}
-        <div className="mt-20 bg-[#ECEFEA] border border-[#DDD7CD] rounded-3xl p-10 sm:p-14 text-center max-w-4xl mx-auto shadow-sm">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-[#5B6454] font-semibold block mb-2">
+        <div className="mt-20 bg-[#121518] border border-[#2B2519] rounded-3xl p-10 sm:p-14 text-center max-w-4xl mx-auto shadow-xl">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-black block  mb-2">
             PRESERVE YOUR LEGACY IN MOTION
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl italic text-[#1E221D] mb-4">
+          <h2 className="font-serif text-3xl sm:text-4xl italic text-[#F5F5F5] mb-4">
             Commission a Wedding Cinema Film
           </h2>
-          <p className="text-xs sm:text-sm text-[#525B4C] max-w-xl mx-auto font-light leading-relaxed mb-8">
+          <p className="text-xs sm:text-sm text-[#C5B388] max-w-xl mx-auto font-light leading-relaxed mb-8">
             Every couple has an unwritten poetry. Our cinema crews are available across Patna, Varanasi, and destination locations worldwide.
           </p>
-          <Link className="inline-block bg-[#5B6454] hover:bg-[#485042] text-[#FAF8F5] px-10 py-3.5 rounded-full text-xs uppercase tracking-[0.25em] font-medium shadow-md transition-all duration-300" href="/contact">
+          <Link className="inline-block px-10 py-3.5 rounded-full font-medium bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer" href="/contact">
             Commission A Film
           </Link>
         </div>

@@ -49,35 +49,32 @@ export default function ServicesPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#FAF8F5] text-[#1E221D] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
+    <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
       {/* 1. EDITORIAL HEADER */}
-      <section className="pt-0 -mt-10 pb-16 px-6 text-center max-w-4xl mx-auto">
-        <span className="text-[10px] uppercase tracking-[0.4em] text-[#5B6454] font-semibold block mb-3">
-          BESPOKE COMMISSIONS
-        </span>
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#1E221D] tracking-tight mb-4">
+      <section className="pt-10 -mt-10 pb-16 px-6 text-center max-w-4xl mx-auto">
+        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
           Studio Offerings
         </h1>
-        <p className="text-xs sm:text-sm text-[#525B4C] max-w-xl mx-auto font-light leading-relaxed">
-          Explore our complete suite of fine-art photography, high-altitude aerials, and documentary cinema tailored for celebrations in Patna, Bihar, and across the globe.
+        <p className="text-xs sm:text-sm text-[#C5B388] font-light leading-relaxed tracking-wide">
+         Bespoke visual craftsmanship, fine-art stills, and master cinema tailored for heirloom preservation.
         </p>
       </section>
 
       {/* 2. ALTERNATING LUXURY SERVICE SPREADS */}
-      <section className="px-6 sm:px-12 max-w-7xl mx-auto space-y-16">
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-16">
         {serviceOfferings.map((service, index) => {
           const isReversed = index % 2 !== 0;
           return (
             <div
               key={index}
-              className="bg-white border border-[#DDD7CD] rounded-3xl p-6 sm:p-12 shadow-sm hover:shadow-md transition-all duration-500"
+              className="bg-[#121518] border border-[#2B2519] rounded-3xl p-6 sm:p-12 shadow-xl hover:shadow-md transition-all duration-500"
             >
               <div className={`grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center ${isReversed ? 'lg:flex-row-reverse' : ''}`}>
                 
                 {/* Visual Image Column */}
                 <div className={`lg:col-span-6 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border-4 border-[#FAF8F5] bg-[#ECEFEA] group">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border-4 border-[#FAF8F5] bg-[#121518] group">
                     <img
                       src={service.img}
                       alt={service.title}
@@ -89,15 +86,15 @@ export default function ServicesPage() {
 
                 {/* Narrative & Details Column */}
                 <div className={`lg:col-span-6 space-y-5 text-center lg:text-left ${isReversed ? 'lg:order-1' : 'lg:order-2'}`}>
-                  <span className="text-[10px] uppercase tracking-[0.3em] text-[#5B6454] font-semibold block">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-black block ">
                     {service.tagline}
                   </span>
 
-                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#1E221D] italic font-normal leading-tight">
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#F5F5F5] italic font-normal leading-tight">
                     {service.title}
                   </h2>
 
-                  <p className="text-xs sm:text-sm text-[#525B4C] leading-relaxed font-light">
+                  <p className="text-xs sm:text-sm text-[#C5B388] leading-relaxed font-light">
                     {service.desc}
                   </p>
 
@@ -105,15 +102,15 @@ export default function ServicesPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 max-w-lg mx-auto lg:mx-0">
                     {service.features.map((feat, fIdx) => (
                       <div key={fIdx} className="flex items-center gap-2 text-left">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#5B6454]"></span>
-                        <span className="text-[11px] text-[#424B3D] tracking-wide font-light">{feat}</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
+                        <span className="text-[11px] text-[#C5B388] tracking-wide font-light">{feat}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Dark Pill Hover Button */}
                   <div className="pt-4">
-                    <Link className="inline-block border border-[#5B6454] text-[#5B6454] hover:bg-[#5B6454] hover:text-[#FAF8F5] px-9 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer" href="/contact">
+                    <Link className="inline-block border border-[#D4AF37]/50 text-[#C5B388] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:font-black hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] px-9 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer" href="/contact">
                       Get Quote
                     </Link>
                   </div>
@@ -126,18 +123,18 @@ export default function ServicesPage() {
       </section>
 
       {/* 3. BOTTOM COMMISSION BANNER (Ensures Safe Spacing Above Dark Footer) */}
-      <section className="px-6 sm:px-12 max-w-7xl mx-auto pt-20 pb-28">
-        <div className="bg-[#ECEFEA] border border-[#DDD7CD] rounded-3xl p-10 sm:p-14 text-center max-w-4xl mx-auto shadow-sm">
-          <span className="text-[10px] uppercase tracking-[0.35em] text-[#5B6454] font-semibold block mb-2">
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
+        <div className="bg-[#121518] border border-[#2B2519] rounded-3xl p-10 sm:p-14 text-center max-w-4xl mx-auto shadow-xl">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-black block  mb-2">
             TAILORED BESPOKE PACKAGES
           </span>
-          <h3 className="font-serif text-3xl sm:text-4xl italic text-[#1E221D] mb-4">
+          <h3 className="font-serif text-3xl sm:text-4xl italic text-[#F5F5F5] mb-4">
             Custom Coverage for Multi-Day Celebrations
           </h3>
-          <p className="text-xs sm:text-sm text-[#525B4C] max-w-xl mx-auto font-light leading-relaxed mb-8">
+          <p className="text-xs sm:text-sm text-[#C5B388] max-w-xl mx-auto font-light leading-relaxed mb-8">
             Planning a multi-city wedding or destination event? We curate custom photography and cinema suites aligned perfectly with your schedule.
           </p>
-          <Link className="inline-block bg-[#5B6454] hover:bg-[#485042] text-[#FAF8F5] px-10 py-3.5 rounded-full text-xs uppercase tracking-[0.25em] font-medium shadow-md transition-all duration-300" href="/contact">
+          <Link className="inline-block px-10 py-3.5 rounded-full font-medium bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer" href="/contact">
             Inquire About Custom Package
           </Link>
         </div>

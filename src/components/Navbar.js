@@ -8,8 +8,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [isKnowMoreOpen, setIsKnowMoreOpen] = useState(false);
-  const [isMobileKnowMoreOpen, setIsMobileKnowMoreOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -58,7 +56,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E7E3DA] py-2 lg:py-0 px-6 sm:px-12 transition-all duration-300">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B0D0E]/85 backdrop-blur-lg border-b border-[#2B2519] py-2 lg:py-0 px-6 sm:px-12 transition-all duration-300">
       <nav className="w-full">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex justify-between items-center h-20">
@@ -70,16 +68,16 @@ export default function Navbar() {
                 onClick={handleLogoClick}
                 className="flex flex-col items-center lg:items-start text-left group cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02] focus:outline-none"
               >
-                <span className="font-serif tracking-[0.28em] text-xl sm:text-2xl font-semibold text-[#1E221D] group-hover:text-[#5B6454] transition-colors duration-300 leading-none">
+                <span className="font-serif tracking-[0.28em] text-xl sm:text-2xl font-semibold text-[#D4AF37] group-hover:text-[#F3E5AB] transition-colors duration-300 leading-none">
                   WEDDINGPUR
                 </span>
-                <span className="text-[9px] uppercase tracking-[0.38em] text-[#3D4537] font-medium mt-1 group-hover:text-[#5B6454] transition-colors duration-300 text-center lg:text-left">
+                <span className="text-[9px] uppercase tracking-[0.38em] text-[#C5B388] font-medium mt-1 group-hover:text-[#D4AF37] transition-colors duration-300 text-center lg:text-left">
                   Studio & Cinema
                 </span>
               </a>
             </div>
             
-            {/* Center Nav Links with Button-Style Pill Hover & Active State */}
+            {/* Center Nav Links */}
             <div className="hidden xl:flex items-center justify-center gap-1.5 flex-1 px-8">
               {navLinks.map((link, idx) => {
                 const isActive = pathname === link.href;
@@ -87,7 +85,7 @@ export default function Navbar() {
                   <Link 
                     key={idx} 
                     href={link.href} 
-                    className={`px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${isActive ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}
+                    className={`px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${isActive ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-transparent hover:border-[#D4AF37] hover:text-[#D4AF37] hover:bg-[#121518]'}`}
                   >
                     {link.name}
                   </Link>
@@ -100,25 +98,25 @@ export default function Navbar() {
               {currentUser ? (
                 <div className="flex items-center gap-2">
                   {currentUser.role === 'admin' ? (
-                    <Link href="/admin" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/admin' ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}>
+                    <Link href="/admin" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/admin' ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-[#2B2519] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518]'}`}>
                       Admin OS
                     </Link>
                   ) : (
-                    <span className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-widest font-medium border border-[#DDD7CD] text-[#1E221D]">
+                    <span className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-widest font-medium border border-[#2B2519] text-[#C5B388]">
                       {currentUser.name}
                     </span>
                   )}
-                  <button onClick={handleLogout} className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454] focus:outline-none">
+                  <button onClick={handleLogout} className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border border-[#2B2519] text-[#C5B388] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518] focus:outline-none">
                     Logout
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
-                  <Link href="/login" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/login' ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}>
+                  <Link href="/login" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/login' ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518]'}`}>
                     Login
                   </Link>
-                  <span className="text-[#DDD7CD] text-xs">|</span>
-                  <Link href="/register" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/register' ? 'bg-[#5B6454] text-[#FAF8F5] border-[#5B6454] shadow-sm' : 'text-[#1E221D] border-transparent hover:border-[#5B6454] hover:text-[#5B6454]'}`}>
+                  <span className="text-[#2B2519] text-xs">|</span>
+                  <Link href="/register" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20`}>
                     Register
                   </Link>
                 </div>
@@ -129,7 +127,7 @@ export default function Navbar() {
             <div className="xl:hidden flex items-center">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-[#1E221D] hover:text-[#626C59] p-2 focus:outline-none"
+                className="text-[#C5B388] hover:text-[#D4AF37] p-2 focus:outline-none"
                 aria-label="Toggle menu"
               >
                 {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -140,7 +138,7 @@ export default function Navbar() {
 
         {/* Mobile Responsive Sliding Drawer */}
         <div 
-          className={`xl:hidden absolute top-full left-0 w-full bg-[#FAF8F5]/98 backdrop-blur-xl border-b border-[#E7E3DA] transition-all duration-300 ease-in-out shadow-2xl ${isOpen ? 'max-h-[85vh] opacity-100 overflow-y-auto pb-6' : 'max-h-0 opacity-0 overflow-hidden'}`}
+          className={`xl:hidden absolute top-full left-0 w-full bg-[#0B0D0E]/95 backdrop-blur-xl border-b border-[#2B2519] transition-all duration-300 ease-in-out shadow-2xl ${isOpen ? 'max-h-[85vh] opacity-100 overflow-y-auto pb-6' : 'max-h-0 opacity-0 overflow-hidden'}`}
         >
           <div className="px-6 pt-4 space-y-1">
             {navLinks.map((link) => (
@@ -148,7 +146,7 @@ export default function Navbar() {
                   key={link.name}
                   onClick={() => setIsOpen(false)} 
                   href={link.href} 
-                  className={`block px-3 py-4 text-xs uppercase tracking-[0.2em] font-medium border-b border-[#E7E3DA]/60 ${pathname === link.href ? 'text-[#626C59]' : 'text-[#3E453A] hover:text-[#626C59]'}`}
+                  className={`block px-3 py-4 text-xs uppercase tracking-[0.2em] font-medium border-b border-[#2B2519] ${pathname === link.href ? 'text-[#D4AF37]' : 'text-[#C5B388] hover:text-[#D4AF37]'}`}
                >
                   {link.name}
                </Link>
@@ -161,14 +159,14 @@ export default function Navbar() {
                     <Link 
                       onClick={() => setIsOpen(false)} 
                       href="/admin" 
-                      className="block w-full bg-[#626C59] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-[#FAF8F5] hover:bg-[#4E5646]"
+                      className="block w-full bg-[#121518] border border-[#D4AF37] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-white hover:bg-[#D4AF37] hover:text-black"
                     >
                       Admin OS
                     </Link>
                   )}
                   <button 
                     onClick={handleLogout} 
-                    className="w-full bg-transparent border border-[#3E453A]/30 text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-[#3E453A] hover:bg-[#E7E3DA] focus:outline-none"
+                    className="w-full bg-transparent border border-[#2B2519] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-[#C5B388] hover:bg-[#121518] hover:text-white hover:border-[#D4AF37] focus:outline-none"
                   >
                     Logout
                   </button>
@@ -178,14 +176,14 @@ export default function Navbar() {
                   <Link 
                     onClick={() => setIsOpen(false)} 
                     href="/login" 
-                    className="w-full bg-transparent border border-[#3E453A]/30 text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-[#3E453A] hover:bg-[#E7E3DA]"
+                    className="w-full bg-transparent border border-[#2B2519] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518]"
                   >
                     LOGIN
                   </Link>
                   <Link 
                     onClick={() => setIsOpen(false)} 
                     href="/register" 
-                    className="w-full bg-[#626C59] text-[#FAF8F5] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold hover:bg-[#4E5646]"
+                    className="w-full text-center px-6 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
                   >
                     REGISTER
                   </Link>

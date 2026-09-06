@@ -68,7 +68,7 @@ export default function StoryDetail({ params }) {
       <div className="fixed top-24 left-4 md:left-8 z-40">
         <Link 
           href="/stories"
-          className="flex items-center space-x-2 bg-white/70 backdrop-blur-md px-4 py-2 rounded-full shadow-sm text-[#1E1E1E] hover:text-[#B38F4D] transition-colors border border-[#DFD9CB]/50 hover:border-[#B38F4D]/30"
+          className="flex items-center space-x-2 bg-[#121518]/70 backdrop-blur-md px-4 py-2 rounded-full shadow-xl text-[#1E1E1E] hover:text-[#B38F4D] transition-colors border border-[#DFD9CB]/50 hover:border-[#B38F4D]/30"
         >
           <ArrowLeft size={16} />
           <span className="text-sm font-semibold tracking-wider uppercase hidden sm:block">Back to Stories</span>
@@ -90,7 +90,7 @@ export default function StoryDetail({ params }) {
           <h1 className="text-5xl md:text-6xl lg:text-8xl font-serif font-normal text-white drop-shadow-xl mb-6">
             {story.couple}
           </h1>
-          <button className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+          <button className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors bg-[#121518]/10 hover:bg-[#121518]/20 backdrop-blur-md px-4 py-2 rounded-full border border-[#2B2519]">
             <Share2 size={16} />
             <span className="text-sm font-medium tracking-wider uppercase">Share Story</span>
           </button>
@@ -98,7 +98,7 @@ export default function StoryDetail({ params }) {
       </div>
 
       {/* Wedding Info Ribbon */}
-      <div className="bg-[#FAF8F5] border-y border-[#DFD9CB]">
+      <div className="bg-[#0B0D0E] border-y border-[#DFD9CB]">
         <div className="max-w-6xl mx-auto px-4 py-6 md:py-8 flex flex-wrap justify-center md:justify-between items-center gap-6">
           <div className="flex items-center space-x-3 text-[#5A524A]">
             <MapPin className="text-[#B38F4D]" size={20} />
@@ -165,7 +165,7 @@ export default function StoryDetail({ params }) {
       {/* Floating CTA */}
       <div className="bg-[#1E1E1E] text-white py-20 px-4 text-center">
         <h3 className="text-3xl md:text-4xl font-serif mb-6">Loved this celebration?</h3>
-        <p className="text-gray-300 font-light mb-10 max-w-lg mx-auto">
+        <p className="text-[#C5B388] font-light mb-10 max-w-lg mx-auto">
           We'd love to capture your special day with the same passion and artistic vision. Let's create magic together.
         </p>
         <Link 

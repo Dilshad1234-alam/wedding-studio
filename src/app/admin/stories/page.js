@@ -72,7 +72,7 @@ export default function EditorialStories() {
         <h2 className="font-serif text-3xl text-[#1E221D]">Editorial Publisher</h2>
         <button 
           onClick={() => setShowModal(true)}
-          className="bg-[#5B6454] hover:bg-[#485042] text-white px-6 py-2.5 rounded-full text-[10px] uppercase tracking-widest font-semibold shadow-sm transition"
+          className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
         >
           + Publish New Story
         </button>
@@ -165,7 +165,7 @@ export default function EditorialStories() {
 
               <div className="pt-4 flex justify-end gap-3 border-t border-[#E4DFD5] mt-4">
                 <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 rounded-full text-[10px] uppercase tracking-widest font-semibold border border-[#DDD7CD] text-[#485042] hover:bg-[#FAF8F5]">Cancel</button>
-                <button type="submit" className="bg-[#5B6454] hover:bg-[#485042] text-white px-6 py-2.5 rounded-full text-[10px] uppercase tracking-widest font-semibold shadow-sm transition">Save Story</button>
+                <button type="submit" className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer">Save Story</button>
               </div>
             </form>
           </div>

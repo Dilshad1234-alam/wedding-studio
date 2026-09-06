@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -56,90 +55,98 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex items-center justify-center px-6 py-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
-      <div className="w-full max-w-md bg-white border border-[#E8E4DC] rounded-3xl shadow-lg p-8 sm:p-12 relative overflow-hidden">
-        
-        {/* Soft Sage Background Decor */}
-        <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-[#ECEFEA] to-transparent pointer-events-none" />
+    <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center p-4 antialiased text-[#F5F5F5] font-sans selection:bg-[#D4AF37] selection:text-black">
+      {/* Glow Effect */}
+      <div className="fixed inset-0 pointer-events-none flex items-center justify-center">
+        <div className="w-[500px] h-[500px] bg-[#D4AF37]/5 blur-[120px] rounded-full"></div>
+      </div>
 
-        <div className="relative z-10">
-          <div className="flex justify-center mb-8">
-            <Link href="/" className="flex flex-col items-center focus:outline-none">
-              <div className="text-center font-serif">
-                <span className="text-xl sm:text-2xl font-light tracking-[0.25em] text-[#1E221D] block leading-none mb-1.5">
-                  WEDDINGPUR
-                </span>
-                <span className="text-[9px] tracking-[0.4em] text-[#626C59] uppercase font-sans leading-none block text-center">
-                  STUDIO & CINEMA
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-serif text-[#1E221D] mb-2 italic">Welcome Back</h1>
-            <p className="text-[#5F6757] font-light text-sm tracking-wide">Sign in to your Weddingpur account</p>
-          </div>
-
-          {error && (
-            <div className="mb-6 p-3 bg-red-50/50 border border-red-200 text-red-600 text-[11px] uppercase tracking-wider rounded-xl text-center font-medium">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Email Address</label>
-              <input 
-                type="email" 
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3.5 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition"
-                placeholder="hello@example.com"
-              />
-            </div>
-
-            <div>
-              <label className="text-[10px] uppercase tracking-[0.2em] text-[#626C59] font-semibold mb-2 block ml-2">Password</label>
-              <div className="relative">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  name="password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full bg-[#FAF8F5] border border-[#DDD7CD] rounded-xl px-4 py-3.5 text-sm text-[#1E221D] placeholder:text-[#9EA598] focus:border-[#5B6454] focus:outline-none focus:ring-1 focus:ring-[#5B6454] transition pr-12"
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9EA598] hover:text-[#5B6454] transition-colors focus:outline-none"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-            </div>
-
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full bg-[#5B6454] text-[#FAF8F5] font-medium tracking-[0.25em] text-[11px] uppercase rounded-full px-4 py-4 mt-8 hover:bg-[#4E5646] transition shadow-md disabled:opacity-50"
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
-          </form>
-
-          <p className="text-center text-[#5F6757] font-light text-sm mt-8">
-            Don't have an account?{' '}
-            <Link href="/register" className="text-[#1E221D] font-medium hover:text-[#5B6454] transition-colors">
-              Register
-            </Link>
+      <div className="relative w-full max-w-[430px] bg-[#121518] border border-[#2B2519] rounded-3xl p-8 sm:p-10 shadow-2xl">
+        {/* Brand Header */}
+        <div className="text-center mb-8">
+          <span className="text-[10px] uppercase font-black tracking-[0.35em] text-[#D4AF37] block mb-1">
+            WEDDINGPUR
+          </span>
+          <span className="text-[9px] uppercase tracking-[0.25em] text-[#8A7D5C] block mb-4">
+            STUDIO & CINEMA
+          </span>
+          
+          <h1 className="text-2xl font-black text-white tracking-tight font-serif italic mb-1">
+            Welcome Back
+          </h1>
+          <p className="text-xs text-[#8A7D5C]">
+            Sign in to your Weddingpur account
           </p>
         </div>
 
+        {error && (
+          <div className="mb-5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold text-center">
+            {error}
+          </div>
+        )}
+
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email Address */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+              EMAIL ADDRESS
+            </label>
+            <input
+              type="email"
+              name="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="hello@example.com"
+              className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
+              PASSWORD
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A7D5C] hover:text-[#D4AF37] text-xs cursor-pointer p-1 transition-colors"
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
+          </div>
+
+          {/* Submit CTA */}
+          <div className="pt-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "SIGNING IN..." : "SIGN IN"}
+            </button>
+          </div>
+        </form>
+
+        {/* Footer Link */}
+        <div className="mt-8 text-center text-xs text-[#8A7D5C]">
+          Don't have an account?{' '}
+          <Link className="text-[#D4AF37] hover:text-[#F3E5AB] font-bold tracking-wide transition-colors underline underline-offset-4" href="/register">
+            Register
+          </Link>
+        </div>
       </div>
     </div>
   );

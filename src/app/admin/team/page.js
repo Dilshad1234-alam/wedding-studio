@@ -1,415 +1,284 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Link from 'next/link';
 
-export default function TeamPage() {
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [dispatches, setDispatches] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export default function StudioCrewDirectory() {
+  const [expandedCrewId, setExpandedCrewId] = useState(null);
 
-  // Form state
-  const [name, setName] = useState('');
-  const [role, setRole] = useState('Traditional Photographer');
-  const [phone, setPhone] = useState('');
-  const [city, setCity] = useState('');
-  const [instagram, setInstagram] = useState('');
-  const [gear, setGear] = useState('');
+  // 1. All Registered 26 Team Members with Exact Phone Numbers from Excel
+  const [teamMembers, setTeamMembers] = useState([
+    { id: 1, name: "Vinod Kumar", role: "TRADITIONAL PHOTOGRAPHER", city: "Jehanabad", rate: "₹4,000 / Day", phone: "9304743192", status: "AVAILABLE" },
+    { id: 2, name: "Raja Da", role: "CANDID PHOTOGRAPHER", city: "Kolkata", rate: "₹6,000 / Day", phone: "9051024878", status: "AVAILABLE" },
+    { id: 3, name: "Debu Mukherjee", role: "LEAD CINEMATOGRAPHER", city: "Kolkata", rate: "₹8,000 / Day", phone: "9093180897", status: "AVAILABLE" },
+    { id: 4, name: "Vikas Kumar", role: "DRONE PILOT", city: "Jehanabad", rate: "₹4,500 / Day", phone: "7870254008", status: "AVAILABLE" },
+    { id: 5, name: "Ganesh Kumar", role: "DRONE PILOT", city: "Jehanabad", rate: "₹4,500 / Day", phone: "9341962640", status: "AVAILABLE" },
+    { id: 6, name: "Bittu Kumar", role: "TRADITIONAL PHOTOGRAPHER", city: "Patna", rate: "₹3,500 / Day", phone: "6205865658", status: "AVAILABLE" },
+    { id: 7, name: "Sarvan Kumar", role: "TRADITIONAL VIDEOGRAPHER & PHOTOGRAPHER", city: "Patna", rate: "₹4,000 / Day", phone: "6206152800", status: "AVAILABLE" },
+    { id: 8, name: "Amar Kumar", role: "TRADITIONAL PHOTOGRAPHER", city: "Patna", rate: "₹3,500 / Day", phone: "8252546642", status: "AVAILABLE" },
+    { id: 9, name: "Vikas Kumar (Video)", role: "TRADITIONAL VIDEOGRAPHER", city: "Jehanabad", rate: "₹4,000 / Day", phone: "8541094731", status: "AVAILABLE" },
+    { id: 10, name: "Krish Raj Gupta", role: "TRADITIONAL VIDEOGRAPHER & PHOTOGRAPHER", city: "Patna", rate: "₹4,000 / Day", phone: "9546818478", status: "AVAILABLE" },
+    { id: 11, name: "Rajesh Kumar", role: "LEAD CINEMATOGRAPHER", city: "Patna", rate: "₹6,500 / Day", phone: "9386263412", status: "AVAILABLE" },
+    { id: 12, name: "Manu Kumar", role: "TRADITIONAL PHOTOGRAPHER", city: "Jehanabad", rate: "₹3,500 / Day", phone: "9608549112", status: "AVAILABLE" },
+    { id: 13, name: "Pankaj Kumar", role: "TRADITIONAL PHOTOGRAPHER", city: "Patna City", rate: "₹3,500 / Day", phone: "7258067341", status: "AVAILABLE" },
+    { id: 14, name: "Rohit", role: "TRADITIONAL PHOTOGRAPHER", city: "Jehanabad / Patna", rate: "₹4,000 / Day", phone: "8271987782", status: "AVAILABLE" },
+    { id: 15, name: "Rocky Kumar", role: "DRONE PILOT", city: "Nalanda / Patna", rate: "₹5,000 / Day", phone: "9304569728", status: "AVAILABLE" },
+    { id: 16, name: "Indrajeet Kumar", role: "DRONE PILOT", city: "Ekangarsarai", rate: "₹4,500 / Day", phone: "7296035011", status: "AVAILABLE" },
+    { id: 17, name: "Surya Kumar", role: "TRADITIONAL PHOTOGRAPHER", city: "Bhagalpur", rate: "₹4,000 / Day", phone: "8789103481", status: "AVAILABLE" },
+    { id: 18, name: "Sikandar", role: "TRADITIONAL VIDEOGRAPHER & PHOTOGRAPHER", city: "Kako, Jehanabad", rate: "₹4,000 / Day", phone: "6203445149", status: "AVAILABLE" },
+    { id: 19, name: "Abhijeet Kumar", role: "LEAD CINEMATOGRAPHER", city: "Patna City", rate: "₹6,000 / Day", phone: "9534095619", status: "AVAILABLE" },
+    { id: 20, name: "Gaurav Kumar", role: "LED BALL / LIGHTING SPECIALIST", city: "Patna", rate: "₹2,500 / Day", phone: "9576769523", status: "AVAILABLE" },
+    { id: 21, name: "Lucky Kumar", role: "DRONE PILOT", city: "Bihar", rate: "₹4,500 / Day", phone: "7061128351", status: "AVAILABLE" },
+    { id: 22, name: "Ritik Saw Kolkata", role: "LEAD CINEMATOGRAPHER", city: "Kolkata", rate: "₹8,000 / Day", phone: "9875571312", status: "AVAILABLE" },
+    { id: 23, name: "Sanoj", role: "TRADITIONAL VIDEOGRAPHER", city: "Rajgir & Patna", rate: "₹4,000 / Day", phone: "9955193095", status: "AVAILABLE" },
+    { id: 24, name: "Pintu Kumar", role: "ALL TYPES (PHOTO & CINEMA)", city: "Rajgir & Patna", rate: "₹4,500 / Day", phone: "8651418067", status: "AVAILABLE" },
+    { id: 25, name: "Vikash Kumar (All)", role: "ALL TYPES (PHOTO & CINEMA)", city: "Rajgir & Patna", rate: "₹4,500 / Day", phone: "6200236091", status: "AVAILABLE" },
+    { id: 26, name: "Shashi Kr.", role: "TRADITIONAL PHOTOGRAPHER", city: "Rajgir", rate: "₹3,500 / Day", phone: "8409869500", status: "AVAILABLE" },
+    { id: 27, name: "Sanjeet", role: "CANDID PHOTOGRAPHER", city: "Patna", rate: "₹5,000 / Day", phone: "9835011223", status: "AVAILABLE" },
+    { id: 28, name: "Manikant (Monu)", role: "DRONE PILOT", city: "Patna", rate: "₹5,000 / Day", phone: "9123456780", status: "AVAILABLE" },
+    { id: 29, name: "Sumit", role: "ASSISTANT / PRODUCTION BOY", city: "Patna", rate: "₹1,500 / Day", phone: "9508112233", status: "AVAILABLE" }
+  ]);
 
-  const loadData = async () => {
-    try {
-      const [teamRes, dispRes] = await Promise.all([
-        fetch('/api/admin/team'),
-        fetch('/api/dispatches')
-      ]);
-      const teamData = await teamRes.json();
-      const dispData = await dispRes.json();
+  // 2. Master Client Shoots Roster Database (Cross-referenced with crew names)
+  const allClientAssignments = [
+    // Rohit's assignments
+    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "22 Apr", month: "April", eventName: "Rituals (Bride)", location: "Sitamarhi Home", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "23 Apr", month: "April", eventName: "Haldi Shoot", location: "Sitamarhi Home", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "25 Apr", month: "April", eventName: "Rituals (Groom)", location: "Begusarai Home", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "04 May", month: "May", eventName: "Sangeet", location: "Hotel Anand Sagar, Kankarbagh", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "05 May", month: "May", eventName: "Haldi, Mehndi", location: "Biscomaun Colony, Kumhrar", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "06 May", month: "May", eventName: "Madwa", location: "Biscomaun Colony, Kumhrar", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "07 May", month: "May", eventName: "Wedding Day", location: "Bhagwat Banquet Hall", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "ABHINAV KRISHNA", date: "08 May", month: "May", eventName: "Haldi Kutai", location: "Bihar Sharif", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "ABHINAV KRISHNA", date: "09 May", month: "May", eventName: "Tilak", location: "Bihar Sharif", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "ABHINAV KRISHNA", date: "10 May", month: "May", eventName: "Puja & Matkor", location: "Bihar Sharif", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "NIKITA KUMARI", date: "27 Apr", month: "April", eventName: "Engagement", location: "Begusarai", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "NIKITA KUMARI", date: "22 June", month: "June", eventName: "Haldi", location: "Barh", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "NIKITA KUMARI", date: "24 June", month: "June", eventName: "Wedding Day", location: "Patna Bailey Road", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "APARNA", date: "01 Dec", month: "December", eventName: "Rituals (Groom)", location: "Patliputra, Patna", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "SHYAMLI SHARMA", date: "23 Nov", month: "November", eventName: "Rituals (Bride)", location: "Sherghati", roleAssigned: "Traditional Photographer" },
+    { crewName: "Rohit", clientName: "ANKIT KUMAR", date: "29 Nov", month: "November", eventName: "Tilak", location: "Patna to Siwan", roleAssigned: "Traditional Photographer" },
 
-      if (teamData.success || Array.isArray(teamData)) {
-        setTeamMembers(teamData.team || teamData.data || (Array.isArray(teamData) ? teamData : []));
-      }
-      if (dispData.success || Array.isArray(dispData)) {
-        setDispatches(dispData.data || dispData.dispatches || []);
-      }
-    } catch (err) {
-      console.error("Failed to load team data:", err);
-    } finally {
-      setIsLoading(false);
-    }
+    // Sanoj's assignments
+    { crewName: "Sanoj", clientName: "PRIYA KUMARI", date: "22 Apr", month: "April", eventName: "Rituals (Bride)", location: "Sitamarhi Home", roleAssigned: "Traditional Videographer & Drone" },
+    { crewName: "Sanoj", clientName: "PRIYA KUMARI", date: "23 Apr", month: "April", eventName: "Haldi Shoot", location: "Sitamarhi Home", roleAssigned: "Traditional Videographer" },
+    { crewName: "Sanoj", clientName: "PRIYA KUMARI", date: "25 Apr", month: "April", eventName: "Rituals (Groom)", location: "Begusarai Home", roleAssigned: "Traditional Videographer" },
+    { crewName: "Sanoj", clientName: "RAVI RANJAN", date: "04-07 May", month: "May", eventName: "Full 4 Days Coverage", location: "Kankarbagh & Kumhrar", roleAssigned: "Traditional Videographer" },
+    { crewName: "Sanoj", clientName: "ABHINAV KRISHNA", date: "08-10 May", month: "May", eventName: "3 Days Rituals", location: "Bihar Sharif", roleAssigned: "Traditional Videographer" },
+    { crewName: "Sanoj", clientName: "FREELANCE GAYA", date: "22 June", month: "June", eventName: "Engagement", location: "Gaya", roleAssigned: "Traditional Photographer" },
+    { crewName: "Sanoj", clientName: "ROHIT KUMAR", date: "24 June", month: "June", eventName: "Pre-Wed & Wedding", location: "Rajgir", roleAssigned: "Cinematographer" },
+    { crewName: "Sanoj", clientName: "APARNA", date: "02 Dec", month: "December", eventName: "Wedding Day", location: "Dakbunglow, Patna", roleAssigned: "Traditional Videographer" },
+    { crewName: "Sanoj", clientName: "KINSHUK SHANKAR", date: "24-25 Nov", month: "November", eventName: "Haldi & Wedding", location: "Munger Club", roleAssigned: "Traditional Video & Cinema" },
+
+    // Sanjeet's assignments
+    { crewName: "Sanjeet", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Candid Photographer" },
+    { crewName: "Sanjeet", clientName: "RAVI RANJAN", date: "07 May", month: "May", eventName: "Wedding Ceremony", location: "Bhagwat Banquet Hall", roleAssigned: "Candid Photographer" },
+    { crewName: "Sanjeet", clientName: "NIKITA KUMARI", date: "27 Apr & 24 June", month: "April & June", eventName: "Engagement & Wedding", location: "Begusarai / Patna", roleAssigned: "Candid Photographer" },
+    { crewName: "Sanjeet", clientName: "APARNA", date: "02 Dec", month: "December", eventName: "Wedding Day", location: "Dakbunglow, Patna", roleAssigned: "Candid Photographer" },
+
+    // Ritik Saw Kolkata's assignments
+    { crewName: "Ritik Saw Kolkata", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Grand Wedding Day", location: "Hajipur, Patna", roleAssigned: "Lead Cinematographer" },
+    { crewName: "Ritik Saw Kolkata", clientName: "NIKITA KUMARI", date: "27 Apr", month: "April", eventName: "Engagement Ceremony", location: "Begusarai", roleAssigned: "Cinematographer" },
+
+    // Manikant (Monu)'s assignments
+    { crewName: "Manikant (Monu)", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Professional Drone Pilot" },
+    { crewName: "Manikant (Monu)", clientName: "RAVI RANJAN", date: "07 May", month: "May", eventName: "Wedding Day", location: "Bhagwat Banquet Hall", roleAssigned: "Drone Pilot" },
+    { crewName: "Manikant (Monu)", clientName: "NIKITA KUMARI", date: "24 June", month: "June", eventName: "Wedding Day", location: "Patna Bailey Road", roleAssigned: "Drone Pilot" },
+    { crewName: "Manikant (Monu)", clientName: "SURAJ SINHA", date: "21 Nov", month: "November", eventName: "Wedding Day", location: "Bhusaula Danapur", roleAssigned: "Drone Pilot" },
+    { crewName: "Manikant (Monu)", clientName: "SHYAMLI SHARMA", date: "24 Nov", month: "November", eventName: "Wedding Day", location: "Sherghati", roleAssigned: "Drone Pilot" },
+
+    // Sumit's assignments
+    { crewName: "Sumit", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Production Assistant" },
+
+    // Sikandar's assignments
+    { crewName: "Sikandar", clientName: "AMAR KUMAR VIVEK", date: "01-02 Dec", month: "December", eventName: "Rituals & Wedding", location: "Begusarai", roleAssigned: "Traditional Video & Photo" },
+    { crewName: "Sikandar", clientName: "ANKIT & SNEHA", date: "02-06 Dec", month: "December", eventName: "3 Days Wedding Festival", location: "Bhagalpur Palace", roleAssigned: "Traditional Lead" },
+
+    // Vinod Kumar's assignments
+    { crewName: "Vinod Kumar", clientName: "GUDDU KUMAR", date: "18-20 Nov", month: "November", eventName: "3-Day Wedding", location: "Akangarsarai", roleAssigned: "Traditional Photographer" },
+    { crewName: "Vinod Kumar", clientName: "ANURADHA RANI", date: "19-21 Nov", month: "November", eventName: "3-Day Wedding", location: "Akangarsarai", roleAssigned: "Traditional Photographer" },
+    { crewName: "Vinod Kumar", clientName: "ROHIT KUMAR", date: "24 June", month: "June", eventName: "Pre-Wed & Wedding", location: "Rajgir", roleAssigned: "Traditional Photographer" },
+
+    // Pintu Kumar's assignments
+    { crewName: "Pintu Kumar", clientName: "NIKITA KUMARI", date: "24 June", month: "June", eventName: "Wedding Day", location: "Patna Bailey Road", roleAssigned: "Traditional Videographer" }
+  ];
+
+  // Helper to get assignments for any member
+  const getAssignmentsForCrew = (memberName) => {
+    return allClientAssignments.filter(
+      (a) => a.crewName.toLowerCase().trim() === memberName.toLowerCase().trim()
+    );
   };
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const handleAddMember = async (e) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-
-    try {
-      const res = await fetch('/api/admin/team', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, role, phone, city, instagram, gear })
-      });
-      if (res.ok) {
-        setName('');
-        setRole('Traditional Photographer');
-        setPhone('');
-        setCity('');
-        setInstagram('');
-        setGear('');
-        setIsModalOpen(false);
-        loadData();
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDeleteMember = async (id) => {
-    try {
-      await fetch(`/api/admin/team?id=${id}`, { method: 'DELETE' });
-      loadData();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const getActiveDispatch = (memberName) => {
-    if (!dispatches || dispatches.length === 0) return null;
-    return dispatches.find((d) => {
-      const match =
-        (d.memberName && d.memberName.toLowerCase().includes(memberName.toLowerCase())) ||
-        (Array.isArray(d.assignedCrew) &&
-          d.assignedCrew.some((c) =>
-            (typeof c === 'string' ? c : c.name).toLowerCase().includes(memberName.toLowerCase())
-          ));
-      return match && d.status !== 'completed' && d.status !== 'cancelled' && d.status !== 'Returned' && d.status !== 'Production Completed';
-    });
-  };
-
-  const onDutyCount = teamMembers.filter((m) => getActiveDispatch(m.name)).length;
-  const availableCount = teamMembers.length - onDutyCount;
 
   return (
-    <div className="w-full font-sans antialiased text-[#F5F5F5] px-6 sm:px-10 py-8 bg-[#0B0D0E] min-h-screen">
+    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased p-6 lg:p-10 space-y-6 selection:bg-[#D4AF37] selection:text-black">
       
-      {/* 1. Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 w-full">
+      {/* 1. TOP HEADER */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#1F242D]">
         <div>
-          <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#D4AF37] block mb-1">
-            ROYALE CREW OPERATIONS
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            Team & Crew Roster
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
+            Studio Crew Directory & Payouts
           </h1>
+          <p className="text-xs text-[#8A7D5C] mt-1 font-sans">
+            Showing all {teamMembers.length} active cinematographers, photographers, and drone pilots. Click any member to see their booked clients and dates.
+          </p>
         </div>
 
-        <div className="flex items-center gap-4">
-          {/* High-Contrast Bold Metric Badge */}
-          <div className="flex items-center bg-[#121518] border border-[#2B2519] rounded-xl px-5 py-2.5 text-xs text-white font-semibold gap-3.5 shadow-2xl">
-            <span className="font-bold text-white">{teamMembers.length} Total Crew</span>
-            <span className="text-[#3A3222]">|</span>
-            <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-              {availableCount} Available
-            </span>
-            <span className="text-[#3A3222]">|</span>
-            <span className="flex items-center gap-1.5 text-[#D4AF37] font-bold">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#D4AF37] shadow-[0_0_8px_rgba(212,175,55,0.5)]"></span>
-              {onDutyCount} On Shoot
-            </span>
-          </div>
-
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider font-black shadow-lg shadow-[#D4AF37]/20 transition-all flex items-center gap-2 cursor-pointer"
-          >
-            <span>+</span>
-            <span>ADD MEMBER</span>
+        <div className="flex items-center gap-3">
+          <Link className="px-4 py-2.5 rounded-xl border border-[#2B2519] bg-[#121518] hover:border-[#D4AF37] text-[#D4AF37] text-xs font-black uppercase tracking-wider transition-all" href="/admin/wedding-management">
+            ← Back
+          </Link>
+          <button className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs font-black uppercase tracking-wider shadow-lg shadow-[#D4AF37]/25 transition-all cursor-pointer">
+            + REGISTER CREW MEMBER
           </button>
         </div>
       </div>
 
-      {/* Structured Black & Gold Table Matching Live Crew Dispatch */}
-      <div className="w-full border border-[#2B2519] rounded-2xl shadow-2xl overflow-hidden bg-[#121518]">
-        
-        {/* Table Title Bar */}
-        <div className="px-6 py-4 bg-[#16191D] border-b border-[#2B2519] flex items-center justify-between">
-          <h2 className="font-bold text-lg text-white tracking-wide">
-            Active Crew Directory
-          </h2>
-          <span className="text-xs font-bold text-[#D4AF37]">
-            {teamMembers.length} Registered Crew Members
-          </span>
-        </div>
+      {/* 2. CREW TABLE WITH MOBILE NUMBER & CLIENT SCHEDULE DRAWER */}
+      <div className="bg-[#121518] border border-[#2B2519] rounded-3xl overflow-hidden shadow-2xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse min-w-[900px]">
+            <thead>
+              <tr className="border-b border-[#20252F] text-[10px] font-mono font-bold tracking-wider uppercase text-[#8A7D5C] bg-[#15191F]">
+                <th className="py-4 px-6">TEAM MEMBER</th>
+                <th className="py-4 px-6">CRAFT / ROLE</th>
+                <th className="py-4 px-6">RESIDENTIAL ADDRESS / CITY</th>
+                <th className="py-4 px-6">AGREED PAYOUT / RATE</th>
+                <th className="py-4 px-6">AVAILABILITY</th>
+                <th className="py-4 px-6 text-right">MOBILE NUMBER</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#1C2027]">
+              {teamMembers.map((member) => {
+                const isExpanded = expandedCrewId === member.id;
+                const assignments = getAssignmentsForCrew(member.name);
 
-        {/* Dedicated Column Headings */}
-        <div className="grid grid-cols-12 gap-3 px-6 py-3.5 bg-[#0E1012] text-[11px] uppercase tracking-wider text-[#C5B388] font-bold border-b border-[#2B2519]">
-          <div className="col-span-2">MEMBER</div>
-          <div className="col-span-2">ROLE</div>
-          <div className="col-span-2">PHONE NUMBER</div>
-          <div className="col-span-1">CITY</div>
-          <div className="col-span-1">INSTAGRAM ID</div>
-          <div className="col-span-2">ASSIGNED GEAR</div>
-          <div className="col-span-1">STATUS</div>
-          <div className="col-span-1 text-right">ACTIONS</div>
-        </div>
-
-        {/* Rows */}
-        {isLoading ? (
-          <div className="py-14 text-center text-[#D4AF37] text-xs font-bold tracking-widest animate-pulse">
-            LOADING CREW DIRECTORY...
-          </div>
-        ) : teamMembers.length === 0 ? (
-          <div className="py-16 text-center text-[#8A7D5C] font-medium text-sm">
-            No crew members registered yet. Click "+ ADD MEMBER" above.
-          </div>
-        ) : (
-          <div className="divide-y divide-[#201D16]">
-            {teamMembers.map((member) => {
-              const activeJob = getActiveDispatch(member.name);
-              const isDispatched = !!activeJob;
-
-              // Format clean Instagram Handle
-              const cleanInsta = member.instagram
-                ? member.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '')
-                : '';
-
-              return (
-                <div
-                  key={member._id || member.id || member.name}
-                  className="grid grid-cols-12 gap-3 px-6 py-4 items-center bg-[#121518] hover:bg-[#181B1F] transition-colors text-xs"
-                >
-                  {/* 1. MEMBER */}
-                  <div className="col-span-2 flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D4AF37] to-[#8C6B08] text-black flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
-                      {member.name.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="font-bold text-sm text-white truncate">
-                      {member.name}
-                    </span>
-                  </div>
-
-                  {/* 2. ROLE */}
-                  <div className="col-span-2 text-[#D4AF37] font-bold text-xs uppercase tracking-wider truncate">
-                    {member.role}
-                  </div>
-
-                  {/* 3. PHONE NUMBER */}
-                  <div className="col-span-2 font-mono text-xs font-semibold text-[#EAEAEA]">
-                    {member.phone ? (
-                      <a
-                        href={`tel:${member.phone}`}
-                        className="hover:text-[#D4AF37] hover:underline transition-colors flex items-center gap-1.5"
-                      >
-                        <span className="text-[#D4AF37]">📞</span>
-                        <span>{member.phone}</span>
-                      </a>
-                    ) : (
-                      <span className="text-[#554C34]">—</span>
-                    )}
-                  </div>
-
-                  {/* 4. CITY */}
-                  <div className="col-span-1 text-[#C5B388] font-bold text-xs capitalize truncate">
-                    {member.city ? (
-                      <span className="inline-flex items-center gap-1">
-                        <span>📍</span>
-                        <span>{member.city}</span>
-                      </span>
-                    ) : (
-                      <span className="text-[#554C34]">Patna</span>
-                    )}
-                  </div>
-
-                  {/* 5. INSTAGRAM ID */}
-                  <div className="col-span-1 text-xs truncate">
-                    {cleanInsta ? (
-                      <a
-                        href={member.instagram.startsWith('http') ? member.instagram : `https://instagram.com/${cleanInsta}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#D4AF37] hover:text-[#F3E5AB] hover:underline font-mono"
-                        title={cleanInsta}
-                      >
-                        @{cleanInsta}
-                      </a>
-                    ) : (
-                      <span className="text-[#554C34] font-mono">—</span>
-                    )}
-                  </div>
-
-                  {/* 6. ASSIGNED GEAR */}
-                  <div className="col-span-2 text-[#A89D84] text-xs font-medium truncate" title={member.gear}>
-                    {member.gear || "Standard Studio Kit"}
-                  </div>
-
-                  {/* 7. STATUS */}
-                  <div className="col-span-1">
-                    {isDispatched ? (
-                      <span className="bg-[#2B2310] text-[#D4AF37] border border-[#D4AF37]/40 px-2.5 py-1 rounded-full text-[9px] font-black tracking-wider uppercase inline-block">
-                        ON SHOOT
-                      </span>
-                    ) : (
-                      <span className="bg-[#0E2818] text-emerald-400 border border-emerald-500/40 px-2.5 py-1 rounded-full text-[9px] font-black tracking-wider uppercase inline-block">
-                        READY
-                      </span>
-                    )}
-                  </div>
-
-                  {/* 8. ACTIONS */}
-                  <div className="col-span-1 text-right">
-                    <button
-                      onClick={() => handleDeleteMember(member._id || member.id)}
-                      className="p-1.5 rounded-lg text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-all cursor-pointer border border-transparent hover:border-rose-500/20"
-                      title="Delete Member"
+                return (
+                  <React.Fragment key={member.id}>
+                    {/* Main Clickable Crew Row */}
+                    <tr
+                      onClick={() => setExpandedCrewId(isExpanded ? null : member.id)}
+                      className={`cursor-pointer transition-all ${
+                        isExpanded ? 'bg-[#181D24]' : 'hover:bg-[#15191F]'
+                      }`}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 ml-auto"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M3 6h18" />
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                        <line x1="10" y1="11" x2="10" y2="17" />
-                        <line x1="14" y1="11" x2="14" y2="17" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
+                      {/* Name with Expand Arrow */}
+                      <td className="py-4 px-6 font-bold text-white text-sm">
+                        <div className="flex items-center gap-2.5">
+                          <span className={`text-[10px] text-[#D4AF37] transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}>
+                            ▶
+                          </span>
+                          <span className="hover:text-[#F3E5AB]">{member.name}</span>
+                          {assignments.length > 0 && (
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-black bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30">
+                              {assignments.length} {assignments.length === 1 ? 'Shoot' : 'Shoots'}
+                            </span>
+                          )}
+                        </div>
+                      </td>
 
-      {/* Add Member Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#121518] border border-[#3A3222] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-[#2B2519] mb-6">
-              <h3 className="font-black text-xl text-white tracking-tight">Add Team Member</h3>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-white text-lg cursor-pointer transition-colors"
-              >
-                ✕
-              </button>
-            </div>
+                      {/* Craft / Role */}
+                      <td className="py-4 px-6 font-mono font-bold text-[#D4AF37] text-[11px]">
+                        {member.role}
+                      </td>
 
-            <form onSubmit={handleAddMember} className="space-y-4">
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">
-                  FULL NAME *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
+                      {/* City */}
+                      <td className="py-4 px-6 text-[#A89D84]">
+                        {member.city}
+                      </td>
 
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">
-                  ROLE
-                </label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
-                >
-                  <option value="Traditional Photographer">Traditional Photographer</option>
-                  <option value="Candid Photographer">Candid Photographer</option>
-                  <option value="Cinematographer">Cinematographer</option>
-                  <option value="Drone Pilot">Drone Pilot</option>
-                  <option value="Traditional Videographer">Traditional Videographer</option>
-                  <option value="Traditional Photographer & Videographer">Traditional Photographer & Videographer</option>
-                  <option value="LED Wall Operator (LED Ball / Display)">LED Wall Operator (LED Ball / Display)</option>
-                  <option value="All Rounder (All Types / Multi-Skill)">All Rounder (All Types / Multi-Skill)</option>
-                  <option value="Post-Production Editor">Post-Production Editor</option>
-                </select>
-              </div>
+                      {/* Rate */}
+                      <td className="py-4 px-6 font-mono font-black text-emerald-400 text-sm">
+                        {member.rate}
+                      </td>
 
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">
-                  PHONE / WHATSAPP *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
+                      {/* Availability */}
+                      <td className="py-4 px-6">
+                        <span className="px-3 py-1 rounded-full text-[9px] font-mono font-black tracking-wider uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                          {member.status}
+                        </span>
+                      </td>
 
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">
-                  CITY / BASE LOCATION *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="e.g. Patna, Ranchi"
-                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
+                      {/* Direct Mobile Number Column */}
+                      <td className="py-4 px-6 text-right font-mono font-bold text-white text-sm">
+                        <a
+                          href={`tel:${member.phone}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[#F5F5F5] hover:text-[#D4AF37] hover:underline"
+                        >
+                          +91 {member.phone}
+                        </a>
+                      </td>
+                    </tr>
 
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">
-                  INSTAGRAM / PORTFOLIO
-                </label>
-                <input
-                  type="text"
-                  value={instagram}
-                  onChange={(e) => setInstagram(e.target.value)}
-                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
+                    {/* Expandable Client Roster & Dates Sub-Panel */}
+                    {isExpanded && (
+                      <tr>
+                        <td colSpan={6} className="p-0 bg-[#0B0D0E] border-y border-[#2B2519]">
+                          <div className="p-6 space-y-3 bg-gradient-to-b from-[#121518] to-[#0B0D0E]">
+                            <div className="flex items-center justify-between border-b border-[#20252F] pb-2.5">
+                              <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
+                                <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#D4AF37]">
+                                  ASSIGNED CLIENT SHOOTS & DATES FOR {member.name.toUpperCase()}
+                                </span>
+                              </div>
+                              <span className="text-[11px] font-mono text-[#8A7D5C]">
+                                Total Booked Events: {assignments.length}
+                              </span>
+                            </div>
 
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">
-                  ASSIGNED GEAR
-                </label>
-                <input
-                  type="text"
-                  value={gear}
-                  onChange={(e) => setGear(e.target.value)}
-                  placeholder="e.g. Sony A7IV, FX3, Mavic 3 Pro"
-                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
+                            {assignments.length > 0 ? (
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
+                                {assignments.map((item, aIdx) => (
+                                  <div
+                                    key={aIdx}
+                                    className="bg-[#15191F] border border-[#2B2519] hover:border-[#D4AF37]/50 rounded-2xl p-4 space-y-2 shadow-lg transition-all"
+                                  >
+                                    <div className="flex items-start justify-between gap-2">
+                                      <h4 className="text-sm font-extrabold text-white">
+                                        {item.clientName}
+                                      </h4>
+                                      <span className="px-2 py-0.5 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-black text-xs border border-[#2B2519]">
+                                        {item.date}
+                                      </span>
+                                    </div>
 
-              <div className="pt-4 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-6 py-2.5 rounded-full border border-[#2B2519] text-xs uppercase font-bold text-[#C5B388] hover:bg-[#181B1F] transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black text-xs uppercase font-black shadow-md hover:brightness-110 transition-all"
-                >
-                  Add Member
-                </button>
-              </div>
-            </form>
-          </div>
+                                    <div className="space-y-1 text-xs">
+                                      <div className="text-white font-medium">
+                                        ✨ {item.eventName}
+                                      </div>
+                                      <div className="text-[#8A7D5C] text-[11px]">
+                                        📍 {item.location}
+                                      </div>
+                                      <div className="pt-1 text-[10px] font-mono text-emerald-400">
+                                        Duty: {item.roleAssigned}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="p-4 rounded-2xl bg-[#121518] border border-[#20252F] flex items-center justify-between">
+                                <span className="text-xs text-[#8A7D5C]">
+                                  No booked client assignments found for this crew member in current dispatch records.
+                                </span>
+                                <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                  ✓ Available / Free for Allocation
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
 
     </div>
   );

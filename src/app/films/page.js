@@ -96,62 +96,45 @@ export default function FilmsPage() {
     { label: "PRE-WEDDING CINEMA", key: "pre-wedding" }
   ];
 
-  const filmsList = [
-    {
-      title: "Aditya & Riya's Royal Pheras",
-      location: "TAJ NADESAR PALACE, VARANASI",
-      duration: "04:12 MIN",
-      category: "teasers",
-      quality: "4K UHD",
-      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    {
-      title: "Karan & Naina's Haldi Beats",
-      location: "UMAID BHAWAN PALACE, JODHPUR",
-      duration: "03:45 MIN",
-      category: "teasers",
-      quality: "4K UHD",
-      img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    {
-      title: "Sandhya & Pratik — Forever Beginnings",
-      location: "VISHWANATH FARMS, PATNA",
-      duration: "24:30 MIN",
-      category: "feature",
-      quality: "4K CINEMA",
-      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    {
-      title: "Pankaj & Shritika's Treasured Symphony",
-      location: "SHANGRI-LA PALACE, PATNA",
-      duration: "03:20 MIN",
-      category: "teasers",
-      quality: "4K UHD",
-      img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1000&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    {
-      title: "Sneha & Rahul's Sacred Vows",
-      location: "TAJ PALACE, PATNA",
-      duration: "28:15 MIN",
-      category: "feature",
-      quality: "4K CINEMA",
-      img: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1000&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    {
-      title: "Ghats of Eternity — Pre-Wedding Film",
-      location: "ASSI GHAT, VARANASI",
-      duration: "02:50 MIN",
-      category: "pre-wedding",
-      quality: "4K UHD",
-      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1000&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    }
-  ];
+  const [filmsList, setFilmsList] = useState([]);
+
+  React.useEffect(() => {
+    // 1. Initial Fetch
+    fetch('/api/films')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          const mapped = data.map(f => ({
+            id: f.id,
+            title: f.title,
+            location: f.venue,
+            duration: f.runtime + " MIN",
+            category: "feature", // or extract if available, assuming default feature
+            quality: "4K UHD",
+            img: f.posterUrl,
+            youtubeUrl: f.videoUrl,
+            couple: f.couple
+          }));
+          setFilmsList(mapped);
+        }
+      })
+      .catch(err => console.error("Error fetching films:", err));
+
+    // 2. Cross-tab sync for deletions
+    const handleStorageChange = (e) => {
+      if (e.key === 'weddingpur_film_deleted' && e.newValue) {
+        try {
+          const { id } = JSON.parse(e.newValue);
+          setFilmsList(prev => prev.filter(film => film.id !== id));
+        } catch (err) {
+          console.error("Error parsing deleted film event:", err);
+        }
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const currentHero = heroShowcases[activeCategory] || heroShowcases.all;
 

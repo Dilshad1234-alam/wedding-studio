@@ -42,9 +42,9 @@ export default function LoginPage() {
 
       // Role-based redirect
       if (data.user?.role === 'admin') {
-        window.location.href = '/admin';
+        router.push('/admin');
       } else {
-        window.location.href = '/';
+        router.push('/');
       }
 
     } catch (err) {
@@ -63,14 +63,18 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-[430px] bg-[#121518] border border-[#2B2519] rounded-3xl p-8 sm:p-10 shadow-2xl">
         {/* Brand Header */}
-        <div className="text-center mb-8">
-          <span className="text-[10px] uppercase font-black tracking-[0.35em] text-[#D4AF37] block mb-1">
-            WEDDINGPUR
-          </span>
-          <span className="text-[9px] uppercase tracking-[0.25em] text-[#8A7D5C] block mb-4">
-            STUDIO & CINEMA
-          </span>
+        <div className="text-center mb-6">
+          <Link className="inline-block group cursor-pointer transition-transform duration-300 hover:scale-[1.03]" href="/" title="Back to Home">
+            <span className="text-sm sm:text-base font-black tracking-[0.35em] text-[#D4AF37] block group-hover:text-[#F3E5AB] transition-colors">
+              WEDDINGPUR
+            </span>
+            <span className="text-[9px] uppercase tracking-[0.25em] text-[#8A7D5C] block mt-0.5 group-hover:text-[#C5B388] transition-colors">
+              STUDIO & CINEMA
+            </span>
+          </Link>
+        </div>
           
+        <div className="text-center mb-8">
           <h1 className="text-2xl font-black text-white tracking-tight font-serif italic mb-1">
             Welcome Back
           </h1>
@@ -121,9 +125,18 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A7D5C] hover:text-[#D4AF37] text-xs cursor-pointer p-1 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A7D5C] hover:text-[#D4AF37] p-1 transition-colors flex items-center justify-center"
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? (
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                )}
               </button>
             </div>
           </div>

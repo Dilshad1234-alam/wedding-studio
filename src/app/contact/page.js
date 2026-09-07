@@ -1,19 +1,51 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     mobile: '',
     email: '',
-    service: '',
+    selectedPackage: 'Gold Wedding Package (3 Days) — ₹1,10,000/- (Recommended)',
     eventDate: '',
     location: '',
-    budget: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
+
+  const weddingPackages = [
+    {
+      id: 'standard',
+      fullLabel: 'Standard Wedding Package (3 Days) — ₹60,000/- (Save ₹18,000)'
+    },
+    {
+      id: 'silver',
+      fullLabel: 'Silver Wedding Package (3 Days) — ₹80,000/- (Save ₹24,000)'
+    },
+    {
+      id: 'gold',
+      fullLabel: 'Gold Wedding Package (3 Days) — ₹1,10,000/- (Recommended)'
+    },
+    {
+      id: 'luxury',
+      fullLabel: 'Luxury Wedding Package (3 Days) — ₹1,50,000/- (VIP Experience)'
+    }
+  ];
+
+  // URL parameter detector so clicking 'COMMISSION THIS SUITE' pre-selects the right one
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const pkgParam = params.get('pkg');
+      if (pkgParam) {
+        const match = weddingPackages.find(p => p.id === pkgParam.toLowerCase());
+        if (match) {
+          setFormData(prev => ({ ...prev, selectedPackage: match.fullLabel }));
+        }
+      }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -37,10 +69,9 @@ export default function ContactPage() {
           name: '',
           mobile: '',
           email: '',
-          service: '',
+          selectedPackage: 'Gold Wedding Package (3 Days) — ₹1,10,000/- (Recommended)',
           eventDate: '',
           location: '',
-          budget: '',
           message: ''
         });
       } else {
@@ -217,21 +248,21 @@ export default function ContactPage() {
               />
             </div>
 
-            {/* Service Required */}
+            {/* Combined Package Selector */}
             <div>
               <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
-                SERVICE REQUIRED
+                SELECT WEDDING PACKAGE & INVESTMENT *
               </label>
               <select
-                name="service"
-                value={formData.service}
+                name="selectedPackage"
+                required
+                value={formData.selectedPackage}
                 onChange={handleChange}
                 className="w-full bg-[#181B1F] border border-[#2B2519] text-[#F5F5F5] rounded-xl px-4 py-3 text-xs font-medium focus:outline-none focus:border-[#D4AF37] transition-all cursor-pointer appearance-none"
               >
-                <option value="" disabled>Select a service</option>
-                <option value="wedding">Wedding Photography & Films</option>
-                <option value="prewedding">Pre-Wedding Shoot</option>
-                <option value="both">Complete Wedding + Pre-Wedding</option>
+                {weddingPackages.map(pkg => (
+                  <option key={pkg.id} value={pkg.fullLabel}>{pkg.fullLabel}</option>
+                ))}
               </select>
             </div>
 
@@ -249,19 +280,6 @@ export default function ContactPage() {
                 </label>
                 <input type="text" name="location" required value={formData.location} onChange={handleChange} placeholder="City or Venue" className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all" />
               </div>
-            </div>
-
-            {/* Budget */}
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
-                ESTIMATED BUDGET
-              </label>
-              <select name="budget" required value={formData.budget} onChange={handleChange} className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium focus:outline-none focus:border-[#D4AF37] transition-all cursor-pointer appearance-none">
-                <option value="" disabled>Select your budget</option>
-                <option value="1-3L">₹1,00,000 - ₹3,00,000</option>
-                <option value="3-5L">₹3,00,000 - ₹5,00,000</option>
-                <option value="5L+">₹5,00,000+</option>
-              </select>
             </div>
 
             {/* Message */}

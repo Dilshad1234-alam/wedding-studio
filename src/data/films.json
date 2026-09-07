@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "The Royal Symphony of Ahmed & Farheen",
+    "couple": "Md Ahmed & Farheen",
+    "venue": "Patna Grand Palace",
+    "runtime": "04:15",
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "posterUrl": "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+    "description": "An opulent Mughal-inspired reception film shot across Patna with bespoke orchestral sound design."
+  },
+  {
+    "id": 2,
+    "title": "Echoes of Heritage — Mani Kant & Priya",
+    "couple": "Mani Kant & Priya",
+    "venue": "Madhubani Haveli",
+    "runtime": "06:30",
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "posterUrl": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&q=80",
+    "description": "Vibrant traditional Vivah rituals, nostalgic folk chants, and candid golden hour vows."
+  },
+  {
+    "id": 3,
+    "title": "A Marwadi Reverie — Ruchi & Abhishek",
+    "couple": "Ruchi & Abhishek",
+    "venue": "Jaipur Royal Courtyard",
+    "runtime": "05:10",
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "posterUrl": "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=800&q=80",
+    "description": "Celebratory three-day desert destination carnival featuring night pool parties and grand varmala."
+  },
+  {
+    "id": 4,
+    "title": "Sacred Vows by the Ghats — Ankit & Sneha",
+    "couple": "Ankit & Sneha",
+    "venue": "Bhagalpur Heritage Suite",
+    "runtime": "03:45",
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "posterUrl": "https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=80",
+    "description": "Intimate spiritual union accompanied by Ganga river breeze and timeless vermillion frames."
+  },
+  {
+    "id": 5,
+    "title": "Serene Heirlooms — Minakshi & Rahul",
+    "couple": "Minakshi & Rahul",
+    "venue": "Anand International, Bodhgaya",
+    "runtime": "04:50",
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "posterUrl": "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&q=80",
+    "description": "Peaceful Bodhgaya union woven with modern cinematic flair and heartfelt emotional toasts."
+  },
+  {
+    "id": 6,
+    "title": "From Zoom Call to Forever — Aprajita & Abhinav",
+    "couple": "Aprajita & Abhinav",
+    "venue": "The Park Pride, Patna",
+    "runtime": "05:40",
+    "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "posterUrl": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&q=80",
+    "description": "From first virtual hello to a magnificent ballroom celebration in the heart of Patna."
+  }
+]

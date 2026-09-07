@@ -1,0 +1,214 @@
+[
+  {
+    "id": 1,
+    "title": "STANDARD WEDDING PACKAGE (3 DAYS)",
+    "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • PROFESSIONAL WEDDING DOCUMENTATION",
+    "badge": "SPECIAL OFFER PACKAGE",
+    "regularPrice": "₹78,000",
+    "offerPrice": "₹60,000/-",
+    "savings": "SAVE ₹18,000",
+    "schedule": [
+      {
+        "day": "Day 1 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+      },
+      {
+        "day": "Day 2 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+      },
+      {
+        "day": "Day 3 – Wedding Day",
+        "crew": ["1 Traditional Photographer", "1 Traditional Videographer", "1 Candid Photographer", "1 Drone Pilot"]
+      }
+    ],
+    "deliverables": [
+      "1 E-Invitation Video",
+      "2 Cinematic Reels",
+      "1 Teaser",
+      "1 Full-Length Wedding Video",
+      "100+ Edited HD Photos",
+      "Social Media Ready Photos (Instagram, WhatsApp)",
+      "30 Sheets Album",
+      "64 GB Premium Pen Drive",
+      "All High-Resolution Edited Photos",
+      "Complete Raw Photos & Videos"
+    ],
+    "experience": [
+      "Professional Coverage & Complete Event Documentation",
+      "Professional Drone Coverage on Wedding Day",
+      "High-Quality Digital & Pen Drive Delivery"
+    ],
+    "whyChooseTitle": "WHY CHOOSE LENSLOOM?",
+    "whyChooseFeatures": [
+      "Complete Event Coverage",
+      "Fast Turnaround",
+      "Creative Storytelling",
+      "Social Media Optimized",
+      "Professional Drone Shots",
+      "Premium 30 Sheets Album"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "SILVER WEDDING PACKAGE (3 DAYS)",
+    "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • BEST VALUE PACKAGE",
+    "badge": "BEST VALUE PACKAGE",
+    "regularPrice": "₹1,04,000",
+    "offerPrice": "₹80,000/-",
+    "savings": "SAVE ₹24,000",
+    "schedule": [
+      {
+        "day": "Day 1 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+      },
+      {
+        "day": "Day 2 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+      },
+      {
+        "day": "Day 3 – Wedding Day",
+        "crew": ["1 Traditional Photographer", "1 Traditional Videographer", "1 Cinematographer", "1 Drone Pilot"]
+      }
+    ],
+    "deliverables": [
+      "1 E-Invitation Video",
+      "4 Cinematic Reels",
+      "1 Cinematic Teaser",
+      "1 Full-Length Wedding Video",
+      "100+ Professionally Edited HD Photos",
+      "Social Media Ready Photos (Instagram, WhatsApp, Facebook)",
+      "30 Sheets Premium Album",
+      "1 x 128 GB Premium Pen Drive",
+      "All High-Resolution Edited Photos",
+      "Complete Raw Photos & Videos"
+    ],
+    "experience": [
+      "Professional Cinematic Coverage & Color Grading",
+      "Enhanced Photo Retouching & Better Content Planning",
+      "High-Quality Final Presentation"
+    ],
+    "whyChooseTitle": "WHY CHOOSE LENSLOOM?",
+    "whyChooseFeatures": [
+      "4K Cinematic Production",
+      "Fast Turnaround",
+      "Cinematic Storytelling",
+      "Social Media Optimized",
+      "Professional Color Grading",
+      "Complete 3-Day Coverage"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "GOLD WEDDING PACKAGE (3 DAYS)",
+    "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • FULL CINEMATIC EXPERIENCE",
+    "badge": "RECOMMENDED PACKAGE",
+    "regularPrice": "₹1,43,000",
+    "offerPrice": "₹1,10,000/-",
+    "savings": "SAVE ₹33,000",
+    "schedule": [
+      {
+        "day": "Day 1 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+      },
+      {
+        "day": "Day 2 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Candid Photographer", "1 Cinematographer"]
+      },
+      {
+        "day": "Day 3 – Wedding Day",
+        "crew": ["1 Traditional Photographer | 1 Traditional Videographer", "1 Candid Photographer | 1 Cinematographer", "1 Drone Pilot"]
+      }
+    ],
+    "timeline": [
+      { "item": "Preview Photos", "time": "Within 24 Hours" },
+      { "item": "First Cinematic Video", "time": "Within 24–48 Hours" },
+      { "item": "Social Media Ready Photos", "time": "Within 2–3 Working Days" },
+      { "item": "Priority Editing", "time": "Faster Content Delivery" }
+    ],
+    "deliverables": [
+      "1 E-Invitation Video",
+      "7 Cinematic Reels & 1 Cinematic Teaser",
+      "1 Full-Length Cinematic Wedding Film",
+      "150+ Professionally Edited HD Photos",
+      "Social Media Ready Photos (Instagram, WhatsApp, Facebook)",
+      "1 x 40 Sheets Premium Album",
+      "1 Wedding Magazine – 'Your Wedding Story'",
+      "1 Mini Album & 1 Table Calendar",
+      "1 x 128 GB Premium Pen Drive",
+      "All High-Resolution Edited Photos",
+      "Complete RAW Photos & Videos"
+    ],
+    "experience": [
+      "Full Cinematic Wedding Coverage & Professional Cinematography",
+      "Advanced Color Grading & Premium Photo Retouching",
+      "Creative Wedding Storytelling & Premium Album Designing"
+    ],
+    "whyChooseTitle": "WHY CHOOSE LENSLOOM?",
+    "whyChooseFeatures": [
+      "Full Cinematic Quality",
+      "Priority Turnaround",
+      "Creative Storytelling",
+      "Social Media Optimized",
+      "Advanced Color Grading",
+      "Premium Magazine & Album"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "LUXURY WEDDING PACKAGE (3 DAYS)",
+    "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • LUXURY EXPERIENCE",
+    "badge": "LUXURY EXPERIENCE",
+    "regularPrice": "₹1,95,000",
+    "offerPrice": "₹1,50,000/-",
+    "savings": "SAVE ₹45,000",
+    "schedule": [
+      {
+        "day": "Day 1 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Candid Photographer", "1 Cinematographer"]
+      },
+      {
+        "day": "Day 2 – Event Coverage",
+        "crew": ["1 Traditional Photographer", "1 Candid Photographer", "1 Cinematographer"]
+      },
+      {
+        "day": "Day 3 – Wedding Day",
+        "crew": ["1 Traditional Photographer | 1 Trad. Videographer", "1 Candid Photographer | 1 Cinematographer", "1 Professional Drone Pilot"]
+      }
+    ],
+    "timeline": [
+      { "item": "Preview Photos", "time": "Within 24 Hours" },
+      { "item": "First Cinematic Video", "time": "Within 24–48 Hours" },
+      { "item": "Social Media Photos", "time": "Within 24–48 Hours (Instagram, WhatsApp, Facebook)" },
+      { "item": "Final Edited Deliverables", "time": "Within 20–30 Working Days" },
+      { "item": "Album Delivery", "time": "Within 30–45 Working Days" }
+    ],
+    "deliverables": [
+      "1 E-Invitation Video",
+      "12 Cinematic Reels & 1 Premium Cinematic Teaser",
+      "1 Full-Length Cinematic Wedding Film",
+      "250+ Professionally Edited HD Photos",
+      "Social Media Ready Photos (Instagram, WhatsApp, Facebook)",
+      "50 Sheets Double Decker Premium Album",
+      "1 Luxury Wedding Magazine – 'Your Wedding Story'",
+      "Premium Mini Album & Table Calendar",
+      "1 Premium 20x30 Portrait Frame",
+      "1 x 128 GB Premium Pen Drive",
+      "All High-Resolution Edited Photos & Complete Raw Data"
+    ],
+    "experience": [
+      "Full Cinematic Experience & Advanced Cinematography",
+      "Professional 4K Production & Advanced Color Grading",
+      "Advanced Skin Retouching & Luxury Album Designing",
+      "Premium Storytelling, Drone Coverage & Priority Fast Track"
+    ],
+    "whyChooseTitle": "WHY CHOOSE LENSLOOM LUXURY?",
+    "whyChooseFeatures": [
+      "Maximum Coverage",
+      "Priority Delivery",
+      "4K Production",
+      "50-Sheet Double Decker",
+      "Magazine & 20x30 Frame",
+      "Full Cinematic Experience"
+    ]
+  }
+]

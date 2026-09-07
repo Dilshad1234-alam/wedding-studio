@@ -80,7 +80,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#1E221D]/75 via-[#1E221D]/55 to-[#1E221D]/85"></div>
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+        <div className="w-full min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-8 text-center relative z-10 mx-auto">
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-[#C5B388] font-medium mb-3">
             WEDDINGPUR — BESPOKE WEDDING CINEMA & STILLS
           </span>
@@ -115,61 +115,94 @@ export default function LandingPage() {
       </section>
 
 
-      {/* 2. ROMAN ARCH PHILOSOPHY SECTION */}
-      <section className="py-24 px-6 sm:px-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
-          <div className="lg:col-span-6 flex justify-center">
-            <div className="relative w-full max-w-md aspect-[3/4] rounded-t-full rounded-b-3xl overflow-hidden shadow-2xl border-8 border-[#2B2519] bg-[#121518]">
-              <img 
-                src="https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg" 
-                alt="Royal Wedding Couple" 
-                className="w-full h-full object-cover object-center scale-100 hover:scale-105 transition-transform duration-700" 
-              />
+      {/* EDITORIAL PHILOSOPHY SECTION */}
+      <section className="w-full bg-[#0B0D0E] py-16 sm:py-24 border-t border-[#1C1A14]">
+        <div className="w-full max-w-[1536px] mx-auto px-6 sm:px-10 lg:px-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            
+            {/* LEFT: Expanded Grand Arch Portrait */}
+            <div className="lg:col-span-6 flex justify-center lg:justify-start">
+              <div className="relative w-full max-w-[500px] aspect-[4/5] sm:aspect-[3/4] rounded-t-[200px] rounded-b-3xl overflow-hidden border border-[#3A311D] shadow-[0_20px_60px_rgba(0,0,0,0.8)] bg-[#121518]">
+                <img
+                  src="https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg"
+                  alt="Unposed Wedding Moments"
+                  className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D0E]/60 via-transparent to-transparent pointer-events-none"></div>
+              </div>
             </div>
+
+            {/* RIGHT: Editorial Narrative & Expanded Metrics */}
+            <div className="lg:col-span-6 space-y-7 text-center lg:text-left">
+              
+              {/* Eyebrow Badge */}
+              <div>
+                <span className="inline-block px-3.5 py-1.5 rounded-full bg-[#181B1F] border border-[#3A311D] text-[10px] font-black uppercase tracking-[0.3em] text-[#D4AF37]">
+                  OUR EDITORIAL PHILOSOPHY
+                </span>
+              </div>
+
+              {/* Heading */}
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-white tracking-tight leading-[1.1]">
+                Unposed. Pure. <br />
+                <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B89018]">
+                  Poetic.
+                </span>
+              </h2>
+
+              {/* Description */}
+              <p className="text-sm sm:text-base text-[#D1C7A5] font-light leading-relaxed max-w-xl mx-auto lg:mx-0">
+                We believe the most breathtaking images are the ones you didn't know were being taken. Our documentary approach focuses on the raw, unscripted emotion of your day—capturing what poses simply cannot. We blend into your celebration to document your legacy as it organically unfolds.
+              </p>
+
+              {/* Key Metrics Row */}
+              <div className="grid grid-cols-3 gap-6 pt-4 border-t border-[#2B2519] max-w-lg mx-auto lg:mx-0">
+                <div>
+                  <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] block">
+                    150+
+                  </span>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#8A7D5C] block mt-1">
+                    WEDDINGS DOCUMENTED
+                  </span>
+                </div>
+                <div>
+                  <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] block">
+                    10+
+                  </span>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#8A7D5C] block mt-1">
+                    AWARDS WON
+                  </span>
+                </div>
+                <div>
+                  <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] block">
+                    100%
+                  </span>
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#8A7D5C] block mt-1">
+                    RAW EMOTION
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-2">
+                <Link
+                  href="/about"
+                  className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-[#3A311D] hover:border-[#D4AF37] bg-[#121518] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] text-[#C5B388] hover:text-black text-xs uppercase tracking-[0.2em] font-black transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95 cursor-pointer"
+                >
+                  OUR STORY & CREW
+                </Link>
+              </div>
+
+            </div>
+
           </div>
-
-          <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
-              OUR EDITORIAL PHILOSOPHY
-            </span>
-            <h2 className="font-serif text-5xl sm:text-6xl text-white font-normal leading-[1.12]">
-              Unposed. Pure. <br />
-              <span className="italic font-light text-[#D4AF37]">Poetic.</span>
-            </h2>
-            <p className="text-[#C5B388] text-base leading-relaxed max-w-lg mx-auto lg:mx-0 font-light">
-              We believe the most breathtaking images are the ones you didn't know were being taken. Our documentary approach focuses on the raw, unscripted emotion of your day—capturing what poses simply cannot. We blend into your celebration to document your legacy as it organically unfolds.
-            </p>
-
-            <div className="grid grid-cols-3 gap-6 pt-4 max-w-md mx-auto lg:mx-0 border-t border-[#2B2519]">
-              <div>
-                <span className="font-serif text-3xl text-white block">150+</span>
-                <span className="text-[9px] uppercase tracking-wider text-[#C5B388]">Weddings Documented</span>
-              </div>
-              <div>
-                <span className="font-serif text-3xl text-white block">10+</span>
-                <span className="text-[9px] uppercase tracking-wider text-[#C5B388]">Awards Won</span>
-              </div>
-              <div>
-                <span className="font-serif text-3xl text-white block">100%</span>
-                <span className="text-[9px] uppercase tracking-wider text-[#C5B388]">Raw Emotion</span>
-              </div>
-            </div>
-
-            <div className="pt-4">
-              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-9 py-3 rounded-full text-xs tracking-[0.25em] uppercase font-medium transition shadow-sm" href="/about">
-                Our Story & Crew
-              </Link>
-            </div>
-          </div>
-
         </div>
       </section>
 
 
       {/* 3. FEATURED WEDDINGS (MAGAZINE SHOWCASE) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] border-t border-[#2B2519]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
+        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
           <div className="text-center mb-16">
             <h2 className="font-serif text-4xl sm:text-5xl text-white font-normal mb-2">
               Featured Weddings
@@ -177,7 +210,7 @@ export default function LandingPage() {
             <p className="text-xs text-[#C5B388] tracking-[0.25em] uppercase">Curated weddings captured with cinematic depth</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full">
             {[
               {
                 names: "Abhishek & Ruchi",
@@ -199,7 +232,7 @@ export default function LandingPage() {
               }
             ].map((story, i) => (
               <div key={i} className="group cursor-pointer flex flex-col items-start text-left">
-                <div className="aspect-[4/5] rounded-2xl overflow-hidden mb-5 bg-[#121518] border border-[#2B2519] w-full">
+                <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-5 bg-[#121518] border border-[#2B2519]">
                   <img 
                     src={story.img} 
                     alt={story.names} 
@@ -230,8 +263,8 @@ export default function LandingPage() {
       </section>
 
       {/* 4. STUDIO PILLARS & SERVICES (4 Editorial Grid Cards with Mini Photo Collages) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#121518] border-t border-[#2B2519]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-[#121518] border-t border-[#2B2519]">
+        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
           
           <div className="text-center mb-16">
             <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
@@ -244,7 +277,7 @@ export default function LandingPage() {
           </div>
 
           {/* 4 Services Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 w-full">
             
             {/* CARD 1: Destination Wedding Photography */}
             <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
@@ -393,8 +426,8 @@ export default function LandingPage() {
 
 
       {/* 5. CINEMATIC WEDDING FILMS SHOWCASE (WEDDINGPUR YOUTUBE REEL) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] border-t border-[#2B2519]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
+        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
           
           {/* Header */}
           <div className="text-center mb-16">
@@ -411,12 +444,12 @@ export default function LandingPage() {
           </div>
 
           {/* MAIN FEATURED CINEMA HERO BANNER */}
-          <div className="max-w-5xl mx-auto mb-14">
+          <div className="w-full mb-8">
             <a
               href="https://www.youtube.com/@WeddingPur"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-black cursor-pointer"
+              className="group relative block w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-black cursor-pointer"
             >
               <img
                 src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85"
@@ -449,7 +482,7 @@ export default function LandingPage() {
           </div>
 
           {/* 4 GRID FILM TEASERS (Direct YouTube Cards) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
             {[
               {
                 couple: "Pankaj & Shritika",
@@ -545,8 +578,8 @@ export default function LandingPage() {
 
 
       {/* 6. VERIFIED GOOGLE REVIEWS SECTION (REAL CLIENT FEEDBACK) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] text-[#F5F5F5]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-[#0B0D0E] text-[#F5F5F5]">
+        <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 py-16">
           
           {/* Header */}
           <div className="text-center mb-16">
@@ -564,7 +597,7 @@ export default function LandingPage() {
 
           {/* Interactive Auto-Playing Google Review Carousel */}
           <div 
-            className="max-w-4xl mx-auto relative"
+            className="w-full mx-auto relative"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -648,8 +681,8 @@ export default function LandingPage() {
 
 
       {/* 6.5. FREQUENTLY ASKED QUESTIONS */}
-      <section className="bg-[#0B0D0E] py-24 px-6 sm:px-12 border-t border-[#2B2519]">
-        <div className="max-w-3xl mx-auto">
+      <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
+        <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 py-16">
           <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
             FAQS
           </span>
@@ -706,8 +739,8 @@ export default function LandingPage() {
 
 
       {/* 7. LIVE INSTAGRAM FEED SHOWCASE (@weddingpur) */}
-      <section className="py-24 px-6 sm:px-12 bg-[#0B0D0E] border-t border-[#2B2519]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
+        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 py-16">
           
           {/* Instagram Profile Header */}
           <div className="flex flex-col items-center text-center mb-12">
@@ -747,7 +780,7 @@ export default function LandingPage() {
           </div>
 
           {/* 3x2 Instagram Post Grid (Direct External Links) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 w-full mx-auto">
             {[
               {
                 img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg",

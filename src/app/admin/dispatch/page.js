@@ -1,525 +1,1019 @@
 "use client";
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState } from 'react';
+import Link from 'next/link';
 
-export default function DispatchPage() {
-  const [dispatches, setDispatches] = useState([]);
-  const [teamMembers, setTeamMembers] = useState([]);
+export default function ClientDispatchConsole() {
+  // Calendar Filter States (Default: September 2026)
+  const [selectedYear, setSelectedYear] = useState(2026);
+  const [selectedMonth, setSelectedMonth] = useState('SEP'); // 'JAN' - 'DEC'
+  const [expandedClientId, setExpandedClientId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  // Form states
-  const [clientName, setClientName] = useState('');
-  const [destination, setDestination] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [selectedCrew, setSelectedCrew] = useState([]);
-  const [budget, setBudget] = useState('');
+  const monthsList = [
+    { key: 'JAN', name: 'January', num: 1 },
+    { key: 'FEB', name: 'February', num: 2 },
+    { key: 'MAR', name: 'March', num: 3 },
+    { key: 'APR', name: 'April', num: 4 },
+    { key: 'MAY', name: 'May', num: 5 },
+    { key: 'JUN', name: 'June', num: 6 },
+    { key: 'JUL', name: 'July', num: 7 },
+    { key: 'AUG', name: 'August', num: 8 },
+    { key: 'SEP', name: 'September', num: 9 },
+    { key: 'OCT', name: 'October', num: 10 },
+    { key: 'NOV', name: 'November', num: 11 },
+    { key: 'DEC', name: 'December', num: 12 }
+  ];
 
-  const loadData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const [dispRes, teamRes] = await Promise.all([
-        fetch('/api/dispatches', { cache: 'no-store' }),
-        fetch('/api/admin/team', { cache: 'no-store' })
-      ]);
+  const yearsList = [2024, 2025, 2026, 2027];
 
-      const dispData = await dispRes.json();
-      const teamData = await teamRes.json();
+  const [clients, setClients] = useState([
+  // SL 1: PRIYA KUMARI (APRIL)
+  {
+    id: 1,
+    serialNo: 1,
+    clientName: "PRIYA KUMARI",
+    destination: "Sitamarhi / Begusarai / Patna",
+    totalBudget: "₹3,50,000",
+    status: "SCHEDULED",
+    daysCount: 4,
+    year: 2026,
+    month: "APR",
+    schedule: [
+      { dayNo: 1, date: "22 Apr 2026", eventName: "Rituals (Bride)", location: "Sitamarhi Home", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "Sanoj", assistance: "—", reportingTime: "10:00 AM" },
+      { dayNo: 2, date: "23 Apr 2026", eventName: "Haldi Shoot", location: "Sitamarhi Home", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "11:00 AM" },
+      { dayNo: 3, date: "25 Apr 2026", eventName: "Rituals (Groom)", location: "Begusarai Home", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "04:00 PM" },
+      { dayNo: 4, date: "26 Apr 2026", eventName: "Wedding Day", location: "Hajipur, Patna", tradPhoto: "Rohit", tradVideo: "Aman (8579044481)", candidPhoto: "Sanjeet", cinema: "Ritik Saw Kolkata", drone: "Manikant (Monu)", assistance: "Sumit", reportingTime: "06:00 PM" }
+    ]
+  },
 
-      const list = Array.isArray(dispData) 
-        ? dispData 
-        : (dispData.data || dispData.dispatches || []);
-      setDispatches(list);
+  // SL 2: RAVI RANJAN (MAY)
+  {
+    id: 2,
+    serialNo: 2,
+    clientName: "RAVI RANJAN",
+    destination: "Kankarbagh / Kumhrar / Patna",
+    totalBudget: "₹3,20,000",
+    status: "SCHEDULED",
+    daysCount: 4,
+    year: 2026,
+    month: "MAY",
+    schedule: [
+      { dayNo: 1, date: "04 May 2026", eventName: "Sangeet", location: "Hotel Anand Sagar, Kankarbagh", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "05:00 PM" },
+      { dayNo: 2, date: "05 May 2026", eventName: "Haldi, Mehndi", location: "Biscomaun Colony, Kumhrar", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "11:00 AM" },
+      { dayNo: 3, date: "06 May 2026", eventName: "Madwa", location: "Biscomaun Colony, Kumhrar", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "04:00 PM" },
+      { dayNo: 4, date: "07 May 2026", eventName: "Wedding Day", location: "Bhagwat Banquet Hall, Patna", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "Sanjeet", cinema: "Suraj", drone: "Manikant (Monu)", assistance: "Banty", reportingTime: "06:00 PM" }
+    ]
+  },
 
-      const teamList = Array.isArray(teamData) 
-        ? teamData 
-        : (teamData.data || teamData || []);
-      setTeamMembers(teamList);
-    } catch (err) {
-      console.error("Failed to load dispatches:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  // SL 3: ABHINAV KRISHNA (MAY)
+  {
+    id: 3,
+    serialNo: 3,
+    clientName: "ABHINAV KRISHNA",
+    destination: "Bihar Sharif",
+    totalBudget: "₹2,10,000",
+    status: "SCHEDULED",
+    daysCount: 3,
+    year: 2026,
+    month: "MAY",
+    schedule: [
+      { dayNo: 1, date: "08 May 2026", eventName: "Haldi (Haldi Kutai)", location: "Bihar Sharif Home", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "10:30 AM" },
+      { dayNo: 2, date: "09 May 2026", eventName: "Tilak", location: "Bihar Sharif", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "05:00 PM" },
+      { dayNo: 3, date: "10 May 2026", eventName: "Puja & Matkor etc.", location: "Bihar Sharif", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "09:00 AM" }
+    ]
+  },
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  // SL 4: NIKITA KUMARI (JUNE)
+  {
+    id: 4,
+    serialNo: 4,
+    clientName: "NIKITA KUMARI",
+    destination: "Begusarai / Darjeeling / Barh / Patna",
+    totalBudget: "₹4,80,000",
+    status: "SCHEDULED",
+    daysCount: 6,
+    year: 2026,
+    month: "JUN",
+    schedule: [
+      { dayNo: 1, date: "27 Apr 2026", eventName: "Engagement", location: "Begusarai", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "Sanjeet", cinema: "Ritik Saw", drone: "—", assistance: "—", reportingTime: "05:00 PM" },
+      { dayNo: 2, date: "03-07 June 2026", eventName: "Prewedding Shoot", location: "Darjeeling", tradPhoto: "—", tradVideo: "—", candidPhoto: "Suraj", cinema: "Vikash Jaishwal", drone: "Suraj", assistance: "—", reportingTime: "07:00 AM" },
+      { dayNo: 3, date: "21 June 2026", eventName: "Tilak", location: "Barh", tradPhoto: "Suraj", tradVideo: "Priyanshu", candidPhoto: "—", cinema: "—", drone: "—", assistance: "Rohit", reportingTime: "08:00 AM" },
+      { dayNo: 4, date: "22 June 2026", eventName: "Haldi", location: "Barh", tradPhoto: "Rohit", tradVideo: "Priyanshu", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "10:00 AM" },
+      { dayNo: 5, date: "23 June 2026", eventName: "Mehndi", location: "Barh", tradPhoto: "Suraj", tradVideo: "Priyanshu", candidPhoto: "—", cinema: "—", drone: "—", assistance: "Rohit", reportingTime: "04:00 PM" },
+      { dayNo: 6, date: "24 June 2026", eventName: "Wedding Day", location: "Patna Bailey Road", tradPhoto: "Rohit", tradVideo: "Pintu (7870082937)", candidPhoto: "Sanjeet", cinema: "Suraj", drone: "Monu", assistance: "Banty", reportingTime: "06:00 PM" }
+    ]
+  },
 
-  // Executive Revenue & Logistics Overview Calculations
-  const metrics = useMemo(() => {
-    const totalMissions = dispatches.length;
-    const completedMissions = dispatches.filter(d => (d.status || '').toLowerCase() === 'completed').length;
-    const activeMissions = dispatches.filter(d => (d.status || '').toLowerCase() !== 'completed' && (d.status || '').toLowerCase() !== 'cancelled').length;
-    const onShootMissions = dispatches.filter(d => (d.status || '').toLowerCase() === 'traveling' || (d.status || '').toLowerCase() === 'on shoot').length;
+  // SL 5: FREELANCE (JUNE - GAYA)
+  {
+    id: 5,
+    serialNo: 5,
+    clientName: "FREELANCE (GAYA ENGAGEMENT)",
+    destination: "Gaya",
+    totalBudget: "₹65,000",
+    status: "CONFIRMED",
+    daysCount: 1,
+    year: 2026,
+    month: "JUN",
+    schedule: [
+      { dayNo: 1, date: "22 June 2026", eventName: "Engagement", location: "Gaya", tradPhoto: "Sanoj", tradVideo: "—", candidPhoto: "—", cinema: "Suraj", drone: "—", assistance: "Banty", reportingTime: "04:00 PM" }
+    ]
+  },
 
-    // Standard high-end wedding shoot benchmark (~₹1,25,000 per multi-day event or custom field)
-    const baseRevenue = dispatches.reduce((acc, curr) => {
-      const val = Number(curr.amount || curr.budget) || 125000;
-      return acc + val;
-    }, 0);
+  // SL 6: ROHIT KUMAR (JUNE - RAJGIR)
+  {
+    id: 6,
+    serialNo: 6,
+    clientName: "ROHIT KUMAR",
+    destination: "Rajgir",
+    totalBudget: "₹1,40,000",
+    status: "CONFIRMED",
+    daysCount: 1,
+    year: 2026,
+    month: "JUN",
+    schedule: [
+      { dayNo: 1, date: "24 June 2026", eventName: "Engagement, Pre-Wed & Wedding", location: "Rajgir", tradPhoto: "Vinod", tradVideo: "—", candidPhoto: "—", cinema: "Sanoj", drone: "—", assistance: "Banty", reportingTime: "11:00 AM" }
+    ]
+  },
 
-    const advanceRealized = Math.round(baseRevenue * 0.65); // 65% standard advance collected
-    const pendingBalance = baseRevenue - advanceRealized;
+  // SL 7: FREELANCE (JUNE - NAWADA)
+  {
+    id: 7,
+    serialNo: 7,
+    clientName: "FREELANCE (NAWADA ENGAGEMENT)",
+    destination: "Nawada",
+    totalBudget: "₹50,000",
+    status: "CONFIRMED",
+    daysCount: 1,
+    year: 2026,
+    month: "JUN",
+    schedule: [
+      { dayNo: 1, date: "24 June 2026", eventName: "Engagement", location: "Nawada", tradPhoto: "—", tradVideo: "—", candidPhoto: "—", cinema: "Priyanshu", drone: "—", assistance: "—", reportingTime: "05:00 PM" }
+    ]
+  },
 
-    return {
-      totalMissions,
-      completedMissions,
-      activeMissions,
-      onShootMissions,
-      baseRevenue,
-      advanceRealized,
-      pendingBalance
-    };
-  }, [dispatches]);
+  // SL 8: BIRTHDAY (JULY)
+  {
+    id: 8,
+    serialNo: 8,
+    clientName: "BIRTHDAY CELEBRATION",
+    destination: "Punpun, Patna",
+    totalBudget: "₹35,000",
+    status: "DELIVERED",
+    daysCount: 1,
+    year: 2026,
+    month: "JUL",
+    schedule: [
+      { dayNo: 1, date: "03 July 2026", eventName: "Birthday Shoot", location: "Punpun", tradPhoto: "Rohit / Sanoj", tradVideo: "—", candidPhoto: "Suraj", cinema: "Priyanshu", drone: "—", assistance: "—", reportingTime: "06:00 PM" }
+    ]
+  },
 
-  const handleToggleCrew = (member) => {
-    if (selectedCrew.some((c) => c.name === member.name)) {
-      setSelectedCrew(selectedCrew.filter((c) => c.name !== member.name));
-    } else {
-      setSelectedCrew([...selectedCrew, member]);
-    }
+  // SL 9: APARNA (DECEMBER)
+  {
+    id: 9,
+    serialNo: 9,
+    clientName: "APARNA",
+    destination: "Patliputra / Dakbunglow, Patna",
+    totalBudget: "₹3,20,000",
+    status: "SCHEDULED",
+    daysCount: 3,
+    year: 2026,
+    month: "DEC",
+    schedule: [
+      { dayNo: 1, date: "01 Dec 2026", eventName: "Rituals (Groom)", location: "Patliputra, Patna", tradPhoto: "Rohit", tradVideo: "Shubham Jeh (7061128351)", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "11:00 AM" },
+      { dayNo: 2, date: "02 Dec 2026", eventName: "Rituals (Groom)", location: "Patliputra, Patna", tradPhoto: "Rohit", tradVideo: "Shubham Jeh (7061128351)", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "02:00 PM" },
+      { dayNo: 3, date: "02 Dec 2026", eventName: "Wedding Day", location: "Dakbunglow, Patna", tradPhoto: "Aman", tradVideo: "Sanoj", candidPhoto: "Sanjeet", cinema: "Suraj", drone: "Aditya", assistance: "Mithlesh", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 10: KINSHUK SHANKAR (NOVEMBER)
+  {
+    id: 10,
+    serialNo: 10,
+    clientName: "KINSHUK SHANKAR",
+    destination: "Munger / Munger Club",
+    totalBudget: "₹2,60,000",
+    status: "SCHEDULED",
+    daysCount: 2,
+    year: 2026,
+    month: "NOV",
+    schedule: [
+      { dayNo: 1, date: "24 Nov 2026", eventName: "Haldi, Mehndi", location: "Munger Home", tradPhoto: "Aman (8435428039)", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "Mithlesh", reportingTime: "10:30 AM" },
+      { dayNo: 2, date: "25 Nov 2026", eventName: "Wedding Day", location: "Munger Club", tradPhoto: "Aman (8435428039)", tradVideo: "Shubham (7061128351)", candidPhoto: "—", cinema: "Sanoj", drone: "Aditya Lucky", assistance: "Mithlesh", reportingTime: "05:30 PM" }
+    ]
+  },
+
+  // SL 11: SHYAMLI SHARMA (NOVEMBER)
+  {
+    id: 11,
+    serialNo: 11,
+    clientName: "SHYAMLI SHARMA",
+    destination: "Sherghati",
+    totalBudget: "₹2,10,000",
+    status: "SCHEDULED",
+    daysCount: 2,
+    year: 2026,
+    month: "NOV",
+    schedule: [
+      { dayNo: 1, date: "23 Nov 2026", eventName: "Rituals (Bride)", location: "Sherghati Home", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "11:00 AM" },
+      { dayNo: 2, date: "24 Nov 2026", eventName: "Wedding Day", location: "Sherghati", tradPhoto: "Rohit", tradVideo: "Sanoj", candidPhoto: "—", cinema: "—", drone: "Monu", assistance: "Banty", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 12: ANKIT KUMAR (NOVEMBER - DECEMBER)
+  {
+    id: 12,
+    serialNo: 12,
+    clientName: "ANKIT KUMAR",
+    destination: "Patna to Siwan / Bailey Road",
+    totalBudget: "₹3,40,000",
+    status: "SCHEDULED",
+    daysCount: 3,
+    year: 2026,
+    month: "NOV",
+    schedule: [
+      { dayNo: 1, date: "29 Nov 2026", eventName: "Tilak", location: "Patna to Siwan", tradPhoto: "Rohit", tradVideo: "Shubham", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "08:00 AM" },
+      { dayNo: 2, date: "01 Dec 2026", eventName: "Haldi Mehndi Sangeet", location: "Bailey Road (Hotel Vibrant)", tradPhoto: "—", tradVideo: "Suraj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "05:00 PM" },
+      { dayNo: 3, date: "02 Dec 2026", eventName: "Wedding Day", location: "Bailey Road (Hotel Vibrant)", tradPhoto: "Rohit", tradVideo: "Shubham", candidPhoto: "—", cinema: "Priyanshu", drone: "Monu", assistance: "—", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 13: GUDDU KUMAR (NOVEMBER)
+  {
+    id: 13,
+    serialNo: 13,
+    clientName: "GUDDU KUMAR",
+    destination: "Akangarsarai",
+    totalBudget: "₹2,50,000",
+    status: "SCHEDULED",
+    daysCount: 3,
+    year: 2026,
+    month: "NOV",
+    schedule: [
+      { dayNo: 1, date: "18 Nov 2026", eventName: "Haldi, Mehndi", location: "Akangarsarai", tradPhoto: "Vinod", tradVideo: "Suraj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "11:00 AM" },
+      { dayNo: 2, date: "19 Nov 2026", eventName: "Rituals & Sangeet", location: "Akangarsarai", tradPhoto: "Vinod", tradVideo: "Suraj", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "04:30 PM" },
+      { dayNo: 3, date: "20 Nov 2026", eventName: "Wedding Day", location: "Akangarsarai", tradPhoto: "Vinod", tradVideo: "—", candidPhoto: "—", cinema: "Suraj", drone: "Aditya", assistance: "—", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 14: ANURADHA RANI (NOVEMBER)
+  {
+    id: 14,
+    serialNo: 14,
+    clientName: "ANURADHA RANI",
+    destination: "Akangarsarai",
+    totalBudget: "₹2,70,000",
+    status: "SCHEDULED",
+    daysCount: 3,
+    year: 2026,
+    month: "NOV",
+    schedule: [
+      { dayNo: 1, date: "19 Nov 2026", eventName: "Lagan, Mehndi", location: "Akangarsarai", tradPhoto: "—", tradVideo: "Vinod", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "03:00 PM" },
+      { dayNo: 2, date: "20 Nov 2026", eventName: "Haldi", location: "Akangarsarai", tradPhoto: "Suraj", tradVideo: "Vinod", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "10:00 AM" },
+      { dayNo: 3, date: "21 Nov 2026", eventName: "Wedding Day", location: "Akangarsarai", tradPhoto: "Vinod", tradVideo: "Lead Lead", candidPhoto: "Suraj", cinema: "—", drone: "Aditya", assistance: "—", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 15: SURAJ SINHA (NOVEMBER)
+  {
+    id: 15,
+    serialNo: 15,
+    clientName: "SURAJ SINHA",
+    destination: "Patna (AIIMS) / Danapur",
+    totalBudget: "₹3,60,000",
+    status: "SCHEDULED",
+    daysCount: 4,
+    year: 2026,
+    month: "NOV",
+    schedule: [
+      { dayNo: 1, date: "18 Nov 2026", eventName: "Haldi and Matkor", location: "Patna (AIIMS)", tradPhoto: "Shubham Patna", tradVideo: "Priyanshu", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "10:00 AM" },
+      { dayNo: 2, date: "19 Nov 2026", eventName: "Mehndi", location: "Patna (AIIMS)", tradPhoto: "Shubham Patna", tradVideo: "Priyanshu", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "04:00 PM" },
+      { dayNo: 3, date: "20 Nov 2026", eventName: "Madwa", location: "Patna (AIIMS)", tradPhoto: "Shubham Patna", tradVideo: "Priyanshu", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "02:00 PM" },
+      { dayNo: 4, date: "21 Nov 2026", eventName: "Wedding Day", location: "Bhusaula Danapur", tradPhoto: "Shubham Patna", tradVideo: "Shubham Jeh", candidPhoto: "—", cinema: "Priyanshu", drone: "Manikant (Monu)", assistance: "—", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 16: RAUSHAN SINGH (NOVEMBER)
+  {
+    id: 16,
+    serialNo: 16,
+    clientName: "RAUSHAN SINGH",
+    destination: "Muzaffarpur",
+    totalBudget: "₹2,20,000",
+    status: "SCHEDULED",
+    daysCount: 2,
+    year: 2026,
+    month: "NOV",
+    schedule: [
+      { dayNo: 1, date: "29 Nov 2026", eventName: "Rituals Haldi & Mehndi", location: "Muzaffarpur", tradPhoto: "—", tradVideo: "—", candidPhoto: "—", cinema: "—", drone: "—", assistance: "—", reportingTime: "11:00 AM" },
+      { dayNo: 2, date: "30 Nov 2026", eventName: "Wedding Day", location: "Muzaffarpur", tradPhoto: "—", tradVideo: "Shubham Jeh", candidPhoto: "Suraj", cinema: "Priyanshu", drone: "—", assistance: "—", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 17: FREELANCE (DECEMBER - NAWADA)
+  {
+    id: 17,
+    serialNo: 17,
+    clientName: "FREELANCE (NAWADA WEDDING)",
+    destination: "Nawada",
+    totalBudget: "₹75,000",
+    status: "SCHEDULED",
+    daysCount: 1,
+    year: 2026,
+    month: "DEC",
+    schedule: [
+      { dayNo: 1, date: "09 Dec 2026", eventName: "Wedding Day", location: "Nawada", tradPhoto: "—", tradVideo: "—", candidPhoto: "—", cinema: "Suraj", drone: "—", assistance: "Mithlesh", reportingTime: "06:00 PM" }
+    ]
+  },
+
+  // SL 18: AMAR KUMAR VIVEK (DECEMBER)
+  {
+    id: 18,
+    serialNo: 18,
+    clientName: "AMAR KUMAR VIVEK",
+    destination: "Begusarai",
+    totalBudget: "₹2,40,000",
+    status: "SCHEDULED",
+    daysCount: 2,
+    year: 2026,
+    month: "DEC",
+    schedule: [
+      { dayNo: 1, date: "01 Dec 2026", eventName: "Rituals", location: "Begusarai Home", tradPhoto: "Sikandar Kr", tradVideo: "—", candidPhoto: "—", cinema: "Ritik", drone: "—", assistance: "—", reportingTime: "11:00 AM" },
+      { dayNo: 2, date: "02 Dec 2026", eventName: "Wedding Day", location: "Begusarai", tradPhoto: "Ritik Photo", tradVideo: "Sikandar Kr", candidPhoto: "—", cinema: "Ritik", drone: "—", assistance: "—", reportingTime: "06:00 PM" }
+    ]
+  }
+]);
+
+  // Form State for Adding Multi-Day Client
+  const [formData, setFormData] = useState({
+    clientName: "",
+    destination: "",
+    totalBudget: "",
+    status: "SCHEDULED",
+    year: selectedYear,
+    month: selectedMonth,
+    days: [
+      {
+        dayNo: 1,
+        date: `15 ${selectedMonth} ${selectedYear}`,
+        eventName: "Rituals / Haldi",
+        location: "",
+        tradPhoto: "",
+        tradVideo: "",
+        candidPhoto: "",
+        cinema: "",
+        drone: "",
+        assistance: "",
+        reportingTime: "10:00 AM"
+      }
+    ]
+  });
+
+  // Filter clients by active year & month
+  const filteredClients = clients.filter(
+    (c) => c.year === selectedYear && c.month === selectedMonth
+  );
+
+  // Helper to count clients per month for badges
+  const getMonthClientCount = (mKey) => {
+    return clients.filter((c) => c.year === selectedYear && c.month === mKey).length;
   };
 
-  const handleCreateDispatch = async (e) => {
+  // Add Day to Builder Form
+  const addDayRow = () => {
+    const nextDayNo = formData.days.length + 1;
+    setFormData({
+      ...formData,
+      days: [
+        ...formData.days,
+        {
+          dayNo: nextDayNo,
+          date: `16 ${formData.month} ${formData.year}`,
+          eventName: nextDayNo === 2 ? "Sangeet" : nextDayNo === 3 ? "Wedding Day" : "Reception",
+          location: formData.days[0]?.location || "",
+          tradPhoto: "",
+          tradVideo: "",
+          candidPhoto: "",
+          cinema: "",
+          drone: "",
+          assistance: "",
+          reportingTime: "04:00 PM"
+        }
+      ]
+    });
+  };
+
+  // Remove Day
+  const removeDayRow = (idxToRemove) => {
+    if (formData.days.length === 1) return;
+    const updated = formData.days
+      .filter((_, idx) => idx !== idxToRemove)
+      .map((item, idx) => ({ ...item, dayNo: idx + 1 }));
+    setFormData({ ...formData, days: updated });
+  };
+
+  // Update field in builder
+  const updateDayField = (idx, field, value) => {
+    const updated = [...formData.days];
+    updated[idx][field] = value;
+    setFormData({ ...formData, days: updated });
+  };
+
+  // Submit client
+  const handleSaveClient = (e) => {
     e.preventDefault();
-    if (!clientName.trim() || !destination.trim()) return;
-
-    setIsSubmitting(true);
-    const crewNames = selectedCrew.map((c) => c.name).join(', ');
-
-    try {
-      const res = await fetch('/api/dispatches', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clientEvent: clientName.trim(),
-          clientName: clientName.trim(),
-          memberName: crewNames || "Unassigned",
-          destination: destination.trim(),
-          startDate,
-          endDate,
-          dates: startDate && endDate ? `${startDate} to ${endDate}` : startDate || '',
-          amount: budget ? Number(budget) : 125000,
-          status: 'scheduled'
-        })
-      });
-
-      if (res.ok) {
-        setClientName('');
-        setDestination('');
-        setStartDate('');
-        setEndDate('');
-        setBudget('');
-        setSelectedCrew([]);
-        setIsModalOpen(false);
-        loadData();
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCSVUpload = async (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async ({ target }) => {
-      try {
-        const text = target.result;
-        const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-        if (lines.length <= 1) return;
-
-        const parsedDispatches = [];
-        for (let i = 1; i < lines.length; i++) {
-          const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
-          const client = cols[1] || cols[0];
-          const date = cols[3] || cols[2] || '';
-          const event = cols[4] || cols[3] || 'Wedding Event';
-          const loc = cols[5] || cols[4] || 'Patna';
-          const crew = cols.slice(6, 12).filter(c => c && c.toLowerCase() !== 'x').join(', ');
-
-          if (client && client.toLowerCase() !== 'client name') {
-            parsedDispatches.push({
-              clientEvent: `${client} - ${event}`,
-              clientName: client,
-              destination: loc,
-              dates: date,
-              memberName: crew || 'Unassigned',
-              status: 'scheduled'
-            });
-          }
-        }
-
-        if (parsedDispatches.length > 0) {
-          const res = await fetch('/api/admin/dispatches/bulk', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ dispatches: parsedDispatches })
-          });
-
-          if (res.ok) {
-            loadData();
-            alert(`Imported ${parsedDispatches.length} missions successfully!`);
-          }
-        }
-      } catch (err) {
-        console.error("CSV parse error:", err);
-      }
+    const newClient = {
+      id: Date.now(),
+      clientName: formData.clientName || "Unnamed Client",
+      destination: formData.destination || "Patna",
+      totalBudget: formData.totalBudget.startsWith('₹') ? formData.totalBudget : `₹${formData.totalBudget}`,
+      status: formData.status,
+      daysCount: formData.days.length,
+      year: parseInt(formData.year, 10),
+      month: formData.month,
+      schedule: formData.days
     };
-    reader.readAsText(file);
-    e.target.value = null;
+
+    setClients([newClient, ...clients]);
+    setExpandedClientId(newClient.id);
+    setIsModalOpen(false);
+
+    // Switch view to created client's month & year
+    setSelectedYear(newClient.year);
+    setSelectedMonth(newClient.month);
+
+    // Reset
+    setFormData({
+      clientName: "",
+      destination: "",
+      totalBudget: "",
+      status: "SCHEDULED",
+      year: selectedYear,
+      month: selectedMonth,
+      days: [
+        {
+          dayNo: 1,
+          date: "",
+          eventName: "Rituals / Haldi",
+          location: "",
+          tradPhoto: "",
+          tradVideo: "",
+          candidPhoto: "",
+          cinema: "",
+          drone: "",
+          assistance: "",
+          reportingTime: "10:00 AM"
+        }
+      ]
+    });
   };
 
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      await fetch('/api/dispatches', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, status: newStatus })
-      });
-      loadData();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleDeleteDispatch = async (id) => {
-    if (!confirm("Are you sure you want to remove this dispatch?")) return;
-    try {
-      await fetch(`/api/dispatches?id=${id}`, { method: 'DELETE' });
-      loadData();
-    } catch (err) {
-      console.error(err);
-    }
+  const deleteClient = (id) => {
+    setClients(clients.filter((c) => c.id !== id));
   };
 
   return (
-    <div className="w-full font-sans antialiased text-[#F5F5F5] px-6 sm:px-10 py-8 bg-[#0B0D0E] min-h-screen">
+    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased p-6 lg:p-10 space-y-6 selection:bg-[#D4AF37] selection:text-black">
       
-      {/* 1. Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 w-full">
+      {/* 1. TOP OPERATIONS HEADER */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#1F242D]">
         <div>
-          <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#D4AF37] block mb-1">
-            ROYALE DISPATCH CONSOLE
+          <span className="text-[10px] font-mono font-bold tracking-[0.25em] text-[#D4AF37] uppercase block mb-1">
+            WEDDING OPERATIONS CONTROL
           </span>
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            Operational Dashboard
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white font-sans">
+            Client Dispatch Console
           </h1>
+          <p className="text-xs text-[#8A7D5C] mt-1">
+            Month-by-month shoot roster, assigned specialists, multi-day call sheets, and contract payments.
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* CSV Import */}
-          <label className="border border-[#D4AF37]/50 text-[#D4AF37] hover:bg-[#D4AF37]/15 px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider font-extrabold transition-all cursor-pointer flex items-center gap-2 shadow-md">
-            <span>📥</span>
-            <span>IMPORT CSV</span>
-            <input type="file" accept=".csv" onChange={handleCSVUpload} className="hidden" />
-          </label>
-
-          {/* New Dispatch */}
+          <Link className="px-4 py-2.5 rounded-xl border border-[#2B2519] bg-[#121518] hover:border-[#D4AF37] text-[#D4AF37] text-xs font-black uppercase tracking-wider transition-all" href="/admin/wedding-management">
+            ← Back to Wedding Management
+          </Link>
           <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider font-black shadow-lg shadow-[#D4AF37]/20 transition-all flex items-center gap-2 cursor-pointer"
+            onClick={() => {
+              setFormData((prev) => ({ ...prev, year: selectedYear, month: selectedMonth }));
+              setIsModalOpen(true);
+            }}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs font-black uppercase tracking-wider shadow-lg shadow-[#D4AF37]/25 transition-all cursor-pointer"
           >
-            <span>+</span>
-            <span>NEW DISPATCH</span>
+            + Add New Client
           </button>
         </div>
       </div>
 
-      {/* 2. EXECUTIVE REVENUE & LOGISTICS OVERVIEW DECK */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        
-        {/* Card 1: Total Projected Revenue */}
-        <div className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/40 rounded-2xl p-5 shadow-2xl transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-black tracking-widest text-[#8A7D5C]">
-              PROJECTED REVENUE
+      {/* 2. YEAR & 12-MONTH TIMELINE NAVIGATION BAR */}
+      <div className="bg-[#121518] border border-[#2B2519] rounded-3xl p-4 sm:p-5 shadow-2xl space-y-4">
+        {/* Year Selector Row */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#1F242D] pb-3.5">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-bold text-[#8A7D5C] uppercase tracking-wider">
+              OPERATIONAL YEAR:
             </span>
-            <span className="w-7 h-7 rounded-lg bg-[#262013] text-[#D4AF37] flex items-center justify-center text-sm font-bold">
-              ₹
-            </span>
+            <div className="flex items-center gap-1.5 bg-[#0B0D0E] p-1 rounded-xl border border-[#2B2519]">
+              {yearsList.map((yr) => (
+                <button
+                  key={yr}
+                  type="button"
+                  onClick={() => setSelectedYear(yr)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    selectedYear === yr
+                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black shadow-md'
+                      : 'text-[#8A7D5C] hover:text-white'
+                  }`}
+                >
+                  {yr}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] via-[#F3E5AB] to-[#D4AF37]">
-            ₹{(metrics.baseRevenue / 100000).toFixed(2)}L
-          </div>
-          <div className="flex items-center gap-1.5 mt-2 text-[11px] text-[#A89D84]">
-            <span className="text-emerald-400 font-bold">↑ Active Pipeline</span>
-            <span>• {metrics.totalMissions} Contracts</span>
+
+          <div className="text-xs font-mono text-[#D4AF37]">
+            Active Schedule: <span className="font-bold text-white uppercase">{selectedMonth} {selectedYear}</span>
           </div>
         </div>
 
-        {/* Card 2: Advance Collected */}
-        <div className="bg-[#121518] border border-[#2B2519] hover:border-emerald-500/40 rounded-2xl p-5 shadow-2xl transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-black tracking-widest text-[#8A7D5C]">
-              ADVANCE REALIZED
-            </span>
-            <span className="w-7 h-7 rounded-lg bg-[#0F291B] text-emerald-400 flex items-center justify-center text-xs font-black">
-              ✓
-            </span>
-          </div>
-          <div className="text-2xl sm:text-3xl font-black text-white">
-            ₹{(metrics.advanceRealized / 100000).toFixed(2)}L
-          </div>
-          <div className="flex items-center gap-1.5 mt-2 text-[11px] text-emerald-400 font-bold">
-            <span>65% Secured in Bank</span>
-          </div>
-        </div>
+        {/* 12 Months Horizontal Tabs Ribbon */}
+        <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-1.5">
+          {monthsList.map((m) => {
+            const isCurrentMonth = selectedMonth === m.key;
+            const count = getMonthClientCount(m.key);
 
-        {/* Card 3: Pending Balance */}
-        <div className="bg-[#121518] border border-[#2B2519] hover:border-amber-500/40 rounded-2xl p-5 shadow-2xl transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-black tracking-widest text-[#8A7D5C]">
-              PENDING RECEIVABLES
-            </span>
-            <span className="w-7 h-7 rounded-lg bg-[#2B2011] text-amber-400 flex items-center justify-center text-xs font-bold">
-              ⏳
-            </span>
-          </div>
-          <div className="text-2xl sm:text-3xl font-black text-amber-200">
-            ₹{(metrics.pendingBalance / 100000).toFixed(2)}L
-          </div>
-          <div className="flex items-center gap-1.5 mt-2 text-[11px] text-amber-400/80 font-bold">
-            <span>Due on Final Delivery</span>
-          </div>
+            return (
+              <button
+                key={m.key}
+                type="button"
+                onClick={() => {
+                  setSelectedMonth(m.key);
+                  setExpandedClientId(null);
+                }}
+                className={`py-2.5 px-2 rounded-xl text-xs font-mono font-bold uppercase transition-all cursor-pointer flex flex-col items-center justify-center gap-1 relative ${
+                  isCurrentMonth
+                    ? 'bg-[#D4AF37] text-black font-black shadow-lg shadow-[#D4AF37]/25'
+                    : 'bg-[#181B20] text-[#A89D84] hover:text-white hover:bg-[#20252E] border border-[#2B2519]'
+                }`}
+              >
+                <span>{m.key}</span>
+                {count > 0 ? (
+                  <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-sans font-black ${
+                    isCurrentMonth ? 'bg-black text-[#D4AF37]' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                  }`}>
+                    {count} {count === 1 ? 'shoot' : 'shoots'}
+                  </span>
+                ) : (
+                  <span className="text-[9px] opacity-30">—</span>
+                )}
+              </button>
+            );
+          })}
         </div>
-
-        {/* Card 4: Fleet & Deployments */}
-        <div className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/40 rounded-2xl p-5 shadow-2xl transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase font-black tracking-widest text-[#8A7D5C]">
-              FLEET DEPLOYMENTS
-            </span>
-            <span className="w-7 h-7 rounded-lg bg-[#1B2129] text-[#38BDF8] flex items-center justify-center text-xs font-bold">
-              ⚡
-            </span>
-          </div>
-          <div className="text-2xl sm:text-3xl font-black text-white flex items-baseline gap-2">
-            <span>{metrics.activeMissions}</span>
-            <span className="text-xs text-[#8A7D5C] font-semibold">Active</span>
-          </div>
-          <div className="flex items-center gap-2 mt-2 text-[11px]">
-            <span className="text-[#D4AF37] font-bold">
-              📍 {metrics.onShootMissions} Traveling
-            </span>
-            <span className="text-[#3A3222]">•</span>
-            <span className="text-[#8A7D5C] font-bold">
-              {metrics.completedMissions} Delivered
-            </span>
-          </div>
-        </div>
-
       </div>
 
-      {/* 3. Black & Gold Table Container */}
-      <div className="w-full border border-[#2B2519] rounded-2xl shadow-2xl overflow-hidden bg-[#121518]">
-        <div className="px-6 py-4 bg-[#16191D] border-b border-[#2B2519] flex items-center justify-between">
-          <h2 className="font-bold text-lg text-white tracking-wide">
-            Live Crew Dispatch
-          </h2>
-          <span className="text-xs font-bold text-[#D4AF37]">
-            {dispatches.length} Active {dispatches.length === 1 ? 'Mission' : 'Missions'}
+      {/* 3. ROSTER SUMMARY HEADER & SERIAL-WISE CLIENT CARDS */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#D4AF37]"></span>
+            <span className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+              Booked Clients for {selectedMonth} {selectedYear} ({filteredClients.length})
+            </span>
+          </div>
+          <span className="text-xs text-[#8A7D5C]">
+            Showing serial by event date
           </span>
         </div>
 
-        {/* Headings */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-3.5 bg-[#0E1012] text-[11px] uppercase tracking-wider text-[#C5B388] font-bold border-b border-[#2B2519]">
-          <div className="col-span-3">CLIENT / EVENT</div>
-          <div className="col-span-3">ASSIGNED CREW</div>
-          <div className="col-span-2">DESTINATION</div>
-          <div className="col-span-2">DATES</div>
-          <div className="col-span-1">STATUS</div>
-          <div className="col-span-1 text-right">ACTIONS</div>
-        </div>
-
-        {/* Table Rows */}
-        {isLoading ? (
-          <div className="py-14 text-center text-[#D4AF37] text-xs font-bold tracking-widest animate-pulse">
-            SYNCHRONIZING FLEET OPERATIONS & REVENUE METRICS...
-          </div>
-        ) : dispatches.length === 0 ? (
-          <div className="py-16 text-center text-[#8A7D5C] font-medium text-sm">
-            No active dispatches found. Click "+ NEW DISPATCH" or "IMPORT CSV" to load missions.
-          </div>
-        ) : (
-          <div className="divide-y divide-[#201D16]">
-            {dispatches.map((item) => (
-              <div
-                key={item._id || item.id}
-                className="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-[#121518] hover:bg-[#181B1F] transition-colors text-xs"
-              >
-                {/* Client / Event */}
-                <div className="col-span-3">
-                  <span className="font-bold text-sm text-white block">
-                    {item.clientEvent || item.clientName || 'Wedding Mission'}
-                  </span>
-                  <span className="text-[10px] text-[#8A7D5C] font-medium">
-                    {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : ''}
-                  </span>
-                </div>
-
-                {/* Assigned Crew */}
-                <div className="col-span-3 text-[#EAEAEA] font-bold">
-                  {item.memberName || 'Unassigned'}
-                </div>
-
-                {/* Destination */}
-                <div className="col-span-2 text-[#D4AF37] flex items-center gap-1.5 font-bold">
-                  <span>📍</span>
-                  <span>{item.destination || 'Patna'}</span>
-                </div>
-
-                {/* Dates */}
-                <div className="col-span-2 text-[#C5B388] font-mono text-[11px] font-semibold">
-                  {item.dates || `${item.startDate ? String(item.startDate).slice(0, 10) : ''} to ${item.endDate ? String(item.endDate).slice(0, 10) : ''}`}
-                </div>
-
-                {/* Status Pill */}
-                <div className="col-span-1">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#262013] text-[#D4AF37] border border-[#D4AF37]/40 shadow-sm">
-                    {item.status}
-                  </span>
-                </div>
-
-                {/* Actions */}
-                <div className="col-span-1 text-right flex items-center justify-end gap-2">
-                  <select
-                    value={item.status}
-                    onChange={(e) => handleStatusChange(item._id || item.id, e.target.value)}
-                    className="bg-[#1C2025] text-[#D4AF37] border border-[#3A3222] text-[10px] font-bold rounded-lg px-2 py-1 focus:outline-none cursor-pointer"
-                  >
-                    <option value="scheduled">SCHEDULED</option>
-                    <option value="traveling">TRAVELING</option>
-                    <option value="confirmed">CONFIRMED</option>
-                    <option value="completed">COMPLETED</option>
-                  </select>
-                  <button
-                    onClick={() => handleDeleteDispatch(item._id || item.id)}
-                    className="text-rose-400 hover:text-rose-300 p-1 cursor-pointer font-bold text-sm"
-                    title="Delete"
-                  >
-                    🗑
-                  </button>
-                </div>
-              </div>
-            ))}
+        {/* Empty State if No Shoots in that Month */}
+        {filteredClients.length === 0 && (
+          <div className="bg-[#121518] border border-dashed border-[#2B2519] rounded-3xl p-12 text-center space-y-4">
+            <div className="w-16 h-16 rounded-full bg-[#181B20] border border-[#2B2519] text-2xl flex items-center justify-center mx-auto text-[#8A7D5C]">
+              📅
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-white">No Weddings Scheduled in {selectedMonth} {selectedYear}</h3>
+              <p className="text-xs text-[#8A7D5C] max-w-sm mx-auto mt-1">
+                There are no client dispatch records logged for this month yet.
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setFormData((prev) => ({ ...prev, year: selectedYear, month: selectedMonth }));
+                setIsModalOpen(true);
+              }}
+              className="px-5 py-2.5 rounded-xl bg-[#20252E] hover:bg-[#D4AF37] hover:text-black text-[#D4AF37] text-xs font-black uppercase tracking-wider border border-[#D4AF37]/40 transition-all cursor-pointer"
+            >
+              + Book Client for {selectedMonth} {selectedYear}
+            </button>
           </div>
         )}
+
+        {/* Serial-Wise Clients List */}
+        {filteredClients.map((client, sIdx) => {
+          const isExpanded = expandedClientId === client.id;
+          const serialNo = sIdx + 1;
+
+          return (
+            <div
+              key={client.id}
+              className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/40 rounded-3xl overflow-hidden shadow-2xl transition-all"
+            >
+              {/* Card Header Row */}
+              <div
+                onClick={() => setExpandedClientId(isExpanded ? null : client.id)}
+                className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-[#15191F] transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  {/* Serial Number Badge */}
+                  <div className="w-10 h-10 rounded-2xl bg-[#0B0D0E] border border-[#2B2519] text-[#D4AF37] flex items-center justify-center font-black text-sm font-mono shrink-0">
+                    #{serialNo}
+                  </div>
+
+                  {/* Multi-Day Indicator */}
+                  <div className="w-12 h-10 rounded-xl bg-[#1C2027] border border-[#2B2519] text-[#F3E5AB] flex items-center justify-center font-black text-xs font-mono shrink-0">
+                    {client.daysCount}D
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
+                      {client.clientName}
+                    </h3>
+                    <span className="text-xs text-[#8A7D5C] font-mono block sm:inline">
+                      📍 {client.destination} • {client.daysCount} Days Multi-Day Ceremony
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-5 self-end md:self-auto">
+                  <div className="text-right">
+                    <span className="text-[10px] text-[#8A7D5C] uppercase font-bold block">Contract Fee</span>
+                    <span className="text-lg sm:text-xl font-black font-mono text-[#D4AF37]">{client.totalBudget}</span>
+                  </div>
+
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase ${
+                    client.status === 'CONFIRMED'
+                      ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
+                      : client.status === 'DELIVERED'
+                      ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                      : 'bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30'
+                  }`}>
+                    {client.status}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteClient(client.id);
+                    }}
+                    className="p-2 text-xs text-rose-400 hover:bg-rose-950/30 rounded-lg border border-rose-900/20 transition-all cursor-pointer"
+                    title="Delete Record"
+                  >
+                    🗑️
+                  </button>
+
+                  <span className="text-xs text-[#8A7D5C] font-mono">
+                    {isExpanded ? '▲ HIDE' : '▼ ROSTER'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Day-Wise Roster Table (Matching Excel Sheet) */}
+              {isExpanded && (
+                <div className="border-t border-[#1F242D] bg-[#0E1013] p-6 space-y-4 overflow-x-auto">
+                  <div className="flex items-center justify-between pb-2">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#D4AF37]">
+                      SL. NO. {serialNo} — {client.clientName} ({client.daysCount} DAYS CREW DEPLOYMENT)
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-mono">
+                      ✓ All specialist crew confirmed
+                    </span>
+                  </div>
+
+                  <table className="w-full text-left text-xs border-collapse min-w-[950px]">
+                    <thead>
+                      <tr className="bg-[#181B20] text-[#D4AF37] border-y border-[#2B2519] text-[10px] font-mono font-bold uppercase">
+                        <th className="p-3">Day</th>
+                        <th className="p-3">Date</th>
+                        <th className="p-3">Event / Ritual</th>
+                        <th className="p-3">Location</th>
+                        <th className="p-3">Trad. Photographer</th>
+                        <th className="p-3">Trad. Videographer</th>
+                        <th className="p-3">Candid Photo</th>
+                        <th className="p-3">Cinematographer</th>
+                        <th className="p-3">Drone Pilot</th>
+                        <th className="p-3">Assistance</th>
+                        <th className="p-3">Call Time</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#1C2027]">
+                      {client.schedule.map((day) => (
+                        <tr key={day.dayNo} className="hover:bg-[#151921] transition-colors">
+                          <td className="p-3 font-mono font-black text-white bg-[#121518]">Day {day.dayNo}</td>
+                          <td className="p-3 font-mono font-bold text-[#D4AF37]">{day.date}</td>
+                          <td className="p-3 font-bold text-white">{day.eventName}</td>
+                          <td className="p-3 text-[#A89D84]">{day.location}</td>
+                          <td className="p-3 text-[#F5F5F5] font-medium">{day.tradPhoto || '—'}</td>
+                          <td className="p-3 text-[#F5F5F5] font-medium">{day.tradVideo || '—'}</td>
+                          <td className="p-3 text-[#C5B388]">{day.candidPhoto || '—'}</td>
+                          <td className="p-3 text-emerald-400 font-bold">{day.cinema || '—'}</td>
+                          <td className="p-3 text-amber-400">{day.drone || '—'}</td>
+                          <td className="p-3 text-[#8A7D5C]">{day.assistance || '—'}</td>
+                          <td className="p-3 font-mono text-[#D4AF37]">{day.reportingTime || '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Modal */}
+      {/* 4. MULTI-DAY CLIENT SCHEDULER MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#121518] border border-[#3A3222] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-[#2B2519] mb-6">
-              <h3 className="font-black text-xl text-white tracking-tight">Create New Dispatch</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white text-lg cursor-pointer">✕</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="bg-[#121518] border border-[#2B2519] rounded-3xl p-6 sm:p-8 max-w-4xl w-full space-y-6 shadow-2xl my-8">
+            
+            <div className="flex items-center justify-between border-b border-[#20252F] pb-4">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-[#D4AF37] uppercase tracking-wider block">
+                  WEDDING SHOOT BUILDER
+                </span>
+                <h3 className="text-xl font-extrabold text-white">
+                  Add New Client & Multi-Day Crew Roster
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="text-[#8A7D5C] hover:text-white text-lg cursor-pointer"
+              >
+                ✕
+              </button>
             </div>
 
-            <form onSubmit={handleCreateDispatch} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSaveClient} className="space-y-6 text-xs">
+              
+              {/* Target Month & Year Selector in Modal */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#0B0D0E] p-4 rounded-2xl border border-[#2B2519]">
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">CLIENT NAME *</label>
+                  <label className="block text-[#8A7D5C] uppercase font-bold mb-1 text-[10px]">Booking Year</label>
+                  <select
+                    value={formData.year}
+                    onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value, 10) })}
+                    className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-3 py-2 text-white font-mono font-bold"
+                  >
+                    {yearsList.map((y) => (
+                      <option key={y} value={y}>{y}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[#8A7D5C] uppercase font-bold mb-1 text-[10px]">Booking Month</label>
+                  <select
+                    value={formData.month}
+                    onChange={(e) => setFormData({ ...formData, month: e.target.value })}
+                    className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-3 py-2 text-[#D4AF37] font-mono font-bold"
+                  >
+                    {monthsList.map((m) => (
+                      <option key={m.key} value={m.key}>{m.name} ({m.key})</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[#8A7D5C] uppercase font-bold mb-1 text-[10px]">Contract Fee (₹)</label>
                   <input
                     type="text"
                     required
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
-                    placeholder="e.g. Priya Kumari"
-                    className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
+                    placeholder="3,50,000"
+                    value={formData.totalBudget}
+                    onChange={(e) => setFormData({ ...formData, totalBudget: e.target.value })}
+                    className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-3 py-2 text-emerald-400 font-mono font-bold"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">DESTINATION CITY *</label>
+                  <label className="block text-[#8A7D5C] uppercase font-bold mb-1 text-[10px]">Shoot Status</label>
+                  <select
+                    value={formData.status}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                    className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-3 py-2 text-white"
+                  >
+                    <option value="SCHEDULED">SCHEDULED</option>
+                    <option value="CONFIRMED">CONFIRMED</option>
+                    <option value="DELIVERED">DELIVERED</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Client Name & Destination */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#15191F] p-4 rounded-2xl border border-[#2B2519]">
+                <div>
+                  <label className="block text-[#8A7D5C] uppercase font-bold mb-1">Couple / Client Name</label>
                   <input
                     type="text"
                     required
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                    placeholder="e.g. Sitamarhi"
-                    className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2.5 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
+                    placeholder="e.g. PRIYA KUMARI"
+                    value={formData.clientName}
+                    onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+                    className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-3 py-2 text-white font-bold"
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">START DATE</label>
+                  <label className="block text-[#8A7D5C] uppercase font-bold mb-1">Primary Destination</label>
                   <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2 text-xs font-semibold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">END DATE</label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2 text-xs font-semibold"
+                    type="text"
+                    required
+                    placeholder="e.g. Sitamarhi / Patna"
+                    value={formData.destination}
+                    onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
+                    className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-3 py-2 text-white"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-1">CONTRACT / PACKAGE VALUE (₹)</label>
-                <input
-                  type="number"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                  placeholder="e.g. 150000"
-                  className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-3.5 py-2 text-xs font-semibold focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
+              {/* Dynamic Day-Wise Crew Schedule Builder */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-extrabold text-white uppercase tracking-wider font-mono">
+                    Schedule By Day ({formData.days.length} Days)
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={addDayRow}
+                    className="px-4 py-1.5 rounded-xl bg-[#20252E] hover:bg-[#D4AF37] hover:text-black text-[#D4AF37] text-xs font-black uppercase tracking-wider border border-[#D4AF37]/40 transition-all cursor-pointer"
+                  >
+                    + Add Day {formData.days.length + 1}
+                  </button>
+                </div>
 
-              <div>
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-[#D4AF37] mb-2">ASSIGN CREW MEMBERS</label>
-                <div className="bg-[#181B1F] border border-[#2B2519] rounded-xl p-3 max-h-48 overflow-y-auto space-y-2">
-                  {teamMembers.map((m) => {
-                    const isChecked = selectedCrew.some((c) => c.name === m.name);
-                    return (
-                      <label key={m._id || m.id || m.name} className="flex items-center gap-3 text-xs cursor-pointer p-1.5 hover:bg-[#20242A] rounded-lg">
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => handleToggleCrew(m)}
-                          className="accent-[#D4AF37] w-4 h-4 rounded cursor-pointer"
-                        />
-                        <span className="font-bold text-white">{m.name}</span>
-                        <span className="text-[11px] text-[#8A7D5C]">({m.role})</span>
-                      </label>
-                    );
-                  })}
+                <div className="space-y-4 max-h-[360px] overflow-y-auto pr-1">
+                  {formData.days.map((day, idx) => (
+                    <div
+                      key={day.dayNo}
+                      className="bg-[#181B20] border border-[#2B2519] rounded-2xl p-4 space-y-3"
+                    >
+                      <div className="flex items-center justify-between pb-2 border-b border-[#20252F]">
+                        <span className="px-3 py-0.5 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-bold text-xs border border-[#2B2519]">
+                          DAY {day.dayNo}
+                        </span>
+                        {formData.days.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeDayRow(idx)}
+                            className="text-rose-400 text-xs hover:underline cursor-pointer"
+                          >
+                            Remove Day
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[#8A7D5C] text-[10px] uppercase font-bold mb-1">Date</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. 22 Apr 2026"
+                            value={day.date}
+                            onChange={(e) => updateDayField(idx, 'date', e.target.value)}
+                            className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2.5 py-1.5 text-white font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[#8A7D5C] text-[10px] uppercase font-bold mb-1">Event / Ritual</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. Rituals (Bride)"
+                            value={day.eventName}
+                            onChange={(e) => updateDayField(idx, 'eventName', e.target.value)}
+                            className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2.5 py-1.5 text-white font-bold"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[#8A7D5C] text-[10px] uppercase font-bold mb-1">Specific Location</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="e.g. Sitamarhi Home"
+                            value={day.location}
+                            onChange={(e) => updateDayField(idx, 'location', e.target.value)}
+                            className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2.5 py-1.5 text-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="pt-1">
+                        <span className="text-[10px] text-[#D4AF37] font-mono font-bold uppercase block mb-2">
+                          Assigned Specialists for Day {day.dayNo}:
+                        </span>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                          <div>
+                            <label className="block text-[#8A7D5C] text-[9px] uppercase font-bold mb-1">Trad. Photo</label>
+                            <input
+                              type="text"
+                              placeholder="Rohit"
+                              value={day.tradPhoto}
+                              onChange={(e) => updateDayField(idx, 'tradPhoto', e.target.value)}
+                              className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#8A7D5C] text-[9px] uppercase font-bold mb-1">Trad. Video</label>
+                            <input
+                              type="text"
+                              placeholder="Sanoj"
+                              value={day.tradVideo}
+                              onChange={(e) => updateDayField(idx, 'tradVideo', e.target.value)}
+                              className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#8A7D5C] text-[9px] uppercase font-bold mb-1">Candid Photo</label>
+                            <input
+                              type="text"
+                              placeholder="Sanjeet"
+                              value={day.candidPhoto}
+                              onChange={(e) => updateDayField(idx, 'candidPhoto', e.target.value)}
+                              className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#8A7D5C] text-[9px] uppercase font-bold mb-1">Cinema Lead</label>
+                            <input
+                              type="text"
+                              placeholder="Ritik Saw"
+                              value={day.cinema}
+                              onChange={(e) => updateDayField(idx, 'cinema', e.target.value)}
+                              className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-emerald-400 text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#8A7D5C] text-[9px] uppercase font-bold mb-1">Drone Pilot</label>
+                            <input
+                              type="text"
+                              placeholder="Manikant"
+                              value={day.drone}
+                              onChange={(e) => updateDayField(idx, 'drone', e.target.value)}
+                              className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-amber-400 text-[11px]"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[#8A7D5C] text-[9px] uppercase font-bold mb-1">Call Time</label>
+                            <input
+                              type="text"
+                              placeholder="10:00 AM"
+                              value={day.reportingTime}
+                              onChange={(e) => updateDayField(idx, 'reportingTime', e.target.value)}
+                              className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-[#D4AF37] text-[11px] font-mono"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="pt-4 flex items-center justify-end gap-3">
+              {/* Submit Button */}
+              <div className="pt-4 border-t border-[#1C1F24] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-6 py-2.5 rounded-full border border-[#2B2519] text-xs uppercase font-bold text-[#C5B388] hover:bg-[#181B1F]"
+                  className="px-4 py-2 rounded-xl text-gray-400 hover:text-white cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black text-xs uppercase font-black shadow-md hover:brightness-110"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black uppercase tracking-wider shadow-md hover:from-[#F3E5AB] hover:to-[#D4AF37] cursor-pointer"
                 >
-                  {isSubmitting ? "Dispatching..." : "Confirm Dispatch"}
+                  Save & Schedule
                 </button>
               </div>
+
             </form>
+
           </div>
         </div>
       )}
+
     </div>
   );
 }

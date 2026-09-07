@@ -56,6 +56,32 @@ export default function AboutPage() {
     }
   ];
 
+  const [aboutConfig, setAboutConfig] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchAbout = () => {
+      fetch('/api/about')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.directorName) {
+            setAboutConfig(data);
+          }
+        })
+        .catch(err => console.error("Error fetching about config:", err));
+    };
+
+    fetchAbout();
+
+    const handleStorageChange = (e) => {
+      if (e.key === 'weddingpur_about_updated' && e.newValue) {
+        fetchAbout();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased py-12 px-6 sm:px-10 lg:px-16 selection:bg-[#D4AF37] selection:text-black">
       
@@ -73,8 +99,8 @@ export default function AboutPage() {
           <div className="lg:col-span-5 flex justify-center">
             <div className="relative w-full max-w-[420px] aspect-[3/4] rounded-t-[140px] rounded-b-3xl overflow-hidden border border-[#2B2519] shadow-2xl bg-[#121518]">
               <img
-                src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200&auto=format&fit=crop"
-                alt="Weddingpur Couple"
+                src={aboutConfig?.directorPhoto || "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1200&auto=format&fit=crop"}
+                alt={aboutConfig?.directorName || "Weddingpur Couple"}
                 className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700 hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D0E]/80 via-transparent to-transparent"></div>
@@ -90,21 +116,23 @@ export default function AboutPage() {
           <div className="lg:col-span-7 space-y-6">
             <div>
               <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">
-                OUR JOURNEY
+                {aboutConfig?.directorRole || "OUR JOURNEY"}
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-white tracking-tight leading-[1.1]">
-                Crafting Legacy <br />
+                {aboutConfig?.directorName || "Crafting Legacy"} <br />
                 <span className="italic text-[#D4AF37]">Since 2016.</span>
               </h1>
             </div>
 
             <div className="space-y-4 text-xs sm:text-sm text-[#D1C7A5] font-light leading-relaxed">
               <p>
-                Founded on the belief that every love story deserves to be treated as a work of fine art. Over the past decade, we have had the privilege of documenting over 850 celebrations across India and beyond.
+                {aboutConfig?.bio || "Founded on the belief that every love story deserves to be treated as a work of fine art. Over the past decade, we have had the privilege of documenting over 850 celebrations across India and beyond."}
               </p>
-              <p>
-                We are a collective of visual storytellers, cinematic directors, and fine-art editors dedicated to preserving the authentic, unscripted moments of your most important day.
-              </p>
+              {aboutConfig?.awards && (
+                <p className="text-[#D4AF37] font-bold">
+                  Awards & Recognition: {aboutConfig.awards}
+                </p>
+              )}
             </div>
 
             {/* Quick Stats Grid */}

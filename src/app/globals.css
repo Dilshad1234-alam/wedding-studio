@@ -28,6 +28,15 @@ html {
     letter-spacing: -0.01em;
     font-weight: 500;
   }
+
+  /* Admin Suite Typography Overrides */
+  .font-sans {
+    font-family: var(--font-admin-sans), ui-sans-serif, system-ui, sans-serif !important;
+  }
+  
+  .font-mono {
+    font-family: var(--font-admin-mono), ui-monospace, SFMono-Regular, monospace !important;
+  }
 }
 
 /* ==========================================================================

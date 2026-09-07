@@ -3,19 +3,36 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { Inter, JetBrains_Mono } from 'next/font/google';
+
+const adminSans = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-admin-sans',
+  display: 'swap',
+});
+
+const adminMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  variable: '--font-admin-mono',
+  display: 'swap',
+});
+
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
 
   const navItems = [
-    { label: "CREW DISPATCH", href: "/admin/dispatch", icon: "🗓️" },
-    { label: "TEAM DIRECTORY", href: "/admin/team", icon: "👥" },
-    { label: "IMAGE CMS", href: "/admin/cms", icon: "🖼️" },
+    { label: "PLATFORM OVERVIEW", href: "/admin/overview", icon: "📊" },
+    { label: "WEDDING MANAGEMENT", href: "/admin/wedding-management", icon: "💍" },
+    { label: "COMMERCIAL MANAGEMENT", href: "/admin/commercial-management", icon: "🎬" },
+    { label: "WEBSITE MANAGEMENT", href: "/admin/website", icon: "🌐" },
     { label: "CLIENT INQUIRIES", href: "/admin/inquiries", icon: "✉️" },
-    { label: "EDITORIAL STORIES", href: "/admin/stories", icon: "📖" },
+    { label: "SETTINGS", href: "/admin/settings", icon: "⚙️" },
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#0B0D0E] font-sans antialiased text-[#F5F5F5]">
+    <div className={`${adminSans.variable} ${adminMono.variable} flex min-h-screen bg-[#0B0D0E] font-sans antialiased text-[#F5F5F5]`}>
       {/* OBSIDIAN GOLD SIDEBAR */}
       <aside className="w-64 min-h-screen bg-[#070809] text-[#EAEAEA] border-r border-[#262117] flex flex-col justify-between p-6 shrink-0 select-none sticky top-0 h-screen shadow-2xl">
         <div>
@@ -63,11 +80,11 @@ export default function AdminLayout({ children }) {
             </p>
           </div>
 
-          <div className="pt-2 flex flex-col gap-2">
+          <div className="pt-3 flex flex-col gap-3">
             <Link
               href="/"
               target="_blank"
-              className="text-[11px] uppercase tracking-wider text-[#D4AF37] hover:text-[#F3E5AB] transition-colors flex items-center gap-1.5 font-bold"
+              className="text-[11px] uppercase tracking-wider text-[#D4AF37] hover:text-[#F3E5AB] transition-colors flex items-center gap-2 font-bold w-full"
             >
               <span>↗</span>
               <span>Open Live Site</span>
@@ -75,10 +92,10 @@ export default function AdminLayout({ children }) {
 
             <button
               onClick={() => { window.location.href = '/login'; }}
-              className="text-[11px] uppercase tracking-wider text-rose-400 hover:text-rose-300 text-left flex items-center gap-1.5 cursor-pointer font-bold transition-colors"
+              className="text-[11px] uppercase tracking-wider text-rose-400 hover:text-rose-300 flex items-center gap-2 cursor-pointer font-bold transition-colors w-full"
             >
               <span>•</span>
-              <span>Logout</span>
+              <span>Secure Logout</span>
             </button>
           </div>
         </div>

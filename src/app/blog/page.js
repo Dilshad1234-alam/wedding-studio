@@ -1,93 +1,40 @@
 'use client';
+import React from 'react';
 import Link from 'next/link';
 
 export default function BlogPage() {
-  const posts = [
-    {
-      id: 1,
-      category: "Planning",
-      title: "The Ultimate Guide to Choosing Your Destination Wedding Venue",
-      image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
-      slug: "choosing-destination-wedding-venue"
-    },
-    {
-      id: 2,
-      category: "Real Weddings",
-      title: "A Royal Heritage Celebration in Jaipur's City Palace",
-      image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop",
-      slug: "royal-heritage-jaipur"
-    },
-    {
-      id: 3,
-      category: "Cinematography",
-      title: "Why You Need a Dedicated Cinematographer for the Haldi",
-      image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=800&auto=format&fit=crop",
-      slug: "dedicated-cinematographer-haldi"
-    },
-    {
-      id: 4,
-      category: "Inspiration",
-      title: "Minimalist Decor Trends for the Modern Indian Bride",
-      image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop",
-      slug: "minimalist-decor-trends"
-    },
-    {
-      id: 5,
-      category: "Real Weddings",
-      title: "Intimate Beach Vows: A Sunset Celebration in Goa",
-      image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
-      slug: "intimate-beach-vows-goa"
-    },
-    {
-      id: 6,
-      category: "Planning",
-      title: "Building Your Perfect Wedding Timeline with Your Photographer",
-      image: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?q=80&w=800&auto=format&fit=crop",
-      slug: "perfect-wedding-timeline"
-    },
-    {
-      id: 1,
-      category: "Planning",
-      title: "The Ultimate Guide to Choosing Your Destination Wedding Venue",
-      image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
-      slug: "choosing-destination-wedding-venue"
-    },
-    {
-      id: 2,
-      category: "Real Weddings",
-      title: "A Royal Heritage Celebration in Jaipur's City Palace",
-      image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop",
-      slug: "royal-heritage-jaipur"
-    },
-    {
-      id: 3,
-      category: "Cinematography",
-      title: "Why You Need a Dedicated Cinematographer for the Haldi",
-      image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=800&auto=format&fit=crop",
-      slug: "dedicated-cinematographer-haldi"
-    },
-    {
-      id: 4,
-      category: "Inspiration",
-      title: "Minimalist Decor Trends for the Modern Indian Bride",
-      image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop",
-      slug: "minimalist-decor-trends"
-    },
-    {
-      id: 5,
-      category: "Real Weddings",
-      title: "Intimate Beach Vows: A Sunset Celebration in Goa",
-      image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop",
-      slug: "intimate-beach-vows-goa"
-    },
-    {
-      id: 6,
-      category: "Planning",
-      title: "Building Your Perfect Wedding Timeline with Your Photographer",
-      image: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?q=80&w=800&auto=format&fit=crop",
-      slug: "perfect-wedding-timeline"
-    }
-  ];
+  const [posts, setPosts] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch('/api/blogs')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          // Map to match the component's expected structure
+          const mapped = data.map(b => ({
+            id: b.id,
+            category: "Journal", // Or extract from a field if we add it
+            title: b.title,
+            image: b.img || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
+            slug: b.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
+          }));
+          setPosts(mapped);
+        }
+      })
+      .catch(err => console.error("Error fetching blogs:", err));
+
+    const handleStorageChange = (e) => {
+      if (e.key === 'weddingpur_blog_deleted' && e.newValue) {
+        try {
+          const { id } = JSON.parse(e.newValue);
+          setPosts(prev => prev.filter(post => post.id !== id));
+        } catch (err) {}
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] pt-10 -mt-10 pb-28 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">

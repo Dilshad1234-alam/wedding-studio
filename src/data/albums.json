@@ -1,0 +1,52 @@
+{
+  "featureSection": {
+    "badge": "THE TANGIBLE LEGACY",
+    "title": "Why Wedding Albums Matter?",
+    "description": "Imagine holding in your hands a timeless keepsake filled with laughter, love, and cherished memories. A wedding album is more than just pictures; it's a tangible piece of your history, a legacy to share with generations to come. Let us transform your digital images into a heartfelt keepsake that captures the essence of your special day. Relive the magic, the love, and the joy through the pages of your personalized wedding album.",
+    "ctaText": "EXPLORE COLLECTIONS ↓",
+    "imageLeft": "[https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&q=80](https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&q=80)",
+    "imageRight": "[https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80](https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80)"
+  },
+  "editions": [
+    {
+      "id": 1,
+      "title": "ACRYLIC FABRIC",
+      "subtitle": "CRIMSON VELVET & GOLD EMBOSSING",
+      "coverImage": "[https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80](https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80)",
+      "material": "Acrylic Glass & Velvet",
+      "specs": "Seamless lay-flat Fuji Silk archival paper with shatterproof high-gloss acrylic faceplate."
+    },
+    {
+      "id": 2,
+      "title": "BRIO",
+      "subtitle": "OCHRE BOX WITH WINDOW CUTOUT",
+      "coverImage": "[https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&q=80](https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&q=80)",
+      "material": "Handcrafted Ochre Presentation Box",
+      "specs": "Precision laser-cut window framing the couple portrait inside a magnetic closure presentation case."
+    },
+    {
+      "id": 3,
+      "title": "QUATRO",
+      "subtitle": "MINIMAL SLATE GREY ARCHIVAL LINEN",
+      "coverImage": "[https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=800&q=80](https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=800&q=80)",
+      "material": "Belgian Slate Grey Linen",
+      "specs": "Textured tactile linen cloth with blind-debossed monogram and thick matte cotton fine-art pages."
+    },
+    {
+      "id": 4,
+      "title": "FABRO",
+      "subtitle": "IMPERIAL BURGUNDY LEATHER HEIRLOOM",
+      "coverImage": "[https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&q=80](https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&q=80)",
+      "material": "Full-Grain Tuscan Leather",
+      "specs": "Heirloom grade oiled leather with hand-stitched spine and 24K gold gilded foil trim."
+    },
+    {
+      "id": 5,
+      "title": "JEWEL",
+      "subtitle": "PURE WHITE SILK WITH SILVER MONOGRAM",
+      "coverImage": "[https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&q=80](https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&q=80)",
+      "material": "Pure Mulberry Silk",
+      "specs": "Luminous pearl silk fabric bound with silver hot-foil calligraphy stamping for destination vows."
+    }
+  ]
+}

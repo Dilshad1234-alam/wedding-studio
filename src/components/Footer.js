@@ -1,3 +1,5 @@
+"use client";
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const InstagramIcon = ({ size = 18 }) => (
@@ -29,6 +31,34 @@ const FacebookIcon = ({ size = 18 }) => (
 );
 
 export default function Footer() {
+  const [settings, setSettings] = useState({
+    instagramUrl: "https://www.instagram.com/weddingpur/",
+    youtubeUrl: "https://www.youtube.com/@weddingpur",
+    copyrightText: "Copyright 2026. Weddingpur"
+  });
+
+  useEffect(() => {
+    const fetchSettings = () => {
+      fetch('/api/settings')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.settings) setSettings(data.settings);
+        })
+        .catch(() => {});
+    };
+    fetchSettings();
+
+    const handleStorageChange = (e) => {
+      if (e.key === 'weddingpur_settings_updated' && e.newValue) {
+        try {
+          setSettings(JSON.parse(e.newValue));
+        } catch (err) {}
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   return (
     <footer className="bg-[#0B0D0E]/90 backdrop-blur-md border-t border-[#2B2519] text-[#F5F5F5] py-16 px-6 sm:px-12 font-sans relative z-10">
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
@@ -56,8 +86,8 @@ export default function Footer() {
         <div className="flex flex-col items-start md:items-end gap-6">
           <div className="flex space-x-3">
             {[
-              { icon: <InstagramIcon />, label: "Instagram", href: "https://www.instagram.com/weddingpur/" },
-              { icon: <YoutubeIcon />, label: "YouTube", href: "https://www.youtube.com/@weddingpur" },
+              { icon: <InstagramIcon />, label: "Instagram", href: settings.instagramUrl || "https://www.instagram.com/weddingpur/" },
+              { icon: <YoutubeIcon />, label: "YouTube", href: settings.youtubeUrl || "https://www.youtube.com/@weddingpur" },
               { icon: <PinterestIcon />, label: "Pinterest", href: "https://in.pinterest.com/weddingpur/" },
               { icon: <FacebookIcon />, label: "Facebook", href: "https://www.facebook.com/weddingpur/" }
             ].map((social, idx) => (
@@ -73,7 +103,7 @@ export default function Footer() {
               </a>
             ))}
           </div>
-          <p className="text-[10px] text-[#C5B388] tracking-[0.2em] uppercase">Copyright 2026. Weddingpur</p>
+          <p className="text-[10px] text-[#C5B388] tracking-[0.2em] uppercase">{settings.copyrightText}</p>
         </div>
 
       </div>

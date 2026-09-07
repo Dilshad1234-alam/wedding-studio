@@ -23,12 +23,12 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname();
 
   const navItems = [
-    { label: "PLATFORM OVERVIEW", href: "/admin/overview", icon: "📊" },
-    { label: "WEDDING MANAGEMENT", href: "/admin/wedding-management", icon: "💍" },
-    { label: "COMMERCIAL MANAGEMENT", href: "/admin/commercial-management", icon: "🎬" },
-    { label: "WEBSITE MANAGEMENT", href: "/admin/website", icon: "🌐" },
-    { label: "CLIENT INQUIRIES", href: "/admin/inquiries", icon: "✉️" },
-    { label: "SETTINGS", href: "/admin/settings", icon: "⚙️" },
+    { label: "PLATFORM OVERVIEW", href: "/admin/overview" },
+    { label: "WEDDING MANAGEMENT", href: "/admin/wedding-management" },
+    { label: "COMMERCIAL MANAGEMENT", href: "/admin/commercial-management" },
+    { label: "WEBSITE MANAGEMENT", href: "/admin/website" },
+    { label: "CLIENT INQUIRIES", href: "/admin/inquiries" },
+    { label: "SETTINGS", href: "/admin/settings" },
   ];
 
   return (
@@ -61,7 +61,6 @@ export default function AdminLayout({ children }) {
                       : 'text-[#C5B388] hover:bg-[#15181B] hover:text-[#F3E5AB]'
                   }`}
                 >
-                  <span className="text-base">{item.icon}</span>
                   <span>{item.label}</span>
                 </Link>
               );

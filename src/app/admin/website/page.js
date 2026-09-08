@@ -1,21 +1,24 @@
 "use client";
-import { useSearchParams, useRouter } from 'next/navigation';
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 
 function WebsiteManagementContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  
-  const tabParam = searchParams.get('tab');
   const validTabs = ['landing', 'stories', 'photography', 'films', 'services', 'albums', 'blog', 'about', 'contact'];
-  const initialTab = validTabs.includes(tabParam) ? tabParam : 'landing';
-  
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const [activeTab, setActiveTab] = useState('landing');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam && validTabs.includes(tabParam)) {
+        setActiveTab(tabParam);
+      }
+    }
+  }, []);
 
   const handleTabSwitch = (tabId) => {
     setActiveTab(tabId);
-    router.push(`?tab=${tabId}`, { scroll: false });
+    window.history.replaceState(null, '', `?tab=${tabId}`);
   };
 
   const [saveAlert, setSaveAlert] = useState(false);

@@ -86,7 +86,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* 2. BALANCED GALLERY GRID (UNIFORM HEIGHT & CLEAN BOTTOM MARGIN) */}
-      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8  py-8 ">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {filteredItems.map((item, idx) => (
             <div

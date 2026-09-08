@@ -5,20 +5,31 @@
     "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • PROFESSIONAL WEDDING DOCUMENTATION",
     "badge": "SPECIAL OFFER PACKAGE",
     "regularPrice": "₹78,000",
-    "offerPrice": "₹60,000/-",
+    "offerPrice": "₹75,000/-",
     "savings": "SAVE ₹18,000",
     "schedule": [
       {
         "day": "Day 1 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Traditional Videographer"
+        ]
       },
       {
         "day": "Day 2 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Traditional Videographer"
+        ]
       },
       {
         "day": "Day 3 – Wedding Day",
-        "crew": ["1 Traditional Photographer", "1 Traditional Videographer", "1 Candid Photographer", "1 Drone Pilot"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Traditional Videographer",
+          "1 Candid Photographer",
+          "1 Drone Pilot"
+        ]
       }
     ],
     "deliverables": [
@@ -46,7 +57,8 @@
       "Social Media Optimized",
       "Professional Drone Shots",
       "Premium 30 Sheets Album"
-    ]
+    ],
+    "timeline": []
   },
   {
     "id": 2,
@@ -59,15 +71,26 @@
     "schedule": [
       {
         "day": "Day 1 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Traditional Videographer"
+        ]
       },
       {
         "day": "Day 2 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Traditional Videographer"
+        ]
       },
       {
         "day": "Day 3 – Wedding Day",
-        "crew": ["1 Traditional Photographer", "1 Traditional Videographer", "1 Cinematographer", "1 Drone Pilot"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Traditional Videographer",
+          "1 Cinematographer",
+          "1 Drone Pilot"
+        ]
       }
     ],
     "deliverables": [
@@ -108,22 +131,45 @@
     "schedule": [
       {
         "day": "Day 1 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Traditional Videographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Traditional Videographer"
+        ]
       },
       {
         "day": "Day 2 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Candid Photographer", "1 Cinematographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Candid Photographer",
+          "1 Cinematographer"
+        ]
       },
       {
         "day": "Day 3 – Wedding Day",
-        "crew": ["1 Traditional Photographer | 1 Traditional Videographer", "1 Candid Photographer | 1 Cinematographer", "1 Drone Pilot"]
+        "crew": [
+          "1 Traditional Photographer | 1 Traditional Videographer",
+          "1 Candid Photographer | 1 Cinematographer",
+          "1 Drone Pilot"
+        ]
       }
     ],
     "timeline": [
-      { "item": "Preview Photos", "time": "Within 24 Hours" },
-      { "item": "First Cinematic Video", "time": "Within 24–48 Hours" },
-      { "item": "Social Media Ready Photos", "time": "Within 2–3 Working Days" },
-      { "item": "Priority Editing", "time": "Faster Content Delivery" }
+      {
+        "item": "Preview Photos",
+        "time": "Within 24 Hours"
+      },
+      {
+        "item": "First Cinematic Video",
+        "time": "Within 24–48 Hours"
+      },
+      {
+        "item": "Social Media Ready Photos",
+        "time": "Within 2–3 Working Days"
+      },
+      {
+        "item": "Priority Editing",
+        "time": "Faster Content Delivery"
+      }
     ],
     "deliverables": [
       "1 E-Invitation Video",
@@ -164,23 +210,50 @@
     "schedule": [
       {
         "day": "Day 1 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Candid Photographer", "1 Cinematographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Candid Photographer",
+          "1 Cinematographer"
+        ]
       },
       {
         "day": "Day 2 – Event Coverage",
-        "crew": ["1 Traditional Photographer", "1 Candid Photographer", "1 Cinematographer"]
+        "crew": [
+          "1 Traditional Photographer",
+          "1 Candid Photographer",
+          "1 Cinematographer"
+        ]
       },
       {
         "day": "Day 3 – Wedding Day",
-        "crew": ["1 Traditional Photographer | 1 Trad. Videographer", "1 Candid Photographer | 1 Cinematographer", "1 Professional Drone Pilot"]
+        "crew": [
+          "1 Traditional Photographer | 1 Trad. Videographer",
+          "1 Candid Photographer | 1 Cinematographer",
+          "1 Professional Drone Pilot"
+        ]
       }
     ],
     "timeline": [
-      { "item": "Preview Photos", "time": "Within 24 Hours" },
-      { "item": "First Cinematic Video", "time": "Within 24–48 Hours" },
-      { "item": "Social Media Photos", "time": "Within 24–48 Hours (Instagram, WhatsApp, Facebook)" },
-      { "item": "Final Edited Deliverables", "time": "Within 20–30 Working Days" },
-      { "item": "Album Delivery", "time": "Within 30–45 Working Days" }
+      {
+        "item": "Preview Photos",
+        "time": "Within 24 Hours"
+      },
+      {
+        "item": "First Cinematic Video",
+        "time": "Within 24–48 Hours"
+      },
+      {
+        "item": "Social Media Photos",
+        "time": "Within 24–48 Hours (Instagram, WhatsApp, Facebook)"
+      },
+      {
+        "item": "Final Edited Deliverables",
+        "time": "Within 20–30 Working Days"
+      },
+      {
+        "item": "Album Delivery",
+        "time": "Within 30–45 Working Days"
+      }
     ],
     "deliverables": [
       "1 E-Invitation Video",

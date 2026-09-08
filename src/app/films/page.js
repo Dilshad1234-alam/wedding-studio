@@ -146,7 +146,7 @@ export default function FilmsPage() {
     <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
       {/* 1. CINEMA HEADER */}
-      <section className="pt-10 -mt-10 pb-10 px-6 text-center max-w-4xl mx-auto">
+      <section className="pt-5 -mt-10 pb-10 px-6 text-center max-w-4xl mx-auto">
   
         <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
           Moving Portraits
@@ -174,7 +174,7 @@ export default function FilmsPage() {
       </section>
 
       {/* 2. DYNAMIC FEATURED HERO SHOWCASE (CHANGES WITH ACTIVE CATEGORY) */}
-      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 mb-20">
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-5 ">
         <div className="text-center mb-6">
           <span className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37] font-semibold">
             FEATURED CINEMA REEL

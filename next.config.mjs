@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  reactCompiler: true,
+  reactStrictMode: true,
+  swcMinify: true,
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -14,6 +15,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    scrollRestoration: true,
+  }
 };
 
 export default nextConfig;

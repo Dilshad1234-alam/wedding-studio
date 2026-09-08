@@ -1,133 +1,131 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function StoriesPage() {
-  const [weddingStories, setWeddingStories] = React.useState([]);
+  const [stories, setStories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
-    // 1. Initial Fetch
-    fetch('/api/stories')
-      .then(res => res.json())
-      .then(data => {
+  // Prevent any bottom-jump on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
+  const fetchStories = async () => {
+    try {
+      const res = await fetch('/api/stories', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
         if (Array.isArray(data)) {
+          // Adapt the API data schema to fit the UI component schema
           const mapped = data.map(s => ({
             id: s.id,
-            couple: s.couple,
-            subtitle: s.tagline,
-            desc: s.desc,
-            featuredImg: s.mainImage,
-            gridImgs: s.thumbnails
+            title: s.couple,
+            description: s.desc,
+            venue: 'Patna, Bihar', 
+            date: 'Sacred Union',
+            photos: [s.mainImage, ...(s.thumbnails || [])].filter(Boolean)
           }));
-          setWeddingStories(mapped);
-        }
-      })
-      .catch(err => console.error("Error fetching stories:", err));
-
-    // 2. Cross-tab sync for deletions
-    const handleStorageChange = (e) => {
-      if (e.key === 'weddingpur_story_deleted' && e.newValue) {
-        try {
-          const { id } = JSON.parse(e.newValue);
-          setWeddingStories(prev => prev.filter(story => story.id !== id));
-        } catch (err) {
-          console.error("Error parsing deleted story event:", err);
+          setStories(mapped);
         }
       }
+    } catch (err) {
+      console.error("Failed fetching stories:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStories();
+
+    const handleSync = (e) => {
+      if (e.key === 'weddingpur_story_updated' || e.key === 'weddingpur_story_deleted') {
+        fetchStories();
+      }
     };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('storage', handleSync);
+    return () => window.removeEventListener('storage', handleSync);
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
+    <div className="min-h-screen bg-[#0B0D0E] text-white selection:bg-[#D4AF37] selection:text-black">
       
-      {/* 1. EDITORIAL HEADER */}
-      <section className="pt-4 pb-16 px-6 text-center max-w-4xl mx-auto">
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
-          Wedding Stories
+      {/* 1. ORIGINAL HEADER */}
+      <section className=" pb-14 px-6 text-center space-y-3 max-w-2xl mx-auto">
+        <span className="text-[10px] font-mono tracking-[0.25em] text-[#D4AF37] uppercase font-bold block">
+          ROYAL NARRATIVES & SACRED VOWS
+        </span>
+        <h1 className="text-4xl sm:text-5xl font-serif italic text-white tracking-tight">
+          Couple Narratives
         </h1>
-        <p className="text-xs sm:text-sm text-[#C5B388] font-light leading-relaxed tracking-wide">
-          A curated chronicle of love, sacred rituals, and unspoken glances captured in their purest cinematic form.
+        <p className="text-xs sm:text-[13px] text-[#8A7D5C] font-light leading-relaxed max-w-lg mx-auto">
+          Every union is a cinematic legacy. Explore real wedding journeys documented with editorial reverence across Bihar & destination circuits.
         </p>
       </section>
 
-      {/* 2. STORIES FEED (ALTERNATING EDITORIAL SPREADS) */}
-      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-20">
-        {weddingStories.map((story, index) => {
-          const isReversed = index % 2 !== 0;
-          return (
-            <div
-              key={index}
-              className="bg-[#121518] border border-[#2B2519] rounded-3xl p-6 sm:p-12 shadow-xl hover:shadow-md transition-shadow duration-500"
-            >
-              <div className={`grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center ${isReversed ? 'lg:flex-row-reverse' : ''}`}>
-                
-                {/* Visual Side: Featured Arch + Mini Collage */}
-                <div className={`lg:col-span-6 space-y-4 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-[#121518]">
+      {/* 2. EXACT ORIGINAL STORY CARDS */}
+      <main className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12 pb-24 space-y-16">
+        {stories.map((story) => (
+          <div
+            key={story.id}
+            className="bg-[#121518] border border-[#20242C] rounded-[32px] p-8 sm:p-12 lg:p-16 space-y-6 shadow-2xl"
+          >
+            {/* Tag & Couple Title */}
+            <div className="space-y-1">
+              <span className="text-[10px] font-mono font-bold tracking-wider text-[#D4AF37] uppercase block">
+                📍 {story.venue || "PATNA, BIHAR"} • {story.date || "SACRED UNION"}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-serif text-white tracking-tight">
+                {story.title}
+              </h2>
+            </div>
+
+            {/* Narrative Description */}
+            <p className="text-xs sm:text-[13px] text-[#A89D84] leading-relaxed font-light">
+              {story.description}
+            </p>
+
+            {/* Photo Grid (Matching Original: 4 columns across, wrapping naturally) */}
+            {story.photos && story.photos.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-2">
+                {story.photos.map((imgUrl, idx) => (
+                  <div
+                    key={idx}
+                    className="h-44 sm:h-48 rounded-2xl overflow-hidden bg-black border border-[#1F232B] group"
+                  >
                     <img
-                      src={story.featuredImg}
-                      alt={story.couple}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                      src={imgUrl}
+                      alt={`${story.title} capture ${idx + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-
-                  {/* 4 Mini Collage Shots */}
-                  <div className="grid grid-cols-4 gap-2">
-                    {story.gridImgs.map((img, i) => (
-                      <div key={i} className="aspect-square rounded-xl overflow-hidden bg-[#121518] border border-[#2B2519]">
-                        <img
-                          src={img}
-                          alt={`${story.couple} moment ${i + 1}`}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Narrative Side */}
-                <div className={`lg:col-span-6 space-y-5 text-center lg:text-left ${isReversed ? 'lg:order-1' : 'lg:order-2'}`}>
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-black block ">
-                    {story.subtitle}
-                  </span>
-                  
-                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#F5F5F5] italic font-normal">
-                    {story.couple}
-                  </h2>
-
-                  <p className="text-xs sm:text-sm text-[#C5B388] leading-relaxed font-light">
-                    {story.desc}
-                  </p>
-
-                  <div className="pt-3">
-                    <Link className="inline-block border border-[#D4AF37]/50 text-[#C5B388] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:font-black hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] px-8 py-3 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer" href="/contact">
-                      View Story
-                    </Link>
-                  </div>
-                </div>
-
+                ))}
               </div>
-            </div>
-          );
-        })}
-      </section>
+            )}
+          </div>
+        ))}
+      </main>
 
-      {/* 3. BOTTOM COMMISSION CTA */}
-      <section className="py-20 px-6 bg-[#121518] text-center border-t border-[#2B2519]">
-        <h3 className="font-serif text-3xl sm:text-4xl text-[#F5F5F5] italic mb-3">
-          Have a Story Waiting to Be Told?
-        </h3>
-        <p className="text-xs text-[#C5B388] uppercase tracking-widest mb-6">
-          Limited dates available for 2026 & 2027 wedding commissions
-        </p>
-        <Link className="inline-block px-10 py-3.5 rounded-full font-medium bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer" href="/contact">
-          Check Date Availability
-        </Link>
-      </section>
+      {/* 3. BOTTOM CTA BANNER (Only renders once content is loaded so it never flickers) */}
+      {!loading && (
+        <section className="bg-[#08090A] border-t border-[#1C1F26] py-16 px-6 text-center space-y-4">
+          <h3 className="text-2xl sm:text-3xl font-serif italic text-white">
+            Have a Story Waiting to Be Told?
+          </h3>
+          <p className="text-[10px] sm:text-xs font-mono tracking-widest text-[#8A7D5C] uppercase">
+            LIMITED DATES AVAILABLE FOR 2026 & 2027 WEDDING COMMISSIONS
+          </p>
+          <div className="pt-2">
+            <Link className="inline-block px-8 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs font-black uppercase tracking-widest shadow-lg shadow-[#D4AF37]/20 transition-all cursor-pointer" href="/contact">
+              CHECK DATE AVAILABILITY
+            </Link>
+          </div>
+        </section>
+      )}
 
-    </main>
+    </div>
   );
 }

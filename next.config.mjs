@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
+  reactStrictMode: false,
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
@@ -17,7 +16,7 @@ const nextConfig = {
   },
   experimental: {
     scrollRestoration: true,
-  }
+  },
 };
 
 export default nextConfig;

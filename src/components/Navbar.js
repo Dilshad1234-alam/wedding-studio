@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [settings, setSettings] = useState({ 
-    brandName: "WEDDINGPUR", 
+    brandName: "LENSLOOM", 
     brandTagline: "Studio & Cinema", 
     logoType: "TEXT", 
     logoImageUrl: "" 

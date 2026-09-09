@@ -1,33 +1,23 @@
 import { NextResponse } from 'next/server';
-import connectMongo from '@/lib/mongodb';
-import SiteImage from '@/models/SiteImage';
+
+// SiteImage model has been removed. Image management is now handled
+// via external media/CDN solutions. These stubs keep the build clean.
 
 export async function GET() {
-  try {
-    await connectMongo();
-    const images = await SiteImage.find({});
-    return NextResponse.json({ success: true, images });
-  } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-  }
+  return NextResponse.json({ success: true, images: [] });
 }
 
 export async function POST(req) {
   try {
-    await connectMongo();
-    const { sectionKey, imageUrl, label, page } = await req.json();
-
+    const { sectionKey, imageUrl } = await req.json();
     if (!sectionKey || !imageUrl) {
-      return NextResponse.json({ success: false, message: 'sectionKey and imageUrl are required' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'sectionKey and imageUrl are required' },
+        { status: 400 }
+      );
     }
-
-    const updatedImage = await SiteImage.findOneAndUpdate(
-      { sectionKey },
-      { imageUrl, label, page, updatedAt: Date.now() },
-      { new: true, upsert: true }
-    );
-
-    return NextResponse.json({ success: true, image: updatedImage });
+    // No-op: return the submitted data as a passthrough acknowledgement
+    return NextResponse.json({ success: true, image: { sectionKey, imageUrl } });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useProtectedAction } from '@/hooks/useProtectedAction';
 
 export default function LandingPage() {
+  const { handleProtectedAction } = useProtectedAction();
   const [openFaq, setOpenFaq] = useState(null);
   const [reviewIndex, setReviewIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -94,10 +96,10 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-wrap gap-4 justify-center items-center mt-6">
-            <Link className="border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/portfolio">
+            <Link onClick={handleProtectedAction()} className="border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/portfolio">
               Explore Portfolio
             </Link>
-            <Link className="bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium shadow-md transition-all duration-300 font-black" href="/contact">
+            <Link onClick={handleProtectedAction()} className="bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium shadow-md transition-all duration-300 font-black" href="/contact">
               Contact Us
             </Link>
           </div>
@@ -449,6 +451,7 @@ export default function LandingPage() {
               href="https://www.youtube.com/@WeddingPur"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleProtectedAction()}
               className="group relative block w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-black cursor-pointer"
             >
               <img
@@ -772,6 +775,7 @@ export default function LandingPage() {
               href="https://www.instagram.com/weddingpur/"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleProtectedAction()}
               className="mt-4 inline-flex items-center gap-2 border border-[#5B6454]/70 text-[#D4AF37] hover:bg-[#5B6454] hover:text-[#F5F5F5] px-7 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition duration-300"
             >
               <span>Follow on Instagram</span>
@@ -812,6 +816,7 @@ export default function LandingPage() {
                 href="https://www.instagram.com/weddingpur/"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleProtectedAction()}
                 className="group relative aspect-square bg-[#121518] rounded-2xl overflow-hidden shadow-sm block"
               >
                 <img

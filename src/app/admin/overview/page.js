@@ -4,6 +4,11 @@ import Link from 'next/link';
 
 export default function OverviewPage() {
   const [currentDate, setCurrentDate] = useState('');
+  const [revenue, setRevenue] = useState({
+    wedding: { amount: "₹38.50L", activeShoots: 31 },
+    commercial: { amount: "₹25.25L" },
+    total: "₹63.75L"
+  });
 
   useEffect(() => {
     const d = new Date();
@@ -113,64 +118,53 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      {/* 2. TOP STATUS ROW */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {/* 2. TOP REVENUE LOGISTICS ROW */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
+        {/* Card 1: Wedding Management */}
         <div className="bg-[#121518] border border-[#2B2519] rounded-2xl p-6 shadow-xl space-y-3 relative hover:border-[#D4AF37]/40 transition-colors">
           <div className="flex justify-between items-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A7D5C]">PUBLIC PORTFOLIO</span>
-            <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-              LIVE & SYNCED
+            <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-[#8A7D5C]">WEDDING MANAGEMENT</span>
+            <span className="px-2 py-0.5 rounded text-[9px] font-sans font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
+              MONTHLY REVENUE
             </span>
           </div>
-          <h4 className="text-base font-extrabold text-white tracking-wide">Obsidian & Royale Gold</h4>
-          <p className="text-[11px] text-[#A89D84]">High-fashion editorial layout active</p>
-          <Link className="inline-block text-xs font-bold text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/media">
-            Customize Assets →
+          <h4 className="text-3xl font-sans font-semibold tracking-tight text-white">{revenue.wedding.amount}</h4>
+          <p className="text-[11px] font-sans text-[#A89D84]">{revenue.wedding.activeShoots} Active wedding shoots • Realized this month</p>
+          <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/wedding-management">
+            View Wedding Ledger →
           </Link>
         </div>
 
+        {/* Card 2: Commercial Management */}
         <div className="bg-[#121518] border border-[#2B2519] rounded-2xl p-6 shadow-xl space-y-3 relative hover:border-[#D4AF37]/40 transition-colors">
           <div className="flex justify-between items-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A7D5C]">SHOOT SCHEDULE</span>
-            <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30">
-              ONGOING DEPLOYMENTS
+            <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-[#8A7D5C]">COMMERCIAL MANAGEMENT</span>
+            <span className="px-2 py-0.5 rounded text-[9px] font-sans font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/30">
+              COMMERCIAL B2B
             </span>
           </div>
-          <h4 className="text-base font-extrabold text-white tracking-wide">29 Active Fleets</h4>
-          <p className="text-[11px] text-[#A89D84]">Patna, Bhagalpur & Madhubani</p>
-          <Link className="inline-block text-xs font-bold text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/wedding-management">
-            View Live Grid →
+          <h4 className="text-3xl font-sans font-semibold tracking-tight text-white">{revenue.commercial.amount}</h4>
+          <p className="text-[11px] font-sans text-[#A89D84]">Corporate & Fashion shoots • Brand campaigns</p>
+          <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/commercial">
+            View Commercial Ledger →
           </Link>
         </div>
 
-        <div className="bg-[#121518] border border-[#2B2519] rounded-2xl p-6 shadow-xl space-y-3 relative hover:border-[#D4AF37]/40 transition-colors">
+        {/* Card 3: Combined Monthly Total */}
+        <div className="bg-gradient-to-br from-[#1C1A14] to-[#121518] border border-[#D4AF37]/40 rounded-2xl p-6 shadow-xl space-y-3 relative shadow-[0_0_25px_rgba(212,175,55,0.1)]">
           <div className="flex justify-between items-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A7D5C]">BESPOKE PACKAGES</span>
-            <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30">
-              4 ACTIVE TIERS
+            <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-[#D4AF37]">TOTAL COMBINED REVENUE</span>
+            <span className="px-2 py-0.5 rounded text-[9px] font-sans font-semibold bg-[#D4AF37]/20 text-[#F3E5AB] border border-[#D4AF37]/40 shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+              NET MONTHLY
             </span>
           </div>
-          <h4 className="text-base font-extrabold text-white tracking-wide">Bespoke Cinema & Stills</h4>
-          <p className="text-[11px] text-[#A89D84]">₹1.5L to ₹7L+ collections active</p>
-          <Link className="inline-block text-xs font-bold text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/services" target="_blank">
-            Preview Offerings →
-          </Link>
-        </div>
-
-        <div className="bg-gradient-to-br from-[#1C1A14] to-[#121518] border border-[#D4AF37]/40 rounded-2xl p-6 shadow-xl space-y-3 relative">
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#D4AF37]">PIPELINE REVENUE</span>
-            <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-[#D4AF37]/20 text-[#F3E5AB] border border-[#D4AF37]/40">
-              CONFIRMED
-            </span>
-          </div>
-          <h4 className="text-3xl font-black tracking-tight text-[#D4AF37]">
-            ₹63.75L
+          <h4 className="text-3xl font-sans font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
+            {revenue.total}
           </h4>
-          <p className="text-[11px] text-[#A89D84]">₹41.44L realized • ₹22.31L due on delivery</p>
-          <Link className="inline-block text-xs font-bold text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/wedding-management">
-            Open Revenue Ledger →
+          <p className="text-[11px] font-sans text-[#A89D84]">Wedding ({revenue.wedding.amount}) + Commercial ({revenue.commercial.amount})</p>
+          <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/overview">
+            Consolidated Statement →
           </Link>
         </div>
 
@@ -207,20 +201,20 @@ export default function OverviewPage() {
                 </div>
 
                 <div>
-                  <h4 className="text-base font-extrabold text-white tracking-wide group-hover:text-[#F3E5AB] transition-colors">
+                  <h4 className="text-base font-sans font-semibold tracking-tight text-white group-hover:text-[#F3E5AB] transition-colors">
                     {module.title}
                   </h4>
-                  <span className="text-[10px] font-bold text-[#8A7D5C] uppercase tracking-wider block mb-2 mt-1">
+                  <span className="text-[10px] font-sans font-semibold text-[#8A7D5C] uppercase tracking-wider block mb-2 mt-1">
                     STATUS: {module.badge}
                   </span>
-                  <p className="text-xs text-[#A89D84] font-normal leading-relaxed">
+                  <p className="text-xs font-sans text-[#A89D84] font-normal leading-relaxed">
                     {module.desc}
                   </p>
                 </div>
               </div>
 
               <div className="pt-4 border-t border-[#1C1F24]">
-                <Link className="w-full py-2.5 rounded-xl border border-[#2B2519] bg-[#16191F] group-hover:bg-gradient-to-r group-hover:from-[#D4AF37] group-hover:to-[#B89018] group-hover:text-black text-[#D4AF37] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer" href={module.link}>
+                <Link className="w-full py-2.5 rounded-xl border border-[#2B2519] bg-[#16191F] group-hover:bg-gradient-to-r group-hover:from-[#D4AF37] group-hover:to-[#B89018] group-hover:text-black text-[#D4AF37] text-xs font-sans font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer" href={module.link}>
                   {module.actionText}
                 </Link>
               </div>

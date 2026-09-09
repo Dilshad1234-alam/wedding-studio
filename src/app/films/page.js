@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useProtectedAction } from '@/hooks/useProtectedAction';
 
 export default function FilmsPage() {
+  const { handleProtectedAction } = useProtectedAction();
   const [activeCategory, setActiveCategory] = useState('all');
 
   // Hero showcase films mapped to each category
@@ -186,6 +188,7 @@ export default function FilmsPage() {
           href={currentHero.youtubeUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={handleProtectedAction()}
           className="w-full group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-[#121518] cursor-pointer animate-fadeIn transition-all duration-700 mb-12"
         >
           <img
@@ -236,6 +239,7 @@ export default function FilmsPage() {
               href={film.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleProtectedAction()}
               className="group bg-[#121518] rounded-3xl p-5 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40/50 transition-all duration-500 block"
             >
               <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black mb-5">

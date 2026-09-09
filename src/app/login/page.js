@@ -55,13 +55,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center p-4 antialiased text-[#F5F5F5] font-sans selection:bg-[#D4AF37] selection:text-black">
-      {/* Glow Effect */}
-      <div className="fixed inset-0 pointer-events-none flex items-center justify-center">
-        <div className="w-[500px] h-[500px] bg-[#D4AF37]/5 blur-[120px] rounded-full"></div>
+    <div className="relative min-h-screen flex items-center justify-center p-4 antialiased text-[#F5F5F5] font-sans selection:bg-amber-500/30 selection:text-amber-200" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(212, 163, 89, 0.08) 0%, rgba(10, 10, 10, 0.95) 70%, #050505 100%)' }}>
+      {/* Decorative ambient elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#D4AF37] rounded-full mix-blend-screen filter blur-[150px] opacity-[0.03] animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#D4AF37] rounded-full mix-blend-screen filter blur-[150px] opacity-[0.04]"></div>
+        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23D4AF37\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
       </div>
 
-      <div className="relative w-full max-w-[430px] bg-[#121518] border border-[#2B2519] rounded-3xl p-8 sm:p-10 shadow-2xl">
+      <div className="relative z-10 w-full max-w-[430px] bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_0_50px_-12px_rgba(212,163,89,0.2)]">
         {/* Brand Header */}
         <div className="text-center mb-6">
           <Link className="inline-block group cursor-pointer transition-transform duration-300 hover:scale-[1.03]" href="/" title="Back to Home">
@@ -103,7 +105,7 @@ export default function LoginPage() {
               value={formData.email}
               onChange={handleChange}
               placeholder="hello@example.com"
-              className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all"
+              className="w-full bg-[#181818] border border-white/10 text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/40 transition-all"
             />
           </div>
 
@@ -120,7 +122,7 @@ export default function LoginPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full bg-[#181B1F] border border-[#2B2519] text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-[#D4AF37] transition-all pr-10"
+                className="w-full bg-[#181818] border border-white/10 text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/40 transition-all pr-10"
               />
               <button
                 type="button"
@@ -146,7 +148,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#c59a45] via-[#e2b755] to-[#c59a45] hover:brightness-110 hover:scale-[1.02] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-amber-500/20 hover:shadow-[0_0_25px_rgba(212,163,89,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "SIGNING IN..." : "SIGN IN"}
             </button>

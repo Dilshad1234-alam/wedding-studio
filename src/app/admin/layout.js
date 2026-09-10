@@ -42,7 +42,7 @@ export default function AdminLayout({ children }) {
               ROYALE COMMAND
             </span>
             <h2 className="text-xl font-black tracking-[0.25em] text-white uppercase">
-              WEDDINGPUR
+              LENSLOOM
             </h2>
           </div>
 

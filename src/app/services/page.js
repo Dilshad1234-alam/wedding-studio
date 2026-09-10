@@ -52,9 +52,9 @@ export default function ServicesPage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-[#D4AF37]/5 blur-[140px] pointer-events-none rounded-full" />
         
         <div className="max-w-4xl mx-auto space-y-4 relative z-10">
-          <span className="inline-block px-4 py-1.5 rounded-full text-[10px] font-mono font-bold tracking-[0.3em] uppercase bg-[#121518] text-[#D4AF37] border border-[#2B2519]">
+          {/* <span className="inline-block px-4 py-1.5 rounded-full text-[10px] font-mono font-bold tracking-[0.3em] uppercase bg-[#121518] text-[#D4AF37] border border-[#2B2519]">
             TRANSPARENT WEDDING INVESTMENTS
-          </span>
+          </span> */}
           <h1 className="text-4xl sm:text-6xl font-serif italic text-white tracking-tight">
             Studio Offerings & Suites
           </h1>

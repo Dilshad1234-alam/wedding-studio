@@ -66,7 +66,7 @@
     "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • BEST VALUE PACKAGE",
     "badge": "BEST VALUE PACKAGE",
     "regularPrice": "₹1,04,000",
-    "offerPrice": "₹80,000/-",
+    "offerPrice": "₹95,000/-",
     "savings": "SAVE ₹24,000",
     "schedule": [
       {
@@ -118,7 +118,8 @@
       "Social Media Optimized",
       "Professional Color Grading",
       "Complete 3-Day Coverage"
-    ]
+    ],
+    "timeline": []
   },
   {
     "id": 3,
@@ -126,7 +127,7 @@
     "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • FULL CINEMATIC EXPERIENCE",
     "badge": "RECOMMENDED PACKAGE",
     "regularPrice": "₹1,43,000",
-    "offerPrice": "₹1,10,000/-",
+    "offerPrice": "₹1,25,000/-",
     "savings": "SAVE ₹33,000",
     "schedule": [
       {
@@ -205,7 +206,7 @@
     "subtitle": "3 DAYS EVENT COVERAGE QUOTATION • LUXURY EXPERIENCE",
     "badge": "LUXURY EXPERIENCE",
     "regularPrice": "₹1,95,000",
-    "offerPrice": "₹1,50,000/-",
+    "offerPrice": "₹1,65,000/-",
     "savings": "SAVE ₹45,000",
     "schedule": [
       {

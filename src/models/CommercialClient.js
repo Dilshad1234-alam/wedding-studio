@@ -11,6 +11,6 @@ const CommercialClientSchema = new mongoose.Schema({
   totalBudget: { type: Number },
   status: { type: String, enum: ['Lead', 'Pre-Production', 'Production', 'Post-Production', 'Completed'], default: 'Lead' },
   createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true, collection: 'commercialclients' });
 
 export default mongoose.models.CommercialClient || mongoose.model('CommercialClient', CommercialClientSchema);

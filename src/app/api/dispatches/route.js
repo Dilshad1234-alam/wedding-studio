@@ -18,6 +18,9 @@ const DispatchSchema = new mongoose.Schema({
   startDate: { type: String, default: '' },
   endDate: { type: String, default: '' },
   status: { type: String, default: 'scheduled' },
+  totalBudget: { type: String, default: '₹0' }, // Added for real budget support
+  year: { type: Number, default: 2026 },
+  month: { type: String, default: 'SEP' },
 }, { timestamps: true });
 
 const Dispatch = mongoose.models.Dispatch || mongoose.model('Dispatch', DispatchSchema);
@@ -26,9 +29,10 @@ export async function GET() {
   try {
     await ensureDb();
     const dispatches = await Dispatch.find({}).sort({ createdAt: -1 });
-    return NextResponse.json({ success: true, data: dispatches });
+    // Directly returning the array so Overview & Dispatch pages can read it smoothly
+    return NextResponse.json(dispatches, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message, data: [] }, { status: 500 });
+    return NextResponse.json([], { status: 500 });
   }
 }
 
@@ -45,7 +49,10 @@ export async function POST(req) {
       dates: body.dates || `${body.startDate || ''} to ${body.endDate || ''}`.trim(),
       startDate: body.startDate || '',
       endDate: body.endDate || '',
-      status: body.status || 'scheduled'
+      status: body.status || 'scheduled',
+      totalBudget: body.totalBudget || body.budget || '₹0',
+      year: body.year || 2026,
+      month: body.month || 'SEP'
     });
 
     return NextResponse.json({ success: true, data: created });

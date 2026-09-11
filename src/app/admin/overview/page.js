@@ -4,11 +4,11 @@ import Link from 'next/link';
 
 export default function OverviewPage() {
   const [currentDate, setCurrentDate] = useState('');
-  const [revenue, setRevenue] = useState({
-    wedding: { amount: "₹38.50L", activeShoots: 31 },
-    commercial: { amount: "₹25.25L" },
-    total: "₹63.75L"
-  });
+  const [timeFilter, setTimeFilter] = useState('1M'); // '1M', '6M', '1Y'
+  
+  const [weddingClients, setWeddingClients] = useState([]);
+  const [commercialClients, setCommercialClients] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const d = new Date();
@@ -18,7 +18,66 @@ export default function OverviewPage() {
       day: 'numeric',
       year: 'numeric'
     }));
+
+    // Fetch real data from MongoDB APIs
+    async function fetchAllData() {
+      try {
+        const [weddingRes, commercialRes] = await Promise.all([
+          fetch('/api/wedding/clients'),
+          fetch('/api/commercial/clients')
+        ]);
+
+        const weddingData = await weddingRes.json();
+        const commercialData = await commercialRes.json();
+
+        if (Array.isArray(weddingData)) setWeddingClients(weddingData);
+        if (Array.isArray(commercialData)) setCommercialClients(commercialData);
+      } catch (err) {
+        console.error("Error fetching overview data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchAllData();
   }, []);
+
+  const parseBudget = (budgetStr) => {
+    if (!budgetStr) return 0;
+    const clean = String(budgetStr).replace(/[^0-9.]/g, '');
+    return parseFloat(clean) || 0;
+  };
+
+  // Filter based on selected time window (1M, 6M, 1Y)
+  const filterByTime = (item) => {
+    const month = item.month || 'SEP';
+    const year = item.year || 2026;
+
+    if (timeFilter === '1M') {
+      return month === 'SEP' && year === 2026;
+    } else if (timeFilter === '6M') {
+      const allowedMonths = ['APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP'];
+      return allowedMonths.includes(month) && year === 2026;
+    } else if (timeFilter === '1Y') {
+      return year === 2026;
+    }
+    return true;
+  };
+
+  const filteredWeddings = weddingClients.filter(filterByTime);
+  const filteredCommercials = commercialClients.filter(filterByTime);
+
+  const weddingTotalNum = filteredWeddings.reduce((acc, c) => acc + parseBudget(c.totalBudget), 0);
+  const commercialTotalNum = filteredCommercials.reduce((acc, c) => acc + parseBudget(c.totalBudget), 0);
+  const combinedTotalNum = weddingTotalNum + commercialTotalNum;
+
+  const formatCurrencyLakhs = (num) => {
+    if (num === 0) return '₹0';
+    if (num >= 100000) {
+      return `₹${(num / 100000).toFixed(2)}L`;
+    }
+    return `₹${num.toLocaleString('en-IN')}`;
+  };
 
   const coreModules = [
     {
@@ -28,48 +87,39 @@ export default function OverviewPage() {
       link: "/admin/wedding-management",
       actionText: "Launch Management Suite →",
       icon: "💍",
-      badge: "51 Active Shoots"
+      badge: `${weddingClients.length} Active Shoots`
     },
     {
       id: "MODULE 2",
-      title: "Crew Directory & Roster",
-      desc: "Master roster of cinematographers, candid photographers, drone pilots, and editors.",
-      link: "/admin/wedding-management",
-      actionText: "Manage Roster →",
+      title: "Commercial Management",
+      desc: "Master roster of directors, DPs, drone pilots, and corporate ad campaigns.",
+      link: "/admin/commercial-management",
+      actionText: "Manage Commercial Suite →",
       icon: "👥",
-      badge: "18 Members"
+      badge: `${commercialClients.length} Campaigns`
     },
     {
       id: "MODULE 3",
-      title: "Image & Media CMS",
+      title: "Website Management",
       desc: "Upload, curate, and categorize high-resolution portfolio stills, teasers, and wedding albums.",
-      link: "/admin/media",
-      actionText: "Manage Galleries →",
+      link: "/admin/website",
+      actionText: "Manage Galleries & Stories →",
       icon: "🖼️",
       badge: "Live Sync"
     },
     {
       id: "MODULE 4",
-      title: "Client Inquiries & CRM",
+      title: "Client Inquiries",
       desc: "Review wedding dates, package requests, budget tiers, and client transmission notes.",
       link: "/admin/inquiries",
-      actionText: "View Inquiries →",
+      actionText: "View Inquiries & CRM →",
       icon: "✉️",
       badge: "12 New Leads"
     },
     {
       id: "MODULE 5",
-      title: "Editorial Stories & Blogs",
-      desc: "Publish couple narratives, featured wedding journals, and behind-the-scenes articles.",
-      link: "/admin/stories",
-      actionText: "Manage Stories →",
-      icon: "📖",
-      badge: "Published"
-    },
-    {
-      id: "MODULE 6",
-      title: "Console Settings & Telemetry",
-      desc: "Master system configurations, API credentials, WhatsApp alert triggers, and staff access roles.",
+      title: "Settings",
+      desc: "Master studio configuration, brand credentials, telemetry logs, and access control.",
       link: "/admin/settings",
       actionText: "Configure Studio →",
       icon: "⚙️",
@@ -92,16 +142,16 @@ export default function OverviewPage() {
               </span>
               <span className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                All Systems Operational
+                MongoDB Database Connected
               </span>
             </div>
             
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white font-sans">
-              Good morning, <span className="text-[#D4AF37] font-black">MD Dilshad</span>
+              Good morning, <span className="text-[#D4AF37] font-black">Sanjeet Sharma</span>
             </h1>
             
             <p className="text-xs sm:text-sm text-[#A89D84] font-normal max-w-2xl leading-relaxed">
-              Weddingpur Master Command Center • Real-time crew dispatch, portfolio media pipelines, active inquiries, and live revenue logistics across Bihar & Pan-India.
+              Weddingpur Master Command Center • Real-time crew dispatch from MongoDB, portfolio media pipelines, active inquiries, and live revenue analytics across Bihar & Pan-India.
             </p>
           </div>
 
@@ -118,7 +168,45 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      {/* 2. TOP REVENUE LOGISTICS ROW */}
+      {/* TIME FILTER TOGGLE BAR (1 Month / 6 Months / Year) */}
+      <div className="flex items-center justify-between flex-wrap gap-4 bg-[#121518] border border-[#2B2519] p-4 rounded-2xl shadow-xl">
+        <div>
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">Revenue Analytics Filter</h3>
+          <p className="text-xs text-[#8A7D5C]">Select timeframe to compute real database earnings</p>
+        </div>
+
+        <div className="flex items-center gap-1.5 bg-[#0B0D0E] p-1.5 rounded-xl border border-[#2B2519]">
+          <button
+            type="button"
+            onClick={() => setTimeFilter('1M')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+              timeFilter === '1M' ? 'bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black shadow-md' : 'text-[#8A7D5C] hover:text-white'
+            }`}
+          >
+            1 Month
+          </button>
+          <button
+            type="button"
+            onClick={() => setTimeFilter('6M')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+              timeFilter === '6M' ? 'bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black shadow-md' : 'text-[#8A7D5C] hover:text-white'
+            }`}
+          >
+            6 Months
+          </button>
+          <button
+            type="button"
+            onClick={() => setTimeFilter('1Y')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+              timeFilter === '1Y' ? 'bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black shadow-md' : 'text-[#8A7D5C] hover:text-white'
+            }`}
+          >
+            Year 2026
+          </button>
+        </div>
+      </div>
+
+      {/* 2. TOP REVENUE LOGISTICS ROW (REAL DATA FROM MONGODB) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         
         {/* Card 1: Wedding Management */}
@@ -126,11 +214,15 @@ export default function OverviewPage() {
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-[#8A7D5C]">WEDDING MANAGEMENT</span>
             <span className="px-2 py-0.5 rounded text-[9px] font-sans font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
-              MONTHLY REVENUE
+              {timeFilter === '1M' ? 'SEPTEMBER 2026' : timeFilter === '6M' ? 'LAST 6 MONTHS' : 'YEAR 2026'}
             </span>
           </div>
-          <h4 className="text-3xl font-sans font-semibold tracking-tight text-white">{revenue.wedding.amount}</h4>
-          <p className="text-[11px] font-sans text-[#A89D84]">{revenue.wedding.activeShoots} Active wedding shoots • Realized this month</p>
+          <h4 className="text-3xl font-sans font-bold tracking-tight text-white font-mono">
+            {isLoading ? "..." : formatCurrencyLakhs(weddingTotalNum)}
+          </h4>
+          <p className="text-[11px] font-sans text-[#A89D84]">
+            {filteredWeddings.length} Active wedding shoots in database
+          </p>
           <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/wedding-management">
             View Wedding Ledger →
           </Link>
@@ -141,12 +233,16 @@ export default function OverviewPage() {
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-[#8A7D5C]">COMMERCIAL MANAGEMENT</span>
             <span className="px-2 py-0.5 rounded text-[9px] font-sans font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/30">
-              COMMERCIAL B2B
+              B2B CAMPAIGNS
             </span>
           </div>
-          <h4 className="text-3xl font-sans font-semibold tracking-tight text-white">{revenue.commercial.amount}</h4>
-          <p className="text-[11px] font-sans text-[#A89D84]">Corporate & Fashion shoots • Brand campaigns</p>
-          <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/commercial">
+          <h4 className="text-3xl font-sans font-bold tracking-tight text-white font-mono">
+            {isLoading ? "..." : formatCurrencyLakhs(commercialTotalNum)}
+          </h4>
+          <p className="text-[11px] font-sans text-[#A89D84]">
+            {filteredCommercials.length} Brand campaigns in database
+          </p>
+          <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/commercial-management">
             View Commercial Ledger →
           </Link>
         </div>
@@ -156,25 +252,27 @@ export default function OverviewPage() {
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-[#D4AF37]">TOTAL COMBINED REVENUE</span>
             <span className="px-2 py-0.5 rounded text-[9px] font-sans font-semibold bg-[#D4AF37]/20 text-[#F3E5AB] border border-[#D4AF37]/40 shadow-[0_0_10px_rgba(212,175,55,0.3)]">
-              NET MONTHLY
+              NET EARNINGS
             </span>
           </div>
-          <h4 className="text-3xl font-sans font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
-            {revenue.total}
+          <h4 className="text-3xl font-sans font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 font-mono">
+            {isLoading ? "..." : formatCurrencyLakhs(combinedTotalNum)}
           </h4>
-          <p className="text-[11px] font-sans text-[#A89D84]">Wedding ({revenue.wedding.amount}) + Commercial ({revenue.commercial.amount})</p>
-          <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/overview">
+          <p className="text-[11px] font-sans text-[#A89D84]">
+            Wedding + Commercial total revenue
+          </p>
+          <Link className="inline-block text-xs font-sans font-semibold tracking-tight text-[#D4AF37] hover:text-[#F3E5AB] pt-1" href="/admin/wedding-management">
             Consolidated Statement →
           </Link>
         </div>
 
       </div>
 
-      {/* 3. CORE STUDIO MODULES */}
+      {/* 3. CORE STUDIO MODULES (Clickable Cards) */}
       <div className="space-y-6">
         <div>
           <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-3">
-            <span>6 Core Essential Studio Modules</span>
+            <span>5 Core Essential Studio Modules</span>
             <span className="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-[#181B1F] border border-[#2B2519] text-[#D4AF37]">
               Single-Click Direct Access
             </span>
@@ -186,9 +284,10 @@ export default function OverviewPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {coreModules.map((module, i) => (
-            <div
+            <Link
               key={i}
-              className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/60 rounded-3xl p-7 shadow-xl flex flex-col justify-between space-y-6 group transition-all duration-300 hover:-translate-y-1"
+              href={module.link}
+              className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37] rounded-3xl p-7 shadow-xl flex flex-col justify-between space-y-6 group transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(212,175,55,0.15)] cursor-pointer block"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -201,7 +300,7 @@ export default function OverviewPage() {
                 </div>
 
                 <div>
-                  <h4 className="text-base font-sans font-semibold tracking-tight text-white group-hover:text-[#F3E5AB] transition-colors">
+                  <h4 className="text-base font-sans font-semibold tracking-tight text-white group-hover:text-[#D4AF37] transition-colors">
                     {module.title}
                   </h4>
                   <span className="text-[10px] font-sans font-semibold text-[#8A7D5C] uppercase tracking-wider block mb-2 mt-1">
@@ -214,11 +313,11 @@ export default function OverviewPage() {
               </div>
 
               <div className="pt-4 border-t border-[#1C1F24]">
-                <Link className="w-full py-2.5 rounded-xl border border-[#2B2519] bg-[#16191F] group-hover:bg-gradient-to-r group-hover:from-[#D4AF37] group-hover:to-[#B89018] group-hover:text-black text-[#D4AF37] text-xs font-sans font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer" href={module.link}>
+                <div className="w-full py-2.5 rounded-xl border border-[#2B2519] bg-[#16191F] group-hover:bg-gradient-to-r group-hover:from-[#D4AF37] group-hover:to-[#B89018] group-hover:text-black group-hover:border-[#D4AF37] text-[#D4AF37] text-xs font-sans font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-300 shadow-md">
                   {module.actionText}
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

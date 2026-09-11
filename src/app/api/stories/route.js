@@ -1,94 +1,64 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import dbConnect from '@/lib/dbConnect';
+import Story from '@/models/Story';
 
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'stories.json');
-
-function readStories() {
-  try {
-    if (!fs.existsSync(dataFilePath)) {
-      return [];
-    }
-    const fileData = fs.readFileSync(dataFilePath, 'utf8');
-    return JSON.parse(fileData);
-  } catch (err) {
-    console.error('Error reading stories.json:', err);
-    return [];
-  }
-}
-
-function writeStories(data) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error writing stories.json:', err);
-    return false;
-  }
-}
-
-// GET all stories
 export async function GET() {
-  const stories = readStories();
-  return NextResponse.json(stories, {
-    headers: {
-      'Cache-Control': 'no-store, max-age=0'
-    }
-  });
+  try {
+    await dbConnect();
+    const stories = await Story.find({}).sort({ createdAt: -1 });
+    // Map _id to id for the frontend
+    const formattedStories = stories.map(s => {
+      const obj = s.toObject();
+      obj.id = obj._id.toString();
+      return obj;
+    });
+    return NextResponse.json(formattedStories, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
 
-// POST create new story
 export async function POST(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    const stories = readStories();
-
-    const newStory = {
-      id: Date.now(),
-      couple: body.couple || "New Couple",
-      tagline: body.tagline || "SACRED VOWS • PATNA",
-      desc: body.desc || "",
-      mainImage: body.mainImage || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
-      thumbnails: Array.isArray(body.thumbnails) && body.thumbnails.length > 0 ? body.thumbnails : [
-        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=300&q=80",
-        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=300&q=80",
-        "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=300&q=80",
-        "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=300&q=80"
-      ]
-    };
-
-    // Insert at the beginning so the newest story appears first
-    stories.unshift(newStory);
-    writeStories(stories);
-
-    return NextResponse.json({ success: true, story: newStory }, { status: 201 });
+    const newStory = await Story.create(body);
+    const result = newStory.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, story: result }, { status: 201 });
   } catch (error) {
-    console.error('API Stories POST error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// PUT edit story
 export async function PUT(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    let stories = readStories();
-    stories = stories.map(s => s.id === body.id ? { ...s, ...body } : s);
-    writeStories(stories);
-    return NextResponse.json({ success: true });
+    const id = body.id || body._id;
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const updatedStory = await Story.findByIdAndUpdate(id, { $set: body }, { new: true });
+    if (!updatedStory) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+    
+    const result = updatedStory.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, story: result });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// DELETE story
 export async function DELETE(req) {
   try {
+    await dbConnect();
     const { searchParams } = new URL(req.url);
-    const id = parseInt(searchParams.get('id'), 10);
-    let stories = readStories();
-    stories = stories.filter(s => s.id !== id);
-    writeStories(stories);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const deletedStory = await Story.findByIdAndDelete(id);
+    if (!deletedStory) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

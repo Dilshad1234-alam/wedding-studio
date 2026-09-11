@@ -8,7 +8,7 @@ export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
 
   // Define routes where Navbar and Footer must be hidden
-  const hideHeaderFooter = pathname === '/login' || pathname === '/register' || pathname.startsWith('/admin');
+  const hideHeaderFooter = pathname === '/admin/auth-login' || pathname.startsWith('/admin');
   
   // Define routes where we want the content to flow under the transparent navbar (no top padding)
   const isHomePage = pathname === '/';

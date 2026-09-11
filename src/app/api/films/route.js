@@ -1,91 +1,63 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import dbConnect from '@/lib/dbConnect';
+import Film from '@/models/Film';
 
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'films.json');
-
-function readFilms() {
-  try {
-    if (!fs.existsSync(dataFilePath)) {
-      return [];
-    }
-    const fileData = fs.readFileSync(dataFilePath, 'utf8');
-    return JSON.parse(fileData);
-  } catch (err) {
-    console.error('Error reading films.json:', err);
-    return [];
-  }
-}
-
-function writeFilms(data) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error writing films.json:', err);
-    return false;
-  }
-}
-
-// GET all films
 export async function GET() {
-  const films = readFilms();
-  return NextResponse.json(films, {
-    headers: {
-      'Cache-Control': 'no-store, max-age=0'
-    }
-  });
+  try {
+    await dbConnect();
+    const films = await Film.find({}).sort({ createdAt: -1 });
+    const formatted = films.map(f => {
+      const obj = f.toObject();
+      obj.id = obj._id.toString();
+      return obj;
+    });
+    return NextResponse.json(formatted, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
 
-// POST create new film
 export async function POST(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    const films = readFilms();
-
-    const newFilm = {
-      id: Date.now(),
-      title: body.title || "New Film",
-      couple: body.couple || "Unknown Couple",
-      venue: body.venue || "Unknown Venue",
-      runtime: body.runtime || "00:00",
-      videoUrl: body.videoUrl || "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      posterUrl: body.posterUrl || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
-      description: body.description || ""
-    };
-
-    // Insert at the beginning so the newest film appears first
-    films.unshift(newFilm);
-    writeFilms(films);
-
-    return NextResponse.json({ success: true, film: newFilm }, { status: 201 });
+    const newFilm = await Film.create(body);
+    const result = newFilm.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, film: result }, { status: 201 });
   } catch (error) {
-    console.error('API Films POST error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// PUT edit film
 export async function PUT(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    let films = readFilms();
-    films = films.map(f => f.id === body.id ? { ...f, ...body } : f);
-    writeFilms(films);
-    return NextResponse.json({ success: true });
+    const id = body.id || body._id;
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const updatedFilm = await Film.findByIdAndUpdate(id, { $set: body }, { new: true });
+    if (!updatedFilm) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+    
+    const result = updatedFilm.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, film: result });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// DELETE film
 export async function DELETE(req) {
   try {
+    await dbConnect();
     const { searchParams } = new URL(req.url);
-    const id = parseInt(searchParams.get('id'), 10);
-    let films = readFilms();
-    films = films.filter(f => f.id !== id);
-    writeFilms(films);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const deletedFilm = await Film.findByIdAndDelete(id);
+    if (!deletedFilm) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

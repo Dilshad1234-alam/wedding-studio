@@ -451,8 +451,7 @@ export default function LandingPage() {
               href="https://www.youtube.com/@WeddingPur"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handleProtectedAction()}
-              className="group relative block w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-black cursor-pointer"
+              className="group relative block w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] hover:border-[#D4AF37] hover:shadow-[0_0_40px_rgba(212,175,55,0.35)] transition-all duration-500 bg-black cursor-pointer"
             >
               <img
                 src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85"
@@ -517,7 +516,7 @@ export default function LandingPage() {
                 href={film.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-[#121518] border border-[#2B2519] rounded-3xl p-4 shadow-sm hover:shadow-xl hover:border-[#D4AF37] transition-all duration-300 block"
+                className="group bg-[#121518] border border-[#2B2519] rounded-3xl p-4 shadow-sm hover:shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:border-[#D4AF37] transition-all duration-300 block cursor-pointer"
               >
                 <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black mb-4">
                   <img
@@ -775,8 +774,7 @@ export default function LandingPage() {
               href="https://www.instagram.com/weddingpur/"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handleProtectedAction()}
-              className="mt-4 inline-flex items-center gap-2 border border-[#5B6454]/70 text-[#D4AF37] hover:bg-[#5B6454] hover:text-[#F5F5F5] px-7 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition duration-300"
+              className="mt-4 inline-flex items-center gap-2 border border-[#5B6454]/70 text-[#D4AF37] hover:bg-[#5B6454] hover:text-[#F5F5F5] px-7 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition duration-300 cursor-pointer"
             >
               <span>Follow on Instagram</span>
               <span>↗</span>
@@ -816,8 +814,7 @@ export default function LandingPage() {
                 href="https://www.instagram.com/weddingpur/"
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={handleProtectedAction()}
-                className="group relative aspect-square bg-[#121518] rounded-2xl overflow-hidden shadow-sm block"
+                className="group relative aspect-square bg-[#121518] rounded-2xl overflow-hidden shadow-sm block cursor-pointer"
               >
                 <img
                   src={post.img}

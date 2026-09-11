@@ -1,38 +1,28 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'about.json');
-
-function readAbout() {
-  try {
-    if (!fs.existsSync(dataFilePath)) return {};
-    return JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
-  } catch (err) {
-    console.error('Error reading about.json:', err);
-    return {};
-  }
-}
-
-function writeAbout(data) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error writing about.json:', err);
-    return false;
-  }
-}
+import dbConnect from '@/lib/dbConnect';
+import SiteContent from '@/models/SiteContent';
 
 export async function GET() {
-  const about = readAbout();
-  return NextResponse.json(about, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  try {
+    await dbConnect();
+    const content = await SiteContent.findOne({ sectionType: 'about' });
+    return NextResponse.json(content ? content.data : {}, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
 
 export async function PUT(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    writeAbout(body);
+    
+    await SiteContent.findOneAndUpdate(
+      { sectionType: 'about' },
+      { $set: { data: body } },
+      { upsert: true, new: true }
+    );
+    
     return NextResponse.json({ success: true, about: body });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

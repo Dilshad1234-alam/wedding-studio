@@ -45,3 +45,51 @@ export async function POST(req) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export async function PUT(req) {
+  try {
+    await dbConnect();
+    const body = await req.json();
+    
+    const id = body.id || body._id;
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'Client ID is required' }, { status: 400 });
+    }
+
+    const updatedClient = await WeddingClient.findByIdAndUpdate(
+      id,
+      { $set: body },
+      { new: true, runValidators: true }
+    );
+    
+    if (!updatedClient) {
+      return NextResponse.json({ success: false, error: 'Client not found' }, { status: 404 });
+    }
+    
+    return NextResponse.json({ success: true, client: updatedClient });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    await dbConnect();
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'Client ID is required' }, { status: 400 });
+    }
+    
+    const deletedClient = await WeddingClient.findByIdAndDelete(id);
+    
+    if (!deletedClient) {
+      return NextResponse.json({ success: false, error: 'Client not found' }, { status: 404 });
+    }
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}

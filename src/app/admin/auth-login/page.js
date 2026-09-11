@@ -36,15 +36,13 @@ export default function LoginPage() {
         throw new Error(data.message || 'Something went wrong');
       }
 
-      // Store in sessionStorage
       sessionStorage.setItem('weddingpur_user', JSON.stringify(data.user));
       sessionStorage.setItem('weddingpur_token', data.token);
 
-      // Role-based redirect
       if (data.user?.role === 'admin') {
-        router.push('/admin');
+        window.location.href = '/admin/overview';
       } else {
-        router.push('/');
+        window.location.href = '/';
       }
 
     } catch (err) {
@@ -55,16 +53,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4 antialiased text-[#F5F5F5] font-sans selection:bg-amber-500/30 selection:text-amber-200" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(212, 163, 89, 0.08) 0%, rgba(10, 10, 10, 0.95) 70%, #050505 100%)' }}>
-      {/* Decorative ambient elements */}
+    <div className="relative min-h-screen flex items-center justify-center p-4 antialiased text-[#F5F5F5] font-sans selection:bg-amber-500/30 selection:text-amber-200 w-full" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(212, 163, 89, 0.08) 0%, rgba(10, 10, 10, 0.95) 70%, #050505 100%)' }}>
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#D4AF37] rounded-full mix-blend-screen filter blur-[150px] opacity-[0.03] animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#D4AF37] rounded-full mix-blend-screen filter blur-[150px] opacity-[0.04]"></div>
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23D4AF37\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
       </div>
 
       <div className="relative z-10 w-full max-w-[430px] bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_0_50px_-12px_rgba(212,163,89,0.2)]">
-        {/* Brand Header */}
         <div className="text-center mb-6">
           <Link className="inline-block group cursor-pointer transition-transform duration-300 hover:scale-[1.03]" href="/" title="Back to Home">
             <span className="text-sm sm:text-base font-black tracking-[0.35em] text-[#D4AF37] block group-hover:text-[#F3E5AB] transition-colors">
@@ -91,9 +86,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email Address */}
           <div>
             <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
               EMAIL ADDRESS
@@ -105,11 +98,10 @@ export default function LoginPage() {
               value={formData.email}
               onChange={handleChange}
               placeholder="hello@example.com"
-              className="w-full bg-[#181818] border border-white/10 text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/40 transition-all"
+              className="w-full bg-[#181818] border border-white/10 text-white rounded-xl px-4 py-3 text-xs font-medium placeholder-[#554C34] focus:outline-none focus:border-amber-500/65 focus:ring-1 focus:ring-amber-500/40 transition-all"
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-[10px] uppercase tracking-[0.2em] font-black text-[#D4AF37] mb-1.5">
               PASSWORD
@@ -127,7 +119,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A7D5C] hover:text-[#D4AF37] p-1 transition-colors flex items-center justify-center"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A7D5C] hover:text-[#D4AF37] p-1 transition-colors flex items-center justify-center cursor-pointer"
               >
                 {showPassword ? (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,7 +135,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Submit CTA */}
           <div className="pt-3">
             <button
               type="submit"
@@ -155,12 +146,14 @@ export default function LoginPage() {
           </div>
         </form>
 
-        {/* Footer Link */}
-        <div className="mt-8 text-center text-xs text-[#8A7D5C]">
-          Don't have an account?{' '}
-          <Link className="text-[#D4AF37] hover:text-[#F3E5AB] font-bold tracking-wide transition-colors underline underline-offset-4" href="/register">
-            Register
-          </Link>
+        <div className="mt-6 text-center text-xs text-[#8A7D5C] space-y-2">
+          <div>Secure Admin Gateway</div>
+          <div>
+            Don&apos;t have an account?{' '}
+            <Link href="/admin/auth-register" className="text-[#D4AF37] font-bold hover:underline">
+              Sign Up
+            </Link>
+          </div>
         </div>
       </div>
     </div>

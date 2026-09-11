@@ -1,95 +1,63 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import dbConnect from '@/lib/dbConnect';
+import Service from '@/models/Service';
 
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'services.json');
-
-function readServices() {
-  try {
-    if (!fs.existsSync(dataFilePath)) {
-      return [];
-    }
-    const fileData = fs.readFileSync(dataFilePath, 'utf8');
-    return JSON.parse(fileData);
-  } catch (err) {
-    console.error('Error reading services.json:', err);
-    return [];
-  }
-}
-
-function writeServices(data) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error writing services.json:', err);
-    return false;
-  }
-}
-
-// GET all services
 export async function GET() {
-  const services = readServices();
-  return NextResponse.json(services, {
-    headers: {
-      'Cache-Control': 'no-store, max-age=0'
-    }
-  });
+  try {
+    await dbConnect();
+    const services = await Service.find({}).sort({ createdAt: -1 });
+    const formatted = services.map(s => {
+      const obj = s.toObject();
+      obj.id = obj._id.toString();
+      return obj;
+    });
+    return NextResponse.json(formatted, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
 
-// POST create new service
 export async function POST(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    const services = readServices();
-
-    const newService = {
-      id: Date.now(),
-      title: body.title || "New Package",
-      subtitle: body.subtitle || "",
-      badge: body.badge || "",
-      regularPrice: body.regularPrice || "",
-      offerPrice: body.offerPrice || "",
-      savings: body.savings || "",
-      schedule: body.schedule || [],
-      timeline: body.timeline || [],
-      deliverables: body.deliverables || [],
-      experience: body.experience || [],
-      whyChooseTitle: body.whyChooseTitle || "WHY CHOOSE US?",
-      whyChooseFeatures: body.whyChooseFeatures || []
-    };
-
-    services.unshift(newService);
-    writeServices(services);
-
-    return NextResponse.json({ success: true, service: newService }, { status: 201 });
+    const newService = await Service.create(body);
+    const result = newService.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, service: result }, { status: 201 });
   } catch (error) {
-    console.error('API Services POST error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// PUT edit service
 export async function PUT(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    let services = readServices();
-    services = services.map(s => s.id === body.id ? { ...s, ...body } : s);
-    writeServices(services);
-    return NextResponse.json({ success: true });
+    const id = body.id || body._id;
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const updatedService = await Service.findByIdAndUpdate(id, { $set: body }, { new: true });
+    if (!updatedService) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+    
+    const result = updatedService.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, service: result });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// DELETE service
 export async function DELETE(req) {
   try {
+    await dbConnect();
     const { searchParams } = new URL(req.url);
-    const id = parseInt(searchParams.get('id'), 10);
-    let services = readServices();
-    services = services.filter(s => s.id !== id);
-    writeServices(services);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const deletedService = await Service.findByIdAndDelete(id);
+    if (!deletedService) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

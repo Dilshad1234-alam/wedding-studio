@@ -127,7 +127,7 @@ export default function Navbar() {
 
             {/* Right CTAs */}
             <div className="hidden lg:flex items-center space-x-6 shrink-0">
-              {currentUser ? (
+              {currentUser && (
                 <div className="flex items-center gap-2">
                   {currentUser.role === 'admin' ? (
                     <Link href="/admin" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/admin' ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-[#2B2519] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518]'}`}>
@@ -141,16 +141,6 @@ export default function Navbar() {
                   <button onClick={handleLogout} className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border border-[#2B2519] text-[#C5B388] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518] focus:outline-none">
                     Logout
                   </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3">
-                  <Link href="/login" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/login' ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518]'}`}>
-                    Login
-                  </Link>
-                  <span className="text-[#2B2519] text-xs">|</span>
-                  <Link href="/register" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20`}>
-                    Register
-                  </Link>
                 </div>
               )}
             </div>
@@ -185,7 +175,7 @@ export default function Navbar() {
             ))}
 
             <div className="pt-8 pb-4 space-y-5 px-3">
-              {currentUser ? (
+              {currentUser && (
                 <div className="flex flex-col space-y-4">
                   {currentUser.role === 'admin' && (
                     <Link 
@@ -202,23 +192,6 @@ export default function Navbar() {
                   >
                     Logout
                   </button>
-                </div>
-              ) : (
-                <div className="flex flex-col space-y-4">
-                  <Link 
-                    onClick={() => setIsOpen(false)} 
-                    href="/login" 
-                    className="w-full bg-transparent border border-[#2B2519] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518]"
-                  >
-                    LOGIN
-                  </Link>
-                  <Link 
-                    onClick={() => setIsOpen(false)} 
-                    href="/register" 
-                    className="w-full text-center px-6 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
-                  >
-                    REGISTER
-                  </Link>
                 </div>
               )}
             </div>

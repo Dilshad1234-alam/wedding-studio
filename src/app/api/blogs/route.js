@@ -1,48 +1,30 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'blogs.json');
-
-function readBlogs() {
-  try {
-    if (!fs.existsSync(dataFilePath)) return [];
-    return JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
-  } catch (err) {
-    console.error('Error reading blogs.json:', err);
-    return [];
-  }
-}
-
-function writeBlogs(data) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error writing blogs.json:', err);
-    return false;
-  }
-}
+import dbConnect from '@/lib/dbConnect';
+import Blog from '@/models/Blog';
 
 export async function GET() {
-  const blogs = readBlogs();
-  return NextResponse.json(blogs, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  try {
+    await dbConnect();
+    const blogs = await Blog.find({}).sort({ createdAt: -1 });
+    const formatted = blogs.map(b => {
+      const obj = b.toObject();
+      obj.id = obj._id.toString();
+      return obj;
+    });
+    return NextResponse.json(formatted, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
 
 export async function POST(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    const blogs = readBlogs();
-    const newBlog = { 
-      id: Date.now(), 
-      title: body.title || "New Blog", 
-      readTime: body.readTime || "5 min read", 
-      date: body.date || "Now",
-      img: body.img || ""
-    };
-    blogs.unshift(newBlog);
-    writeBlogs(blogs);
-    return NextResponse.json({ success: true, blog: newBlog }, { status: 201 });
+    const newBlog = await Blog.create(body);
+    const result = newBlog.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, blog: result }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -50,11 +32,17 @@ export async function POST(req) {
 
 export async function PUT(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    let blogs = readBlogs();
-    blogs = blogs.map(b => b.id === body.id ? { ...b, ...body } : b);
-    writeBlogs(blogs);
-    return NextResponse.json({ success: true });
+    const id = body.id || body._id;
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const updatedBlog = await Blog.findByIdAndUpdate(id, { $set: body }, { new: true });
+    if (!updatedBlog) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+    
+    const result = updatedBlog.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, blog: result });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -62,11 +50,14 @@ export async function PUT(req) {
 
 export async function DELETE(req) {
   try {
+    await dbConnect();
     const { searchParams } = new URL(req.url);
-    const id = parseInt(searchParams.get('id'), 10);
-    let blogs = readBlogs();
-    blogs = blogs.filter(b => b.id !== id);
-    writeBlogs(blogs);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const deletedBlog = await Blog.findByIdAndDelete(id);
+    if (!deletedBlog) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

@@ -1,107 +1,102 @@
-"use client";
-import React from 'react';
-import Link from 'next/link';
+'use client';
+
 import { usePathname } from 'next/navigation';
-
-import { Inter, JetBrains_Mono } from 'next/font/google';
-
-const adminSans = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-  variable: '--font-admin-sans',
-  display: 'swap',
-});
-
-const adminMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['500', '700'],
-  variable: '--font-admin-mono',
-  display: 'swap',
-});
+import Link from 'next/link';
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
 
+  // Hide sidebar on auth pages
+  const isAuthPage = pathname === '/admin/auth-login' || pathname === '/admin/auth-register';
+
+  if (isAuthPage) {
+    return <main className="min-h-screen bg-[#0B0D0E] w-full">{children}</main>;
+  }
+
   const navItems = [
-    { label: "PLATFORM OVERVIEW", href: "/admin/overview" },
-    { label: "WEDDING MANAGEMENT", href: "/admin/wedding-management" },
-    { label: "COMMERCIAL MANAGEMENT", href: "/admin/commercial-management" },
-    { label: "WEBSITE MANAGEMENT", href: "/admin/website" },
-    { label: "CLIENT INQUIRIES", href: "/admin/inquiries" },
-    { label: "SETTINGS", href: "/admin/settings" },
+    { label: 'PLATFORM OVERVIEW', href: '/admin/overview' },
+    { label: 'WEDDING MANAGEMENT', href: '/admin/wedding-management' },
+    { label: 'COMMERCIAL MANAGEMENT', href: '/admin/commercial-management' },
+    { label: 'WEBSITE MANAGEMENT', href: '/admin/website-management' },
+    { label: 'CLIENT INQUIRIES', href: '/admin/inquiries' },
+    { label: 'SETTINGS', href: '/admin/settings' },
   ];
 
+  const handleLogout = () => {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    sessionStorage.removeItem('weddingpur_user');
+    sessionStorage.removeItem('weddingpur_token');
+    window.location.href = '/admin/auth-login';
+  };
+
   return (
-    <div className={`${adminSans.variable} ${adminMono.variable} flex min-h-screen bg-[#0B0D0E] font-sans antialiased text-[#F5F5F5]`}>
-      {/* OBSIDIAN GOLD SIDEBAR */}
-      <aside className="w-64 min-h-screen bg-[#070809] text-[#EAEAEA] border-r border-[#262117] flex flex-col justify-between p-6 shrink-0 select-none sticky top-0 h-screen shadow-2xl">
+    <div className="flex min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans">
+      {/* Permanent Admin Sidebar */}
+      <aside className="w-64 border-r border-[#1F242D] bg-[#0E1114] flex flex-col justify-between p-6 shrink-0 sticky top-0 h-screen overflow-y-auto">
         <div>
-          {/* Brand Header */}
-          <div className="pb-6 border-b border-[#262117]">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] font-bold block mb-1">
+          {/* Logo */}
+          <div className="mb-10">
+            <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block">
               ROYALE COMMAND
             </span>
-            <h2 className="text-xl font-black tracking-[0.25em] text-white uppercase">
+            <span className="text-xl font-black tracking-widest text-[#D4AF37] block mt-1">
               LENSLOOM
-            </h2>
+            </span>
           </div>
 
-          {/* Navigation Menu */}
-          <nav className="mt-8 space-y-2">
-            {navItems.map((item, idx) => {
-              const isActive = pathname === item.href || (pathname === '/admin' && idx === 0);
-
+          {/* Navigation Links */}
+          <nav className="space-y-2">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
               return (
                 <Link
-                  key={idx}
+                  key={item.href}
                   href={item.href}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs tracking-wider transition-all duration-200 font-bold ${
+                  className={`block px-4 py-3 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase transition-all ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black shadow-lg shadow-[#D4AF37]/10'
-                      : 'text-[#C5B388] hover:bg-[#15181B] hover:text-[#F3E5AB]'
+                      ? 'bg-[#D4AF37] text-black shadow-lg shadow-[#D4AF37]/20 font-black'
+                      : 'text-[#8A7D5C] hover:text-white hover:bg-[#15191F]'
                   }`}
                 >
-                  <span>{item.label}</span>
+                  {item.label}
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        {/* Footer Admin Info */}
-        <div className="pt-6 border-t border-[#262117] space-y-3">
+        {/* Footer Profile & Logout */}
+        <div className="pt-6 border-t border-[#1F242D] space-y-4">
           <div>
-            <span className="text-[9px] uppercase tracking-wider text-[#8A7D5C] font-bold block">
+            <span className="text-[9px] font-mono text-[#8A7D5C] uppercase tracking-wider block">
               AUTHORIZED CONSOLE
             </span>
-            <p className="text-xs font-black text-white tracking-wide mt-0.5">
+            <span className="text-xs font-bold text-white block mt-0.5">
               MD DILSHAD
-            </p>
+            </span>
           </div>
 
-          <div className="pt-3 flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <Link
               href="/"
               target="_blank"
-              className="text-[11px] uppercase tracking-wider text-[#D4AF37] hover:text-[#F3E5AB] transition-colors flex items-center gap-2 font-bold w-full"
+              className="text-[11px] text-[#8A7D5C] hover:text-[#D4AF37] flex items-center gap-1.5 font-mono transition-colors"
             >
-              <span>↗</span>
-              <span>Open Live Site</span>
+              ↗ OPEN LIVE SITE
             </Link>
 
             <button
-              onClick={() => { window.location.href = '/login'; }}
-              className="text-[11px] uppercase tracking-wider text-rose-400 hover:text-rose-300 flex items-center gap-2 cursor-pointer font-bold transition-colors w-full"
+              onClick={handleLogout}
+              className="text-left text-[11px] text-rose-400 hover:text-rose-300 font-mono font-bold uppercase tracking-wider transition-colors cursor-pointer"
             >
-              <span>•</span>
-              <span>Secure Logout</span>
+              ⏻ SECURE LOGOUT
             </button>
           </div>
         </div>
       </aside>
 
-      {/* DYNAMIC VIEW */}
-      <main className="flex-1 overflow-y-auto min-h-screen bg-[#0B0D0E]">
+      {/* Main Admin Content Dashboard */}
+      <main className="flex-1 min-w-0 overflow-y-auto">
         {children}
       </main>
     </div>

@@ -44,3 +44,51 @@ export async function POST(req) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+export async function PUT(req) {
+  try {
+    await dbConnect();
+    const body = await req.json();
+    
+    const id = body.id || body._id;
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'Member ID is required' }, { status: 400 });
+    }
+
+    const updatedMember = await WeddingTeamMember.findByIdAndUpdate(
+      id,
+      { $set: body },
+      { new: true, runValidators: true }
+    );
+    
+    if (!updatedMember) {
+      return NextResponse.json({ success: false, error: 'Member not found' }, { status: 404 });
+    }
+    
+    return NextResponse.json({ success: true, member: updatedMember });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    await dbConnect();
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+    
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'Member ID is required' }, { status: 400 });
+    }
+    
+    const deletedMember = await WeddingTeamMember.findByIdAndDelete(id);
+    
+    if (!deletedMember) {
+      return NextResponse.json({ success: false, error: 'Member not found' }, { status: 404 });
+    }
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}

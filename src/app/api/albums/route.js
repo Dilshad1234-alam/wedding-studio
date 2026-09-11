@@ -1,53 +1,37 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const dataFilePath = path.join(process.cwd(), 'src', 'data', 'albums.json');
-
-function readAlbums() {
-  try {
-    if (!fs.existsSync(dataFilePath)) return { featureSection: {}, editions: [] };
-    const raw = fs.readFileSync(dataFilePath, 'utf8');
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) return { featureSection: {}, editions: parsed };
-    return parsed;
-  } catch (err) {
-    console.error('Error reading albums.json:', err);
-    return { featureSection: {}, editions: [] };
-  }
-}
-
-function writeAlbums(data) {
-  try {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
-    return true;
-  } catch (err) {
-    console.error('Error writing albums.json:', err);
-    return false;
-  }
-}
+import dbConnect from '@/lib/dbConnect';
+import Album from '@/models/Album';
+import SiteContent from '@/models/SiteContent';
 
 export async function GET() {
-  const albums = readAlbums();
-  return NextResponse.json(albums, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  try {
+    await dbConnect();
+    const albums = await Album.find({}).sort({ createdAt: -1 });
+    const formatted = albums.map(a => {
+      const obj = a.toObject();
+      obj.id = obj._id.toString();
+      return obj;
+    });
+    
+    const featureContent = await SiteContent.findOne({ sectionType: 'albumFeature' });
+    
+    return NextResponse.json({
+      editions: formatted,
+      featureSection: featureContent ? featureContent.data : {}
+    }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
 
 export async function POST(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    const data = readAlbums();
-    const newEdition = { 
-      id: Date.now(), 
-      title: body.title || "New Edition", 
-      subtitle: body.subtitle || "",
-      coverImage: body.coverImage || "",
-      material: body.material || "",
-      specs: body.specs || ""
-    };
-    if (!data.editions) data.editions = [];
-    data.editions.unshift(newEdition);
-    writeAlbums(data);
-    return NextResponse.json({ success: true, album: newEdition }, { status: 201 });
+    const newAlbum = await Album.create(body);
+    const result = newAlbum.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, album: result }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -55,18 +39,27 @@ export async function POST(req) {
 
 export async function PUT(req) {
   try {
+    await dbConnect();
     const body = await req.json();
-    let data = readAlbums();
     
     if (body.type === 'featureSection') {
-      data.featureSection = { ...data.featureSection, ...body.payload };
-    } else {
-      if (!data.editions) data.editions = [];
-      data.editions = data.editions.map(a => a.id === body.id ? { ...a, ...body } : a);
+      await SiteContent.findOneAndUpdate(
+        { sectionType: 'albumFeature' },
+        { $set: { data: body.payload } },
+        { upsert: true, new: true }
+      );
+      return NextResponse.json({ success: true });
     }
     
-    writeAlbums(data);
-    return NextResponse.json({ success: true });
+    const id = body.id || body._id;
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const updatedAlbum = await Album.findByIdAndUpdate(id, { $set: body }, { new: true });
+    if (!updatedAlbum) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+    
+    const result = updatedAlbum.toObject();
+    result.id = result._id.toString();
+    return NextResponse.json({ success: true, album: result });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
@@ -74,12 +67,14 @@ export async function PUT(req) {
 
 export async function DELETE(req) {
   try {
+    await dbConnect();
     const { searchParams } = new URL(req.url);
-    const id = parseInt(searchParams.get('id'), 10);
-    let data = readAlbums();
-    if (!data.editions) data.editions = [];
-    data.editions = data.editions.filter(a => a.id !== id);
-    writeAlbums(data);
+    const id = searchParams.get('id');
+    if (!id) return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+
+    const deletedAlbum = await Album.findByIdAndDelete(id);
+    if (!deletedAlbum) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

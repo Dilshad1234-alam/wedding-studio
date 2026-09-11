@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import connectMongo from '@/lib/mongodb';
+import dbConnect from '@/lib/dbConnect';
 import WeddingTeamMember from '@/models/WeddingTeamMember';
 
 // TeamMember model was removed. This route now uses WeddingTeamMember
@@ -7,7 +7,7 @@ import WeddingTeamMember from '@/models/WeddingTeamMember';
 
 export async function GET() {
   try {
-    await connectMongo();
+    await dbConnect();
     const team = await WeddingTeamMember.find({}).sort({ orderIndex: 1 });
     return NextResponse.json({ success: true, team });
   } catch (error) {

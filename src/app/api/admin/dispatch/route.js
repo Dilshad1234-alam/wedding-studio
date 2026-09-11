@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import connectMongo from '@/lib/mongodb';
+import dbConnect from '@/lib/dbConnect';
 import WeddingClient from '@/models/WeddingClient';
 
 // Dispatch data is sourced from WeddingClient (shoot scheduling lives on the client record)
 
 export async function GET() {
   try {
-    await connectMongo();
+    await dbConnect();
     // Return wedding clients sorted by shoot date as the dispatch schedule
     const dispatches = await WeddingClient.find({}).sort({ weddingDate: 1 });
     return NextResponse.json({ success: true, dispatches });

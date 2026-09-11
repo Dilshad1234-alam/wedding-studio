@@ -40,7 +40,7 @@ export default function LoginPage() {
       sessionStorage.setItem('weddingpur_token', data.token);
 
       if (data.user?.role === 'admin') {
-        window.location.href = '/admin/overview';
+        router.push('/admin/overview');
       } else {
         window.location.href = '/';
       }

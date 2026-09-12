@@ -8,6 +8,24 @@ export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState(null);
   const [reviewIndex, setReviewIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [landingConfig, setLandingConfig] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    fetch('/api/landing')
+      .then(res => res.json())
+      .then(data => {
+        if (data && Object.keys(data).length > 0) setLandingConfig(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching landing config:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  const safeConfig = landingConfig || {};
+
 
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -68,6 +86,14 @@ export default function LandingPage() {
     setReviewIndex((prev) => (prev + 1) % realGoogleReviews.length);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D4AF37]"></div>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-[#0B0D0E] to-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
       
@@ -76,7 +102,7 @@ export default function LandingPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center z-0 scale-100"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85')`
+            backgroundImage: `url('${safeConfig.bgImage || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85'}')`
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-[#1E221D]/75 via-[#1E221D]/55 to-[#1E221D]/85"></div>
@@ -84,15 +110,15 @@ export default function LandingPage() {
 
         <div className="w-full min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-8 text-center relative z-10 mx-auto">
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-[#C5B388] font-medium mb-3">
-            WEDDINGPUR — BESPOKE WEDDING CINEMA & STILLS
+            {safeConfig.badge || "WEDDINGPUR — BESPOKE WEDDING CINEMA & STILLS"}
           </span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#F5F5F5] tracking-tight leading-[1.12] drop-shadow-md">
-            Best Wedding Photographers <br className="hidden sm:inline" />
-            <span className="italic font-light text-[#D4AF37]">In Patna, Bihar</span>
+            {safeConfig.titleLine1 || "Best Wedding Photographers"} <br className="hidden sm:inline" />
+            <span className="italic font-light text-[#D4AF37]">{safeConfig.titleLine2 || "In Patna, Bihar"}</span>
           </h1>
 
           <p className="text-[#F5F5F5]/90 text-sm sm:text-lg font-light tracking-wide max-w-2xl mx-auto mt-6 mb-4">
-            We capture timeless weddings for modern couples who want their story told beautifully.
+            {safeConfig.subtitle || "We capture timeless weddings for modern couples who want their story told beautifully."}
           </p>
 
           <div className="flex flex-wrap gap-4 justify-center items-center mt-6">
@@ -126,7 +152,7 @@ export default function LandingPage() {
             <div className="lg:col-span-6 flex justify-center lg:justify-start">
               <div className="relative w-full max-w-[500px] aspect-[4/5] sm:aspect-[3/4] rounded-t-[200px] rounded-b-3xl overflow-hidden border border-[#3A311D] shadow-[0_20px_60px_rgba(0,0,0,0.8)] bg-[#121518]">
                 <img
-                  src="https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg"
+                  src={safeConfig.philosophy?.image || "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg"}
                   alt="Unposed Wedding Moments"
                   className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700 hover:scale-105"
                 />
@@ -140,49 +166,43 @@ export default function LandingPage() {
               {/* Eyebrow Badge */}
               <div>
                 <span className="inline-block px-3.5 py-1.5 rounded-full bg-[#181B1F] border border-[#3A311D] text-[10px] font-black uppercase tracking-[0.3em] text-[#D4AF37]">
-                  OUR EDITORIAL PHILOSOPHY
+                  {safeConfig.philosophy?.badge || "OUR EDITORIAL PHILOSOPHY"}
                 </span>
               </div>
 
               {/* Heading */}
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-white tracking-tight leading-[1.1]">
-                Unposed. Pure. <br />
-                <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B89018]">
-                  Poetic.
-                </span>
+                {safeConfig.philosophy?.title || (
+                  <>
+                    Unposed. Pure. <br />
+                    <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#F3E5AB] via-[#D4AF37] to-[#B89018]">
+                      Poetic.
+                    </span>
+                  </>
+                )}
               </h2>
 
               {/* Description */}
               <p className="text-sm sm:text-base text-[#D1C7A5] font-light leading-relaxed max-w-xl mx-auto lg:mx-0">
-                We believe the most breathtaking images are the ones you didn't know were being taken. Our documentary approach focuses on the raw, unscripted emotion of your day—capturing what poses simply cannot. We blend into your celebration to document your legacy as it organically unfolds.
+                {safeConfig.philosophy?.desc || "We believe the most breathtaking images are the ones you didn't know were being taken. Our documentary approach focuses on the raw, unscripted emotion of your day—capturing what poses simply cannot. We blend into your celebration to document your legacy as it organically unfolds."}
               </p>
 
               {/* Key Metrics Row */}
               <div className="grid grid-cols-3 gap-6 pt-4 border-t border-[#2B2519] max-w-lg mx-auto lg:mx-0">
-                <div>
-                  <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] block">
-                    150+
-                  </span>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#8A7D5C] block mt-1">
-                    WEDDINGS DOCUMENTED
-                  </span>
-                </div>
-                <div>
-                  <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] block">
-                    10+
-                  </span>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#8A7D5C] block mt-1">
-                    AWARDS WON
-                  </span>
-                </div>
-                <div>
-                  <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] block">
-                    100%
-                  </span>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-[#8A7D5C] block mt-1">
-                    RAW EMOTION
-                  </span>
-                </div>
+                {(safeConfig.philosophy?.stats || [
+                  { value: "150+", label: "WEDDINGS DOCUMENTED" },
+                  { value: "10+", label: "AWARDS WON" },
+                  { value: "100%", label: "RAW EMOTION" }
+                ]).map((stat, i) => (
+                  <div key={i}>
+                    <span className="text-2xl sm:text-3xl font-black text-[#D4AF37] block">
+                      {stat.value}
+                    </span>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-[#8A7D5C] block mt-1">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
               </div>
 
               {/* Action Button */}
@@ -213,36 +233,24 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full">
-            {[
+            {(safeConfig.featuredWeddings && safeConfig.featuredWeddings.length > 0 ? safeConfig.featuredWeddings : [
               {
-                names: "Abhishek & Ruchi",
-                sub: "ANANYA & KABIR • JAIPUR",
+                title: "Abhishek & Ruchi",
+                location: "ANANYA & KABIR • JAIPUR",
                 img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
                 description: "Some weddings are beautiful. Some are unforgettable. Abhishek and Ruchi's wedding was one of a kind. A Marwadi wedding full of life, laughter, and love that every single frame told a story worth saving forever. Click on the button to feel every moment of this beautiful union."
-              },
-              {
-                names: "Akshat & Shivani",
-                sub: "SNEHA & RAHUL • VARANASI",
-                img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
-                description: "Some celebrations feel timeless from the very first moment. Akshat and Shivani's wedding at The Mavrick Resort was one such celebration. A beautiful blend of emotions, traditions and joyful moments where every frame reflected the elegance of their story."
-              },
-              {
-                names: "Minimalist Meadow Vows",
-                sub: "POOJA & NEIL • PATNA",
-                img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
-                description: "Some weddings are beautiful. Some are unforgettable. Abhishek and Ruchi's wedding was one of a kind. A Marwadi wedding full of life, laughter, and love that every single frame told a story worth saving forever. Click on the button to feel every moment of this beautiful union."
               }
-            ].map((story, i) => (
+            ]).map((story, i) => (
               <div key={i} className="group cursor-pointer flex flex-col items-start text-left">
                 <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-5 bg-[#121518] border border-[#2B2519]">
                   <img 
                     src={story.img} 
-                    alt={story.names} 
+                    alt={story.title || story.names} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                   />
                 </div>
-                <h3 className="font-serif text-2xl text-white mb-1">{story.names}</h3>
-                <p className="text-[10px] tracking-[0.25em] uppercase text-[#C5B388] mb-2">{story.sub}</p>
+                <h3 className="font-serif text-2xl text-white mb-1">{story.title || story.names}</h3>
+                <p className="text-[10px] tracking-[0.25em] uppercase text-[#C5B388] mb-2">{story.location || story.sub}</p>
                 
                 {story.description ? (
                   <>
@@ -278,149 +286,50 @@ export default function LandingPage() {
             <div className="w-16 h-[1px] bg-[#5B6454]/40 mx-auto mt-4"></div>
           </div>
 
-          {/* 4 Services Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 w-full">
+          {/* Services Carousel Dynamic */}
+          <div className="relative group">
+            {/* Optional scroll hint on desktop */}
+            <div className="absolute -top-8 right-4 hidden md:flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#8A7D5C] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <span>Scroll to explore</span>
+              <svg className="w-4 h-4 animate-bounce-x" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </div>
             
-            {/* CARD 1: Destination Wedding Photography */}
-            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
-                  Destination Wedding <br />Photography
-                </h3>
-
-                {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
-                  {[
-                    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80"
-                  ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
-                      <img src={img} alt="Destination shoot" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div className="flex overflow-x-auto scroll-smooth gap-6 sm:gap-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full pb-8">
+              {(safeConfig.servicesPillars && safeConfig.servicesPillars.length > 0 ? safeConfig.servicesPillars : [
+                {
+                  title: "Destination Wedding Photography",
+                  desc: "If you want your wedding to be a thing outside the world, then a destination wedding is the right choice for you.",
+                  image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+                  link: "/services"
+                }
+              ]).map((pillar, i) => (
+                <div key={i} className="min-w-[85vw] sm:min-w-[45vw] lg:min-w-[400px] snap-center bg-[#121518] rounded-3xl p-6 lg:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 shrink-0">
+                  <div>
+                    <div className="w-full aspect-[4/3] mb-8 rounded-2xl overflow-hidden bg-[#0B0D0E] border border-[#2B2519]">
+                      <img 
+                        src={pillar.image} 
+                        alt={pillar.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" 
+                      />
                     </div>
-                  ))}
+                    <h3 className="font-serif text-2xl text-white mb-4 font-normal leading-snug group-hover:text-[#D4AF37] transition-colors">
+                      {pillar.title}
+                    </h3>
+                    <p className="text-sm text-[#C5B388] font-light leading-relaxed mb-8 max-w-sm mx-auto">
+                      {pillar.desc}
+                    </p>
+                  </div>
+                  <div>
+                    <Link 
+                      className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-black hover:border-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] py-3 px-8 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm" 
+                      href={pillar.link || "/services"}
+                    >
+                      Learn More
+                    </Link>
+                  </div>
                 </div>
-
-                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
-                  If you want your wedding to be a thing outside the world, then a destination wedding is the right choice for you.
-                </p>
-              </div>
-
-              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
-                Learn More
-              </Link>
+              ))}
             </div>
-
-            {/* CARD 2: Candid Style Wedding Photography */}
-            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
-                  Candid Style Wedding <br />Photography
-                </h3>
-
-                {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
-                  {[
-                    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80"
-                  ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
-                      <img src={img} alt="Candid shoot" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
-                  Candid photography is nothing but capturing real moments, feelings and expressions rather than posed ones.
-                </p>
-              </div>
-
-              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
-                Learn More
-              </Link>
-            </div>
-
-            {/* CARD 3: Wedding Cinematography & Films */}
-            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
-                  Wedding Cinematography & <br />Films
-                </h3>
-
-                {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
-                  {[
-                    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80"
-                  ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
-                      <img src={img} alt="Cinema visual" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
-                  A wedding is like a movie of so many beautiful things coming together into one big happy story that is timeless.
-                </p>
-              </div>
-
-              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
-                Learn More
-              </Link>
-            </div>
-
-            {/* CARD 4: Prewedding Photography & Videos */}
-            <div className="bg-[#121518] rounded-3xl p-6 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-md hover:-translate-y-1.5 transition-all duration-300">
-              <div>
-                <h3 className="font-serif text-xl text-white min-h-[52px] flex items-center justify-center mb-5 font-normal leading-snug">
-                  Prewedding Photography & <br />Videos
-                </h3>
-
-                {/* Mini Photo Collage */}
-                <div className="grid grid-cols-4 gap-1.5 mb-6 rounded-2xl overflow-hidden p-1.5 bg-[#0B0D0E] border border-[#2B2519]">
-                  {[
-                    "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80",
-                    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=200&q=80"
-                  ].map((img, i) => (
-                    <div key={i} className="aspect-square overflow-hidden rounded-md bg-[#121518]">
-                      <img src={img} alt="Prewedding visual" className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-xs text-[#C5B388] font-light leading-relaxed mb-6">
-                  Your unmatched love story with you and your beloved in the frame captured months before your big celebration.
-                </p>
-              </div>
-
-              <Link className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] py-2.5 px-6 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition" href="/services">
-                Learn More
-              </Link>
-            </div>
-
           </div>
 
         </div>
@@ -434,13 +343,13 @@ export default function LandingPage() {
           {/* Header */}
           <div className="text-center mb-16">
             <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
-              MOTION & SOUND STORIES
+              {safeConfig.cinematicFilms?.badge || "MOTION & SOUND STORIES"}
             </span>
             <h2 className="font-serif text-4xl sm:text-5xl text-white italic font-normal">
-              Cinematic Wedding Films
+              {safeConfig.cinematicFilms?.title || "Cinematic Wedding Films"}
             </h2>
             <p className="text-xs text-[#C5B388] tracking-[0.25em] uppercase mt-2">
-              Teasers & 4K highlight films streaming on YouTube
+              {safeConfig.cinematicFilms?.subtitle || "Teasers & 4K highlight films streaming on YouTube"}
             </p>
             <div className="w-16 h-[1px] bg-[#5B6454]/40 mx-auto mt-4"></div>
           </div>
@@ -448,13 +357,13 @@ export default function LandingPage() {
           {/* MAIN FEATURED CINEMA HERO BANNER */}
           <div className="w-full mb-8">
             <a
-              href="https://www.youtube.com/@WeddingPur"
+              href={safeConfig.cinematicFilms?.mainVideoUrl || "https://www.youtube.com/@lensloom_official"}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative block w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] hover:border-[#D4AF37] hover:shadow-[0_0_40px_rgba(212,175,55,0.35)] transition-all duration-500 bg-black cursor-pointer"
             >
               <img
-                src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85"
+                src={safeConfig.cinematicFilms?.mainThumb || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85"}
                 alt="Sandhya & Pratik Wedding Teaser"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
               />
@@ -485,32 +394,14 @@ export default function LandingPage() {
 
           {/* 4 GRID FILM TEASERS (Direct YouTube Cards) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
-            {[
+            {(safeConfig.cinematicFilms?.grid && safeConfig.cinematicFilms.grid.length > 0 ? safeConfig.cinematicFilms.grid : [
               {
                 couple: "Pankaj & Shritika",
                 subtitle: "Treasured Symphony • Shangri-La Palace, Patna",
                 img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
-                link: "https://www.youtube.com/@WeddingPur"
-              },
-              {
-                couple: "Abhishek & Ruchi",
-                subtitle: "Joyful Reverie • Royal Destination Wedding",
-                img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
-                link: "https://www.youtube.com/@WeddingPur"
-              },
-              {
-                couple: "Ritik & Kajal",
-                subtitle: "Engagement Highlight • Heritage Grand, Patna",
-                img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80",
-                link: "https://www.youtube.com/@WeddingPur"
-              },
-              {
-                couple: "Tanya & Rishabh",
-                subtitle: "Latest Engagement Teaser • Hotel Maurya, Patna",
-                img: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80",
-                link: "https://www.youtube.com/@WeddingPur"
+                link: "https://www.youtube.com/@lensloom_official"
               }
-            ].map((film, idx) => (
+            ]).map((film, idx) => (
               <a
                 key={idx}
                 href={film.link}
@@ -558,7 +449,7 @@ export default function LandingPage() {
           {/* YouTube Channel CTA Button */}
           <div className="text-center mt-12">
             <a
-              href="https://www.youtube.com/@WeddingPur"
+              href="https://www.youtube.com/@lensloom_official"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#E5C158] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#D4AF37]/20 hover:shadow-[0_0_25px_rgba(212,175,55,0.45)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
@@ -569,11 +460,11 @@ export default function LandingPage() {
           </div>
 
           {/* Editorial Quote */}
-          <div className="text-center pt-14 border-t border-[#2B2519] mt-16">
+          {/* <div className="text-center pt-14 border-t border-[#2B2519] mt-16">
             <blockquote className="font-serif text-2xl sm:text-3xl text-white italic max-w-2xl mx-auto">
               "You will forget the flowers and the food, but you will never forget how it felt."
             </blockquote>
-          </div>
+          </div> */}
 
         </div>
       </section>
@@ -744,10 +635,10 @@ export default function LandingPage() {
       <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
         <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 py-16">
           
-          {/* Instagram Profile Header */}
+          {/* Instagram Profile Header Dynamic */}
           <div className="flex flex-col items-center text-center mb-12">
             <a
-              href="https://www.instagram.com/weddingpur/"
+              href={safeConfig.instagram?.profileUrl || "https://www.instagram.com/lensloom_official/"}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex flex-col items-center"
@@ -755,23 +646,24 @@ export default function LandingPage() {
               <div className="w-20 h-20 rounded-full p-1 bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 mb-3 group-hover:scale-105 transition-transform duration-300">
                 <div className="w-full h-full rounded-full bg-[#121518] p-0.5 overflow-hidden">
                   <div className="w-full h-full rounded-full bg-[#0B0D0E] flex items-center justify-center font-serif font-bold text-xl text-white">
-                    W
+                    {(safeConfig.instagram?.handle || "@lensloom_official").replace('@', '').charAt(0).toUpperCase()}
                   </div>
                 </div>
               </div>
               <h3 className="font-semibold text-lg text-white tracking-wide flex items-center gap-1.5 group-hover:text-[#D4AF37] transition-colors">
-                weddingpur
+                {(safeConfig.instagram?.handle || "@lensloom_official").replace('@', '')}
                 <span className="text-blue-500 text-xs">✓</span>
               </h3>
             </a>
 
-            {/* Bio Badges from reference image */}
             <p className="text-xs text-[#C5B388] max-w-2xl mx-auto mt-2 leading-relaxed font-light">
-              🏆 Couples Choice Award 2024 Winner • 🏆 Wedding Awards 2025 Winner • 💍 Wedding Films Expert • 🌍 Available Worldwide
+              {safeConfig.instagram?.badges 
+                ? (typeof safeConfig.instagram.badges === 'string' ? safeConfig.instagram.badges.split(',').join(' • ') : safeConfig.instagram.badges.join(' • '))
+                : "🏆 Couples Choice Award 2024 Winner • 🏆 Wedding Awards 2025 Winner • 💍 Wedding Films Expert • 🌍 Available Worldwide"}
             </p>
 
             <a
-              href="https://www.instagram.com/weddingpur/"
+              href={safeConfig.instagram?.profileUrl || "https://www.instagram.com/lensloom_official/"}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-2 border border-[#5B6454]/70 text-[#D4AF37] hover:bg-[#5B6454] hover:text-[#F5F5F5] px-7 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition duration-300 cursor-pointer"
@@ -783,42 +675,24 @@ export default function LandingPage() {
 
           {/* 3x2 Instagram Post Grid (Direct External Links) */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 w-full mx-auto">
-            {[
-              {
-                img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg",
-                title: "Silhouette Bride Portrait"
-              },
-              {
-                img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
-                title: "Nocturnal Courtyard Vows"
-              },
-              {
-                img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
-                title: "Pink Sherwani Royal Spread"
-              },
-              {
-                img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
-                title: "Intimate Haldi & Pheras"
-              },
-              {
-                img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80",
-                title: "Heritage Archways Sequence"
-              },
-              {
-                img: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80",
-                title: "Royal Red Saree Heirloom"
-              }
-            ].map((post, i) => (
+            {(safeConfig.instagram?.gridImages || [
+              "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg",
+              "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+              "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
+              "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+              "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80",
+              "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80"
+            ]).map((imgSrc, i) => (
               <a
                 key={i}
-                href="https://www.instagram.com/weddingpur/"
+                href={safeConfig.instagram?.profileUrl || "https://www.instagram.com/lensloom_official/"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative aspect-square bg-[#121518] rounded-2xl overflow-hidden shadow-sm block cursor-pointer"
               >
                 <img
-                  src={post.img}
-                  alt={post.title}
+                  src={imgSrc}
+                  alt="Instagram Post"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
 

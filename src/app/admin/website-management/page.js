@@ -38,7 +38,76 @@ function WebsiteManagementContent() {
     bgImage: "https://ik.imagekit.io/weddingpur/hero-cover.jpg",
     ctaPrimaryText: "CONTACT US",
     ctaSecondaryText: "EXPLORE PORTFOLIO",
-    serviceCities: "PATNA • VARANASI • JAIPUR • GOA"
+    serviceCities: "PATNA • VARANASI • JAIPUR • GOA",
+    philosophy: {
+      badge: "OUR EDITORIAL PHILOSOPHY",
+      title: "Unposed. Pure. Poetic.",
+      desc: "We believe the most breathtaking images are the ones you didn't know were being taken.",
+      image: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg",
+      stats: [
+        { value: "150+", label: "WEDDINGS DOCUMENTED" },
+        { value: "10+", label: "AWARDS WON" },
+        { value: "100%", label: "RAW EMOTION" }
+      ]
+    },
+    featuredWeddings: [
+      {
+        title: "Abhishek & Ruchi",
+        location: "ANANYA & KABIR • JAIPUR",
+        img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+        description: "Some weddings are beautiful...",
+        link: ""
+      }
+    ],
+    servicesPillars: [
+      {
+        title: "Destination Wedding Photography",
+        desc: "If you want your wedding to be a thing outside the world, then a destination wedding is the right choice for you.",
+        image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+        link: "/services"
+      },
+      {
+        title: "Candid Style Wedding Photography",
+        desc: "Candid photography is nothing but capturing real moments, feelings and expressions rather than posed ones.",
+        image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
+        link: "/services"
+      },
+      {
+        title: "Wedding Cinematography & Films",
+        desc: "A wedding is like a movie of so many beautiful things coming together into one big happy story that is timeless.",
+        image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+        link: "/services"
+      },
+      {
+        title: "Prewedding Photography & Videos",
+        desc: "Your unmatched love story with you and your beloved in the frame captured months before your big celebration.",
+        image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80",
+        link: "/services"
+      }
+    ],
+    cinematicFilms: {
+      badge: "MOTION & SOUND STORIES",
+      title: "Cinematic Wedding Films",
+      subtitle: "Teasers & 4K highlight films streaming on YouTube",
+      mainVideoUrl: "https://www.youtube.com/@WeddingPur",
+      mainThumb: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85",
+      grid: [
+        { couple: "Pankaj & Shritika", subtitle: "Treasured Symphony", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/@WeddingPur" }
+      ]
+    },
+    instagram: {
+      handle: "@lensloom_official",
+      profileUrl: "https://www.instagram.com/lensloom_official/",
+      badges: "Couples Choice Award 2024 Winner, Wedding Awards 2025 Winner, Wedding Films Expert, Available Worldwide",
+      gridImages: [
+        "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg",
+        "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80"
+      ]
+    }
   });
 
   React.useEffect(() => {
@@ -49,6 +118,44 @@ function WebsiteManagementContent() {
       })
       .catch(err => console.error("Error fetching landing config:", err));
   }, []);
+
+  const [editingPillarIndex, setEditingPillarIndex] = useState(null);
+  const [isNewPillarModal, setIsNewPillarModal] = useState(false);
+  const [pillarFormData, setPillarFormData] = useState({ title: '', desc: '', image: '', link: '' });
+
+  const openPillarModal = (index = null) => {
+    if (index !== null) {
+      setEditingPillarIndex(index);
+      setIsNewPillarModal(false);
+      setPillarFormData(landingConfig.servicesPillars[index]);
+    } else {
+      setEditingPillarIndex(null);
+      setIsNewPillarModal(true);
+      setPillarFormData({ title: '', desc: '', image: '', link: '' });
+    }
+  };
+
+  const closePillarModal = () => {
+    setEditingPillarIndex(null);
+    setIsNewPillarModal(false);
+  };
+
+  const savePillar = () => {
+    const newPillars = [...(landingConfig.servicesPillars || [])];
+    if (editingPillarIndex !== null) {
+      newPillars[editingPillarIndex] = pillarFormData;
+    } else {
+      newPillars.push(pillarFormData);
+    }
+    setLandingConfig({ ...landingConfig, servicesPillars: newPillars });
+    closePillarModal();
+  };
+
+  const deletePillar = (index) => {
+    const newPillars = [...(landingConfig.servicesPillars || [])];
+    newPillars.splice(index, 1);
+    setLandingConfig({ ...landingConfig, servicesPillars: newPillars });
+  };
 
   // 2. Stories State
   const [stories, setStories] = useState([]);
@@ -920,6 +1027,93 @@ function WebsiteManagementContent() {
                 />
               </div>
             </div>
+
+            {/* NEW DYNAMIC SECTIONS UI */}
+            <div className="mt-8 pt-8 border-t border-[#2B2519]">
+              <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white font-sans mb-4">Other Landing Page Sections (JSON View)</h2>
+              <p className="text-xs font-sans text-[#8A7D5C] font-normal mb-4">Edit the raw JSON for complex sections like Philosophy, Featured Weddings, Services, Films, and Instagram. Advanced UI editor coming soon.</p>
+              
+              <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Philosophy Section Config</label>
+              <textarea
+                rows={6}
+                value={JSON.stringify(landingConfig.philosophy, null, 2)}
+                onChange={e => {
+                  try {
+                    const parsed = JSON.parse(e.target.value);
+                    setLandingConfig({ ...landingConfig, philosophy: parsed });
+                  } catch (err) { /* ignore parse error while typing */ }
+                }}
+                className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37] mb-4"
+              />
+
+              <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Featured Weddings Config</label>
+              <textarea
+                rows={6}
+                value={JSON.stringify(landingConfig.featuredWeddings, null, 2)}
+                onChange={e => {
+                  try {
+                    const parsed = JSON.parse(e.target.value);
+                    setLandingConfig({ ...landingConfig, featuredWeddings: parsed });
+                  } catch (err) { /* ignore parse error while typing */ }
+                }}
+                className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37] mb-4"
+              />
+
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px]">Services Pillars Config</label>
+                <button onClick={() => openPillarModal()} className="px-3 py-1 bg-[#181B20] border border-[#2B2519] hover:border-[#D4AF37] text-[#D4AF37] text-[10px] font-sans font-semibold uppercase tracking-wider rounded-lg transition-all cursor-pointer">
+                  + Add Pillar
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-3 mb-4">
+                {(landingConfig.servicesPillars || []).map((pillar, idx) => (
+                  <div key={idx} className="bg-[#181B20] border border-[#2B2519] rounded-xl p-3 flex items-center justify-between">
+                    <div className="flex items-center gap-3 overflow-hidden">
+                      {pillar.image && (
+                        <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-[#2B2519]">
+                          <img src={pillar.image} alt={pillar.title} className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                      <div className="truncate">
+                        <p className="text-xs font-semibold text-white truncate">{pillar.title}</p>
+                        <p className="text-[10px] text-[#8A7D5C] truncate">{pillar.desc}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button onClick={() => openPillarModal(idx)} className="text-[#D4AF37] text-xs font-semibold px-2 py-1 hover:bg-[#121518] rounded cursor-pointer">Edit</button>
+                      <button onClick={() => deletePillar(idx)} className="text-rose-400 text-xs font-semibold px-2 py-1 hover:bg-[#121518] rounded cursor-pointer">Delete</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Cinematic Films Config</label>
+              <textarea
+                rows={6}
+                value={JSON.stringify(landingConfig.cinematicFilms, null, 2)}
+                onChange={e => {
+                  try {
+                    const parsed = JSON.parse(e.target.value);
+                    setLandingConfig({ ...landingConfig, cinematicFilms: parsed });
+                  } catch (err) { /* ignore parse error while typing */ }
+                }}
+                className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37] mb-4"
+              />
+
+              <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Instagram Section Config</label>
+              <textarea
+                rows={6}
+                value={JSON.stringify(landingConfig.instagram, null, 2)}
+                onChange={e => {
+                  try {
+                    const parsed = JSON.parse(e.target.value);
+                    setLandingConfig({ ...landingConfig, instagram: parsed });
+                  } catch (err) { /* ignore parse error while typing */ }
+                }}
+                className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37] mb-4"
+              />
+            </div>
+
           </div>
         )}
 
@@ -1703,6 +1897,46 @@ function WebsiteManagementContent() {
             <div className="flex justify-end gap-3 pt-4 border-t border-[#2B2519]">
               <button onClick={closeAboutModal} className="px-5 py-2.5 rounded-xl border border-[#2B2519] text-[#8A7D5C] hover:text-white font-sans font-semibold uppercase text-xs tracking-wider transition-all cursor-pointer">Cancel</button>
               <button onClick={saveAbout} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-sans font-semibold uppercase tracking-wider text-xs transition-all cursor-pointer">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT / ADD PILLAR */}
+      {(editingPillarIndex !== null || isNewPillarModal) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 font-sans">
+          <div className="bg-[#121518] border border-[#2B2519] rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 lg:p-8 space-y-6 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-[#2B2519] pb-4">
+              <h2 className="text-xl font-sans font-semibold tracking-tight text-white">
+                {isNewPillarModal ? "Add New Pillar" : "Edit Pillar"}
+              </h2>
+              <button onClick={closePillarModal} className="text-[#8A7D5C] hover:text-white text-2xl leading-none cursor-pointer">&times;</button>
+            </div>
+            
+            <div className="space-y-4 text-xs font-sans">
+              <div>
+                <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Title</label>
+                <input type="text" value={pillarFormData.title} onChange={e => setPillarFormData({...pillarFormData, title: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D4AF37]" placeholder="e.g. Destination Wedding Photography" />
+              </div>
+              <div>
+                <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Description</label>
+                <textarea rows={3} value={pillarFormData.desc} onChange={e => setPillarFormData({...pillarFormData, desc: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-[#A89D84] font-normal leading-relaxed focus:outline-none focus:border-[#D4AF37]" placeholder="Description..." />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Image URL</label>
+                  <input type="text" value={pillarFormData.image} onChange={e => setPillarFormData({...pillarFormData, image: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono focus:outline-none focus:border-[#D4AF37]" placeholder="https://..." />
+                </div>
+                <div>
+                  <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Link</label>
+                  <input type="text" value={pillarFormData.link} onChange={e => setPillarFormData({...pillarFormData, link: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono focus:outline-none focus:border-[#D4AF37]" placeholder="/services" />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-[#2B2519]">
+              <button onClick={closePillarModal} className="px-5 py-2.5 rounded-xl border border-[#2B2519] text-[#8A7D5C] hover:text-white font-sans font-semibold uppercase text-xs tracking-wider transition-all cursor-pointer">Cancel</button>
+              <button onClick={savePillar} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-sans font-semibold uppercase tracking-wider text-xs transition-all cursor-pointer">Save Pillar</button>
             </div>
           </div>
         </div>

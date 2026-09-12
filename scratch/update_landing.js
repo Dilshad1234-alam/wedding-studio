@@ -1,84 +1,136 @@
 const fs = require('fs');
 const path = require('path');
 
-const targetFile = path.resolve('src/app/landing/page.js');
-let content = fs.readFileSync(targetFile, 'utf8');
+const filePath = path.join(__dirname, '../src/app/landing/page.js');
+let content = fs.readFileSync(filePath, 'utf8');
 
-// Replacements
-const rules = [
-  // Ambient lighting for main wrapper
-  {
-    regex: /<main className="min-h-screen bg-\[#FAF8F5\] text-\[#1E221D\] font-sans antialiased selection:bg-\[#5B6454\] selection:text-white">/g,
-    replace: '<main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-[#0B0D0E] to-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black">'
-  },
+// 1. Add state for landingConfig and fetch it
+const stateAdd = `  const { handleProtectedAction } = useProtectedAction();
+  const [openFaq, setOpenFaq] = useState(null);
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);`;
 
-  // Primary Action buttons (Contact Us, Subscribe & Watch)
-  {
-    regex: /className="bg-\[#5B6454\] hover:bg-\[#485042\] text-\[#FAF8F5\] ([^"]*)"/g,
-    replace: 'className="bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 $1 font-black"'
-  },
-  
-  // Secondary / Outline Buttons (Explore Portfolio, Our Story, View Story, Learn More, Follow on IG)
-  {
-    regex: /border border-\[#FAF8F5\]\/80 hover:bg-\[#FAF8F5\] hover:text-\[#1E221D\] text-\[#FAF8F5\]/g,
-    replace: 'border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518]'
-  },
-  {
-    regex: /border border-\[#5B6454\](\/60)? text-\[#5B6454\] hover:bg-\[#5B6454\] hover:text-\[#FAF8F5\]( hover:border-\[#5B6454\])?/g,
-    replace: 'border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518]'
-  },
+const newStateAdd = `  const { handleProtectedAction } = useProtectedAction();
+  const [openFaq, setOpenFaq] = useState(null);
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [landingConfig, setLandingConfig] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Highlight Badges / Subtitles (Text #D4AF37 with subtle #D4AF37/10 background and #D4AF37/20 border)
-  // Let's add background and border to the small uppercase spans
-  {
-    regex: /<span className="text-\[10px\](?: sm:text-xs)? uppercase tracking-\[[^\]]+\] text-\[[^\]]+\] font-(?:medium|semibold) block([^"]*)">/g,
-    replace: '<span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">'
-  },
+  React.useEffect(() => {
+    fetch('/api/landing')
+      .then(res => res.json())
+      .then(data => {
+        if (data && Object.keys(data).length > 0) setLandingConfig(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching landing config:", err);
+        setLoading(false);
+      });
+  }, []);
 
-  // Background colors
-  { regex: /bg-\[#FAF8F5\]/g, replace: 'bg-[#0B0D0E]' },
-  { regex: /bg-white/g, replace: 'bg-[#121518]' },
-  { regex: /bg-\[#ECEFEA\]/g, replace: 'bg-[#121518]' },
-  { regex: /bg-\[#1E221D\]/g, replace: 'bg-[#0B0D0E]' }, // Used in Google Reviews
-  { regex: /bg-gray-100/g, replace: 'bg-[#121518]' },
-  
-  // Text colors
-  { regex: /text-\[#1E221D\]/g, replace: 'text-white' },
-  { regex: /text-\[#FAF8F5\]/g, replace: 'text-[#F5F5F5]' },
-  { regex: /text-\[#5F6757\]/g, replace: 'text-[#C5B388]' },
-  { regex: /text-\[#7A8275\]/g, replace: 'text-[#C5B388]' },
-  { regex: /text-\[#525B4C\]/g, replace: 'text-[#C5B388]' },
-  { regex: /text-\[#A2ADA0\]/g, replace: 'text-[#C5B388]' },
-  { regex: /text-gray-300/g, replace: 'text-[#C5B388]' },
-  { regex: /text-\[#ECEFEA\](\/70)?/g, replace: 'text-[#C5B388]' },
-  { regex: /text-\[#5B6454\]/g, replace: 'text-[#D4AF37]' },
-  { regex: /text-\[#E6B85C\]/g, replace: 'text-[#D4AF37]' },
-  { regex: /text-amber-300/g, replace: 'text-[#D4AF37]' },
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D4AF37]"></div>
+      </div>
+    );
+  }
 
-  // Borders
-  { regex: /border-\[#E8E4DB\]/g, replace: 'border-[#2B2519]' },
-  { regex: /border-\[#EAE6DE\]/g, replace: 'border-[#2B2519]' },
-  { regex: /border-\[#E3DFD5\]/g, replace: 'border-[#2B2519]' },
-  { regex: /border-\[#DDD7CD\](\/70)?/g, replace: 'border-[#2B2519]' },
-  { regex: /border-white(\/\d+)?/g, replace: 'border-[#2B2519]' },
-  
-  // Hover states
-  { regex: /hover:border-\[#5B6454\](\/60)?/g, replace: 'hover:border-[#D4AF37]' },
-  { regex: /hover:bg-white\/40/g, replace: 'hover:bg-[#D4AF37]/40' },
-  { regex: /hover:text-\[#E6B85C\]/g, replace: 'hover:text-[#D4AF37]' },
-  { regex: /hover:border-\[#E6B85C\]/g, replace: 'hover:border-[#D4AF37]' },
+  const safeConfig = landingConfig || {};
+`;
 
-  // Carousel dots
-  { regex: /bg-\[#E6B85C\]/g, replace: 'bg-[#D4AF37]' },
-  { regex: /bg-white\/20/g, replace: 'bg-[#D4AF37]/20' },
+content = content.replace(stateAdd, newStateAdd);
 
-  // Highlight word in titles (italic font-light -> gold text)
-  { regex: /<span className="italic font-light">/g, replace: '<span className="italic font-light text-[#D4AF37]">' }
-];
 
-rules.forEach(r => {
-  content = content.replace(r.regex, r.replace);
-});
+// 2. Hero Section
+content = content.replace(
+  `          <span className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-[#C5B388] font-medium mb-3">
+            WEDDINGPUR — BESPOKE WEDDING CINEMA & STILLS
+          </span>`,
+  `          <span className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-[#C5B388] font-medium mb-3">
+            {safeConfig.badge || "WEDDINGPUR — BESPOKE WEDDING CINEMA & STILLS"}
+          </span>`
+);
 
-fs.writeFileSync(targetFile, content, 'utf8');
-console.log('Update complete');
+content = content.replace(
+  `          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#F5F5F5] tracking-tight leading-[1.12] drop-shadow-md">
+            Best Wedding Photographers <br className="hidden sm:inline" />
+            <span className="italic font-light text-[#D4AF37]">In Patna, Bihar</span>
+          </h1>`,
+  `          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#F5F5F5] tracking-tight leading-[1.12] drop-shadow-md">
+            {safeConfig.titleLine1 || "Best Wedding Photographers"} <br className="hidden sm:inline" />
+            <span className="italic font-light text-[#D4AF37]">{safeConfig.titleLine2 || "In Patna, Bihar"}</span>
+          </h1>`
+);
+
+content = content.replace(
+  `          <p className="text-[#F5F5F5]/90 text-sm sm:text-lg font-light tracking-wide max-w-2xl mx-auto mt-6 mb-4">
+            We capture timeless weddings for modern couples who want their story told beautifully.
+          </p>`,
+  `          <p className="text-[#F5F5F5]/90 text-sm sm:text-lg font-light tracking-wide max-w-2xl mx-auto mt-6 mb-4">
+            {safeConfig.subtitle || "We capture timeless weddings for modern couples who want their story told beautifully."}
+          </p>`
+);
+
+content = content.replace(
+  `style={{
+            backgroundImage: \`url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85')\`
+          }}`,
+  `style={{
+            backgroundImage: \`url('\${safeConfig.bgImage || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85'}')\`
+          }}`
+);
+
+
+// 3. Featured Weddings
+content = content.replace(
+  `{[
+              {
+                names: "Abhishek & Ruchi",
+                sub: "ANANYA & KABIR • JAIPUR",
+                img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+                description: "Some weddings are beautiful. Some are unforgettable. Abhishek and Ruchi's wedding was one of a kind. A Marwadi wedding full of life, laughter, and love that every single frame told a story worth saving forever. Click on the button to feel every moment of this beautiful union."
+              },
+              {
+                names: "Akshat & Shivani",
+                sub: "SNEHA & RAHUL • VARANASI",
+                img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
+                description: "Some celebrations feel timeless from the very first moment. Akshat and Shivani's wedding at The Mavrick Resort was one such celebration. A beautiful blend of emotions, traditions and joyful moments where every frame reflected the elegance of their story."
+              },
+              {
+                names: "Minimalist Meadow Vows",
+                sub: "POOJA & NEIL • PATNA",
+                img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80",
+                description: "Some weddings are beautiful. Some are unforgettable. Abhishek and Ruchi's wedding was one of a kind. A Marwadi wedding full of life, laughter, and love that every single frame told a story worth saving forever. Click on the button to feel every moment of this beautiful union."
+              }
+            ].map`,
+  `(safeConfig.featuredWeddings && safeConfig.featuredWeddings.length > 0 ? safeConfig.featuredWeddings : [
+              {
+                title: "Abhishek & Ruchi",
+                location: "ANANYA & KABIR • JAIPUR",
+                img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+                description: "Some weddings are beautiful. Some are unforgettable. Abhishek and Ruchi's wedding was one of a kind. A Marwadi wedding full of life, laughter, and love that every single frame told a story worth saving forever. Click on the button to feel every moment of this beautiful union."
+              }
+            ]).map`
+);
+
+content = content.replace(
+  `alt={story.names}`,
+  `alt={story.title || story.names}`
+);
+
+content = content.replace(
+  `<h3 className="font-serif text-2xl text-white mb-1">{story.names}</h3>`,
+  `<h3 className="font-serif text-2xl text-white mb-1">{story.title || story.names}</h3>`
+);
+
+content = content.replace(
+  `<p className="text-[10px] tracking-[0.25em] uppercase text-[#C5B388] mb-2">{story.sub}</p>`,
+  `<p className="text-[10px] tracking-[0.25em] uppercase text-[#C5B388] mb-2">{story.location || story.sub}</p>`
+);
+
+// 4. Write back
+fs.writeFileSync(filePath, content, 'utf8');
+console.log('Successfully updated landing/page.js');

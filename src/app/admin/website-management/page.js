@@ -920,84 +920,39 @@ function WebsiteManagementContent() {
               </div>
 
               <div className="md:col-span-2 border border-[#2B2519] rounded-2xl p-5 bg-[#121518] space-y-4">
-                <div className="flex items-center justify-between border-b border-[#2B2519] pb-4">
+                <div className="border-b border-[#2B2519] pb-4">
                   <h3 className="text-sm font-sans font-semibold tracking-tight text-white">Hero Background Media</h3>
-                  <div className="flex bg-[#181B20] rounded-lg p-1 border border-[#2B2519]">
-                    <button 
-                      onClick={() => setMediaType('image')} 
-                      className={`px-3 py-1 text-xs font-sans font-semibold rounded-md transition-all ${mediaType === 'image' ? 'bg-[#2B2519] text-[#D4AF37]' : 'text-[#8A7D5C]'}`}
-                    >
-                      High-Res Image
-                    </button>
-                    <button 
-                      onClick={() => setMediaType('video')} 
-                      className={`px-3 py-1 text-xs font-sans font-semibold rounded-md transition-all ${mediaType === 'video' ? 'bg-[#2B2519] text-[#D4AF37]' : 'text-[#8A7D5C]'}`}
-                    >
-                      4K Cinema Video
-                    </button>
+                  <p className="text-[#8A7D5C] text-[10px] uppercase font-mono mt-1">Video overrides image if both are provided.</p>
+                </div>
+
+                <div className="pt-2 space-y-4">
+                  <div>
+                    <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Hero Background Video URL (YouTube)</label>
+                    <input
+                      type="text"
+                      value={landingConfig.bgVideoUrl || ''}
+                      onChange={e => setLandingConfig({ ...landingConfig, bgVideoUrl: e.target.value })}
+                      placeholder="https://www.youtube.com/watch?v=3ImICPkGAkg"
+                      className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37]"
+                    />
                   </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => setSourceMethod('upload')} 
-                    className={`flex-1 py-2 text-[10px] uppercase font-sans font-semibold tracking-wider rounded-xl border transition-all ${sourceMethod === 'upload' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5' : 'border-[#2B2519] text-[#8A7D5C] hover:border-[#8A7D5C]'}`}
-                  >
-                    💻 Upload from PC
-                  </button>
-                  <button 
-                    onClick={() => setSourceMethod('url')} 
-                    className={`flex-1 py-2 text-[10px] uppercase font-sans font-semibold tracking-wider rounded-xl border transition-all ${sourceMethod === 'url' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5' : 'border-[#2B2519] text-[#8A7D5C] hover:border-[#8A7D5C]'}`}
-                  >
-                    🌐 CDN / Web URL
-                  </button>
-                  <button 
-                    onClick={() => setSourceMethod('instagram')} 
-                    className={`flex-1 py-2 text-[10px] uppercase font-sans font-semibold tracking-wider rounded-xl border transition-all ${sourceMethod === 'instagram' ? 'border-pink-500 text-pink-400 bg-pink-500/5' : 'border-[#2B2519] text-[#8A7D5C] hover:border-[#8A7D5C]'}`}
-                  >
-                    📱 Instagram Embed
-                  </button>
-                </div>
-
-                <div className="pt-2">
-                  {sourceMethod === 'upload' && (
-                    <div className="border-2 border-dashed border-[#2B2519] rounded-xl p-6 text-center hover:border-[#D4AF37] transition-all cursor-pointer bg-[#0B0D0E]">
-                      <span className="text-2xl block mb-2">☁️</span>
-                      <p className="text-[#A89D84] font-sans font-semibold text-xs mb-1">Click to upload {mediaType === 'image' ? '.jpg, .png, .webp' : '.mp4, .webm'}</p>
-                      <p className="text-[#8A7D5C] text-[10px] font-mono">Maximum file size: {mediaType === 'image' ? '5MB' : '50MB'}</p>
-                    </div>
-                  )}
-                  {sourceMethod === 'url' && (
-                    <div>
-                      <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Direct CDN Link</label>
-                      <input
-                        type="text"
-                        value={heroMediaSrc}
-                        onChange={e => setHeroMediaSrc(e.target.value)}
-                        placeholder="https://ik.imagekit.io/..."
-                        className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono focus:outline-none focus:border-[#D4AF37]"
-                      />
-                    </div>
-                  )}
-                  {sourceMethod === 'instagram' && (
-                    <div>
-                      <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Instagram Post or Reel URL</label>
-                      <input
-                        type="text"
-                        value={instagramUrl}
-                        onChange={e => setInstagramUrl(e.target.value)}
-                        placeholder="https://www.instagram.com/p/..."
-                        className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono focus:outline-none focus:border-pink-500"
-                      />
-                    </div>
-                  )}
+                  <div>
+                    <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Hero Fallback Background Image (CDN URL)</label>
+                    <input
+                      type="text"
+                      value={landingConfig.bgImage || ''}
+                      onChange={e => setLandingConfig({ ...landingConfig, bgImage: e.target.value })}
+                      placeholder="https://ik.imagekit.io/..."
+                      className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37]"
+                    />
+                  </div>
                 </div>
 
                 {/* Live Preview Box */}
                 <div className="mt-4 border border-[#2B2519] rounded-xl bg-[#0B0D0E] overflow-hidden flex flex-col md:flex-row">
                   <div className="w-full md:w-1/3 bg-[#181B20] flex items-center justify-center p-4 border-b md:border-b-0 md:border-r border-[#2B2519]">
                     <span className="text-4xl text-[#2B2519]">
-                      {mediaType === 'image' ? '🖼️' : '🎬'}
+                      {landingConfig.bgVideoUrl ? '🎬' : '🖼️'}
                     </span>
                   </div>
                   <div className="w-full md:w-2/3 p-4 flex flex-col justify-center">

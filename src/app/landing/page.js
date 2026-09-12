@@ -1,15 +1,16 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useProtectedAction } from '@/hooks/useProtectedAction';
 
-export default function LandingPage() {
+export default function LandingPage({ initialData = null }) {
   const { handleProtectedAction } = useProtectedAction();
   const [openFaq, setOpenFaq] = useState(null);
   const [reviewIndex, setReviewIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [landingConfig, setLandingConfig] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [landingConfig, setLandingConfig] = useState(initialData);
+  const [loading, setLoading] = useState(!initialData);
+
 
   React.useEffect(() => {
     fetch('/api/landing')
@@ -23,6 +24,14 @@ export default function LandingPage() {
         setLoading(false);
       });
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D4AF37]"></div>
+      </div>
+    );
+  }
 
   const safeConfig = landingConfig || {};
 
@@ -94,6 +103,14 @@ export default function LandingPage() {
     );
   }
 
+  const getYoutubeId = (url) => {
+    if (!url) return null;
+    const match = url.match(/[?&]v=([^&]+)/) || url.match(/youtu\.be\/([^?]+)/);
+    return match ? match[1] : null;
+  };
+
+  const heroVideoId = getYoutubeId(safeConfig.bgVideoUrl || "https://www.youtube.com/watch?v=3ImICPkGAkg");
+
   return (
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-[#0B0D0E] to-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
       
@@ -102,16 +119,22 @@ export default function LandingPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center z-0 scale-100"
           style={{
-            backgroundImage: `url('${safeConfig.bgImage || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85'}')`
+            backgroundImage: !heroVideoId ? `url('${safeConfig.bgImage || 'https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%202.avif'}')` : 'none'
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1E221D]/75 via-[#1E221D]/55 to-[#1E221D]/85"></div>
+          {heroVideoId && (
+            <iframe
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-125 sm:scale-150"
+              src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&playlist=${heroVideoId}&controls=0&showinfo=0&autohide=1&modestbranding=1&iv_load_policy=3&disablekb=1`}
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            ></iframe>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1E221D]/75 via-[#1E221D]/55 to-[#1E221D]/85 z-10"></div>
         </div>
 
         <div className="w-full min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-8 text-center relative z-10 mx-auto">
-          <span className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-[#C5B388] font-medium mb-3">
-            {safeConfig.badge || "WEDDINGPUR — BESPOKE WEDDING CINEMA & STILLS"}
-          </span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#F5F5F5] tracking-tight leading-[1.12] drop-shadow-md">
             {safeConfig.titleLine1 || "Best Wedding Photographers"} <br className="hidden sm:inline" />
             <span className="italic font-light text-[#D4AF37]">{safeConfig.titleLine2 || "In Patna, Bihar"}</span>
@@ -287,39 +310,57 @@ export default function LandingPage() {
           </div>
 
           {/* Services Carousel Dynamic */}
-          <div className="relative group">
-            {/* Optional scroll hint on desktop */}
-            <div className="absolute -top-8 right-4 hidden md:flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#8A7D5C] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-              <span>Scroll to explore</span>
-              <svg className="w-4 h-4 animate-bounce-x" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-            </div>
+          <div className="flex overflow-hidden w-full py-4 group">
             
-            <div className="flex overflow-x-auto scroll-smooth gap-6 sm:gap-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full pb-8">
-              {(safeConfig.servicesPillars && safeConfig.servicesPillars.length > 0 ? safeConfig.servicesPillars : [
-                {
-                  title: "Destination Wedding Photography",
-                  desc: "If you want your wedding to be a thing outside the world, then a destination wedding is the right choice for you.",
-                  image: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
-                  link: "/services"
-                }
-              ]).map((pillar, i) => (
-                <div key={i} className="min-w-[85vw] sm:min-w-[45vw] lg:min-w-[400px] snap-center bg-[#121518] rounded-3xl p-6 lg:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 shrink-0">
+            <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] gap-6 px-3">
+              {[...(safeConfig.servicesPillars || []), ...(safeConfig.servicesPillars || [])].map((pillar, i) => (
+                <div key={`set1-${i}`} className="w-[320px] sm:w-[350px] shrink-0 bg-[#121518] rounded-3xl p-6 sm:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group/card hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 min-h-[460px]">
                   <div>
-                    <div className="w-full aspect-[4/3] mb-8 rounded-2xl overflow-hidden bg-[#0B0D0E] border border-[#2B2519]">
+                    <div className="w-full h-[240px] mb-6 rounded-2xl overflow-hidden bg-[#0B0D0E] border border-[#2B2519]">
                       <img 
                         src={pillar.image} 
                         alt={pillar.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" 
+                        className="w-full h-full object-cover object-top group-hover/card:scale-105 transition-transform duration-700 opacity-90 group-hover/card:opacity-100" 
                       />
                     </div>
-                    <h3 className="font-serif text-2xl text-white mb-4 font-normal leading-snug group-hover:text-[#D4AF37] transition-colors">
+                    <h3 className="font-serif text-2xl text-white mb-3 font-normal leading-snug group-hover/card:text-[#D4AF37] transition-colors">
                       {pillar.title}
                     </h3>
-                    <p className="text-sm text-[#C5B388] font-light leading-relaxed mb-8 max-w-sm mx-auto">
+                    <p className="text-sm text-[#C5B388] font-light leading-relaxed mb-6 max-w-sm mx-auto line-clamp-3">
                       {pillar.desc}
                     </p>
                   </div>
+                  <div className="mt-auto pt-2">
+                    <Link 
+                      className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-black hover:border-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] py-3 px-8 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm" 
+                      href={pillar.link || "/services"}
+                    >
+                      Learn More
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] gap-6 px-3" aria-hidden="true">
+              {[...(safeConfig.servicesPillars || []), ...(safeConfig.servicesPillars || [])].map((pillar, i) => (
+                <div key={`set2-${i}`} className="w-[320px] sm:w-[350px] shrink-0 bg-[#121518] rounded-3xl p-6 sm:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group/card hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 min-h-[460px]">
                   <div>
+                    <div className="w-full h-[240px] mb-6 rounded-2xl overflow-hidden bg-[#0B0D0E] border border-[#2B2519]">
+                      <img 
+                        src={pillar.image} 
+                        alt={pillar.title} 
+                        className="w-full h-full object-cover object-top group-hover/card:scale-105 transition-transform duration-700 opacity-90 group-hover/card:opacity-100" 
+                      />
+                    </div>
+                    <h3 className="font-serif text-2xl text-white mb-3 font-normal leading-snug group-hover/card:text-[#D4AF37] transition-colors">
+                      {pillar.title}
+                    </h3>
+                    <p className="text-sm text-[#C5B388] font-light leading-relaxed mb-6 max-w-sm mx-auto line-clamp-3">
+                      {pillar.desc}
+                    </p>
+                  </div>
+                  <div className="mt-auto pt-2">
                     <Link 
                       className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-black hover:border-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] py-3 px-8 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm" 
                       href={pillar.link || "/services"}
@@ -357,14 +398,14 @@ export default function LandingPage() {
           {/* MAIN FEATURED CINEMA HERO BANNER */}
           <div className="w-full mb-8">
             <a
-              href={safeConfig.cinematicFilms?.mainVideoUrl || "https://www.youtube.com/@lensloom_official"}
+              href={safeConfig.cinematicFilms?.mainVideoUrl || "https://www.youtube.com/watch?v=3ImICPkGAkg"}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative block w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] hover:border-[#D4AF37] hover:shadow-[0_0_40px_rgba(212,175,55,0.35)] transition-all duration-500 bg-black cursor-pointer"
             >
               <img
-                src={safeConfig.cinematicFilms?.mainThumb || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85"}
-                alt="Sandhya & Pratik Wedding Teaser"
+                src={safeConfig.cinematicFilms?.mainThumb || "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%202.avif"}
+                alt="Nitika weds Abhinav | Darjeeling Pre Wedding"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
@@ -385,7 +426,7 @@ export default function LandingPage() {
               <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2">
                 <div>
                   <span className="text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">Featured Teaser • 4K Film</span>
-                  <h3 className="font-serif text-2xl sm:text-3xl italic">Sandhya & Pratik — Vishwanath Farms, Patna</h3>
+                  <h3 className="font-serif text-2xl sm:text-3xl italic">Nitika weds Abhinav | Darjeeling Pre Wedding</h3>
                 </div>
                 <span className="text-xs text-white/70 tracking-wider">Streaming in 4K UHD</span>
               </div>
@@ -396,10 +437,16 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
             {(safeConfig.cinematicFilms?.grid && safeConfig.cinematicFilms.grid.length > 0 ? safeConfig.cinematicFilms.grid : [
               {
-                couple: "Pankaj & Shritika",
+                couple: "Nitika weds Abhinav",
                 subtitle: "Treasured Symphony • Shangri-La Palace, Patna",
-                img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
-                link: "https://www.youtube.com/@lensloom_official"
+                img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%201.avif",
+                link: "https://www.youtube.com/watch?v=BL6gFtSKTjk"
+              },
+              {
+                couple: "Nitika weds Abhinav",
+                subtitle: "Treasured Symphony • Shangri-La Palace, Patna",
+                img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%203.avif",
+                link: "https://www.youtube.com/watch?v=ioNQNyoh6eQ"
               }
             ]).map((film, idx) => (
               <a
@@ -656,11 +703,11 @@ export default function LandingPage() {
               </h3>
             </a>
 
-            <p className="text-xs text-[#C5B388] max-w-2xl mx-auto mt-2 leading-relaxed font-light">
+            {/* <p className="text-xs text-[#C5B388] max-w-2xl mx-auto mt-2 leading-relaxed font-light">
               {safeConfig.instagram?.badges 
                 ? (typeof safeConfig.instagram.badges === 'string' ? safeConfig.instagram.badges.split(',').join(' • ') : safeConfig.instagram.badges.join(' • '))
                 : "🏆 Couples Choice Award 2024 Winner • 🏆 Wedding Awards 2025 Winner • 💍 Wedding Films Expert • 🌍 Available Worldwide"}
-            </p>
+            </p> */}
 
             <a
               href={safeConfig.instagram?.profileUrl || "https://www.instagram.com/lensloom_official/"}

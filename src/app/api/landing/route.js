@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import dbConnect from '@/lib/dbConnect';
 import SiteContent from '@/models/SiteContent';
 
@@ -22,6 +23,8 @@ export async function PUT(req) {
       { $set: { data: body } },
       { upsert: true, new: true }
     );
+    
+    revalidatePath('/');
     
     return NextResponse.json({ success: true, landing: body });
   } catch (error) {

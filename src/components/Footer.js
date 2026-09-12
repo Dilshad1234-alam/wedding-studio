@@ -32,9 +32,9 @@ const FacebookIcon = ({ size = 18 }) => (
 
 export default function Footer() {
   const [settings, setSettings] = useState({
-    instagramUrl: "https://www.instagram.com/weddingpur/",
-    youtubeUrl: "https://www.youtube.com/@weddingpur",
-    copyrightText: "Copyright 2026. Weddingpur"
+    instagramUrl: "https://www.instagram.com/lensloom_official?stkn=MTc3Zzl0c2c1dWo4ag%3D%3D",
+    youtubeUrl: "https://www.youtube.com/@lensloom_official",
+    copyrightText: "© 2026 LensLoom Production. All rights reserved."
   });
 
   useEffect(() => {
@@ -60,36 +60,49 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-[#0B0D0E]/90 backdrop-blur-md border-t border-[#2B2519] text-[#F5F5F5] py-16 px-6 sm:px-12 font-sans relative z-10">
-      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+    <footer className="bg-[#0B0D0E]/90 backdrop-blur-md border-t border-[#2B2519] text-[#F5F5F5] font-sans relative z-10">
+      <div className="max-w-[1536px] mx-auto px-6 sm:px-10 lg:px-16 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 items-start">
         
-        {/* Left: Informations */}
-        <div className="flex flex-col">
-          <h4 className="text-[10px] tracking-[0.3em] uppercase text-[#C5B388] font-semibold mb-6">
-            INFORMATIONS
-          </h4>
-          <div className="flex flex-col sm:flex-row gap-6 sm:gap-16 text-xs text-[#F5F5F5]/70 font-light">
-            <div className="flex flex-col gap-4">
-              <Link href="/privacy-policy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-[#D4AF37] transition-colors">Terms & Conditions</Link>
-            </div>
-            <div className="flex flex-col gap-4">
-              <a href="https://weddingpurindia.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
-                weddingpurindia.com
-              </a>
-              <Link href="/contact" className="hover:text-[#D4AF37] transition-colors">Contact Us</Link>
+        {/* Left: Logo & Brand */}
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+          <Link href="/" className="inline-block mb-6 hover:scale-[1.02] transition-transform duration-300">
+            <img 
+              src="/logo lens.png" 
+              alt="LensLoom Production" 
+              className="h-10 sm:h-12 w-auto object-contain mix-blend-screen"
+              style={{ mixBlendMode: 'screen' }}
+            />
+          </Link>
+          <p className="text-xs text-[#F5F5F5]/70 font-light max-w-xs">
+            Bespoke wedding cinema and photography capturing timeless love stories for modern couples worldwide.
+          </p>
+        </div>
+
+        {/* Center: Informations */}
+        <div className="flex flex-col items-center md:items-center">
+          <div className="flex flex-col">
+            <h4 className="text-[10px] tracking-[0.3em] uppercase text-[#C5B388] font-semibold mb-6 text-center md:text-left">
+              INFORMATIONS
+            </h4>
+            <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 text-xs text-[#F5F5F5]/70 font-light text-center md:text-left">
+              <div className="flex flex-col gap-4">
+                <a href="https://lensloom.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors">
+                  lensloom.com
+                </a>
+                <Link href="/contact" className="hover:text-[#D4AF37] transition-colors">Contact Us</Link>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right: Social & Copyright */}
-        <div className="flex flex-col items-start md:items-end gap-6">
-          <div className="flex space-x-3">
+        <div className="flex flex-col items-center md:items-end w-full gap-6">
+          <div className="flex space-x-4">
             {[
-              { icon: <InstagramIcon />, label: "Instagram", href: settings.instagramUrl || "https://www.instagram.com/weddingpur/" },
-              { icon: <YoutubeIcon />, label: "YouTube", href: settings.youtubeUrl || "https://www.youtube.com/@weddingpur" },
-              { icon: <PinterestIcon />, label: "Pinterest", href: "https://in.pinterest.com/weddingpur/" },
-              { icon: <FacebookIcon />, label: "Facebook", href: "https://www.facebook.com/weddingpur/" }
+              { icon: <InstagramIcon />, label: "Instagram", href: "https://www.instagram.com/lensloom_official?stkn=MTc3Zzl0c2c1dWo4ag%3D%3D" },
+              { icon: <YoutubeIcon />, label: "YouTube", href: "https://www.youtube.com/@lensloom_official" },
+              { icon: <PinterestIcon />, label: "Pinterest", href: "https://in.pinterest.com/lensloom_official/" },
+              { icon: <FacebookIcon />, label: "Facebook", href: "https://www.facebook.com/lensloom_official/" }
             ].map((social, idx) => (
               <a 
                 key={idx}
@@ -97,13 +110,13 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="w-10 h-10 rounded-full border border-[#2B2519] text-[#C5B388] flex items-center justify-center hover:border-[#D4AF37] hover:bg-[#121518] hover:text-[#D4AF37] transition-all"
+                className="w-10 h-10 rounded-full border border-[#2B2519] text-[#C5B388] flex items-center justify-center hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all duration-300"
               >
                 {social.icon}
               </a>
             ))}
           </div>
-          <p className="text-[10px] text-[#C5B388] tracking-[0.2em] uppercase">{settings.copyrightText}</p>
+          <p className="text-[10px] text-[#C5B388] tracking-[0.2em] uppercase text-center md:text-right">{settings.copyrightText}</p>
         </div>
 
       </div>

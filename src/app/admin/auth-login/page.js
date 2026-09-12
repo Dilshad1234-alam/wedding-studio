@@ -62,12 +62,11 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-[430px] bg-[#121212]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 shadow-[0_0_50px_-12px_rgba(212,163,89,0.2)]">
         <div className="text-center mb-6">
           <Link className="inline-block group cursor-pointer transition-transform duration-300 hover:scale-[1.03]" href="/" title="Back to Home">
-            <span className="text-sm sm:text-base font-black tracking-[0.35em] text-[#D4AF37] block group-hover:text-[#F3E5AB] transition-colors">
-              WEDDINGPUR
-            </span>
-            <span className="text-[9px] uppercase tracking-[0.25em] text-[#8A7D5C] block mt-0.5 group-hover:text-[#C5B388] transition-colors">
-              STUDIO & CINEMA
-            </span>
+            <img 
+              src="/lens.png" 
+              alt="LensLoom Production" 
+              className="h-10 w-auto object-contain mx-auto" 
+            />
           </Link>
         </div>
           

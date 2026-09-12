@@ -7,6 +7,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        marquee: 'marquee 60s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        }
+      },
       fontFamily: {
         serif: ['var(--font-cormorant)', 'Georgia', 'serif'],
         sans: ['var(--font-montserrat)', 'sans-serif'],

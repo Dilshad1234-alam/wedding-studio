@@ -35,13 +35,16 @@ export default function AdminLayout({ children }) {
       <aside className="w-64 border-r border-[#1F242D] bg-[#0E1114] flex flex-col justify-between p-6 shrink-0 sticky top-0 h-screen overflow-y-auto">
         <div>
           {/* Logo */}
-          <div className="mb-10">
-            <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block">
+          <div className="mb-10 bg-transparent">
+            <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block mb-3">
               ROYALE COMMAND
             </span>
-            <span className="text-xl font-black tracking-widest text-[#D4AF37] block mt-1">
-              LENSLOOM
-            </span>
+            <img 
+              src="/logo lens_3.png" 
+              alt="LensLoom Production" 
+              className="h-16 w-auto object-contain mix-blend-screen"
+              style={{ mixBlendMode: 'screen' }}
+            />
           </div>
 
           {/* Navigation Links */}

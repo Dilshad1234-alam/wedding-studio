@@ -92,20 +92,14 @@ export default function Navbar() {
               <a
                 href="/"
                 onClick={handleLogoClick}
-                className="flex flex-col items-center lg:items-start text-left group cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02] focus:outline-none"
+                className="flex flex-col items-center lg:items-start text-left group cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02] focus:outline-none bg-transparent"
               >
-                {settings.logoType === 'IMAGE' && settings.logoImageUrl ? (
-                  <img src={settings.logoImageUrl} alt={settings.brandName} className="h-10 object-contain" />
-                ) : (
-                  <>
-                    <span className="font-serif tracking-[0.28em] text-xl sm:text-2xl font-semibold text-[#D4AF37] group-hover:text-[#F3E5AB] transition-colors duration-300 leading-none">
-                      {settings.brandName || "WEDDINGPUR"}
-                    </span>
-                    <span className="text-[9px] uppercase tracking-[0.38em] text-[#C5B388] font-medium mt-1 group-hover:text-[#D4AF37] transition-colors duration-300 text-center lg:text-left">
-                      {settings.brandTagline || "Studio & Cinema"}
-                    </span>
-                  </>
-                )}
+                <img 
+                  src="/logo lens.png" 
+                  alt="LensLoom Production" 
+                  className="h-16 sm:h-20 w-auto object-contain mix-blend-screen" 
+                  style={{ mixBlendMode: 'screen' }}
+                />
               </a>
             </div>
             

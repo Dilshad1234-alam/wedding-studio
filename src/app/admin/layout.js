@@ -36,7 +36,7 @@ export default function AdminLayout({ children }) {
       <aside className="w-64 border-r border-[#1F242D] bg-[#0E1114] flex flex-col justify-between p-6 shrink-0 sticky top-0 h-screen overflow-y-auto">
         <div>
           {/* Logo */}
-          <div className="mb-10 bg-transparent">
+          <div className="mb-10 bg-transparent flex items-center justify-start -ml-4">
             {/* <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block mb-3">
               ROYALE COMMAND
             </span> */}

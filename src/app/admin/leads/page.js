@@ -9,16 +9,6 @@ export default function LeadsManagementPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  useEffect(() => {
-    const token = sessionStorage.getItem('weddingpur_token');
-    if (!token) {
-      router.push('/admin');
-    } else {
-      setIsAuthorized(true);
-      fetchLeads();
-    }
-  }, [router]);
-
   const fetchLeads = async () => {
     try {
       const res = await fetch('/api/leads');
@@ -32,6 +22,16 @@ export default function LeadsManagementPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('weddingpur_token');
+    if (!token) {
+      router.push('/admin');
+    } else {
+      setIsAuthorized(true);
+      fetchLeads();
+    }
+  }, [router]);
 
   if (!isAuthorized) return null;
 

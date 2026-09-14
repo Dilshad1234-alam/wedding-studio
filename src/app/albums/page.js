@@ -13,7 +13,7 @@ export default function AlbumsPage() {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
 
-    fetch('/api/albums')
+    fetch('/api/albums', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         setFeatureSection(data.featureSection || {});
@@ -35,6 +35,14 @@ export default function AlbumsPage() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#07090A] flex items-center justify-center pt-0 pb-12 px-6">
+        <div className="w-10 h-10 border-4 border-[#D4AF37]/30 border-t-[#D4AF37] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#07090A] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black pb-24 relative overflow-hidden">
       
@@ -42,7 +50,7 @@ export default function AlbumsPage() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#D4AF37]/5 blur-[150px] pointer-events-none rounded-full" />
 
       {/* 1. WHY WEDDING ALBUMS MATTER (Feature Hero) */}
-      <section className="pt-28 pb-20 px-6 max-w-[1440px] mx-auto relative z-10">
+      <section className="pt-8 sm:pt-10 pb-8 sm:pb-12 px-6 max-w-[1440px] mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Left Text Box */}
@@ -83,9 +91,9 @@ export default function AlbumsPage() {
       </section>
 
       {/* 2. ALBUM EDITIONS SHOWROOM */}
-      <section id="editions" className="w-full max-w-[1440px] mx-auto px-6 sm:px-8 py-24 relative z-10">
+      <section id="editions" className="w-full max-w-[1440px] mx-auto px-6 sm:px-8 pt-8 pb-16 relative z-10">
         
-        <div className="text-center mb-20 space-y-4">
+        <div className="text-center mb-12 space-y-4">
           <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-white italic tracking-tight">Curated Editions</h2>
           <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mx-auto"></div>
           <p className="text-[#8A7D5C] text-xs font-mono tracking-widest uppercase">Select your heirloom presentation</p>
@@ -159,14 +167,6 @@ export default function AlbumsPage() {
           </div>
         )}
       </section>
-
-      {/* 3. CTA */}
-      <section className="text-center pt-8 pb-10">
-        <Link className="inline-block px-12 py-4 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-black text-xs uppercase tracking-widest shadow-xl shadow-[#D4AF37]/20 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300" href="/contact?subject=Album Design">
-          DESIGN YOUR ALBUM ↗
-        </Link>
-      </section>
-
     </main>
   );
 }

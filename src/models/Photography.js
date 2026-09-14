@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const PhotographySchema = new mongoose.Schema({
   title: { type: String, required: true },
-  venue: { type: String },
+  location: { type: String },
   category: { type: String },
   imageUrl: { type: String, required: true },
 }, { timestamps: true, collection: 'photography' });

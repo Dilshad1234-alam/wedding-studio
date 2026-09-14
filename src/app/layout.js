@@ -18,14 +18,18 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: 'Lumen Weddings | Luxury Wedding Photographer in Patna',
+  title: 'LensLoom Production | Luxury Wedding Cinema & Photography',
   description: 'Luxury candid wedding photography, pre-weddings, and cinematic films.',
+  icons: {
+    icon: '/layer 0.png',
+    apple: '/layer 0.png',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${cormorant.variable} ${montserrat.variable}`}>
-      <body className="bg-[#0B0D0E] text-[#F5F5F5] m-0 p-0 antialiased min-h-screen flex flex-col font-sans selection:bg-[#D4AF37] selection:text-black">
+    <html lang="en" data-scroll-behavior="smooth" className={`${cormorant.variable} ${montserrat.variable}`} suppressHydrationWarning>
+      <body className="bg-[#0B0D0E] text-[#F5F5F5] m-0 p-0 antialiased min-h-screen flex flex-col font-sans selection:bg-[#D4AF37] selection:text-black" suppressHydrationWarning>
         <LayoutWrapper>
           {children}
         </LayoutWrapper>

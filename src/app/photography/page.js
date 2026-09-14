@@ -13,39 +13,34 @@ export default function PortfolioPage() {
   ];
 
   const [galleryItems, setGalleryItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
-    // 1. Initial Fetch
-    fetch('/api/photography')
+    fetch('/api/photography', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
-          const mapped = data.map(p => ({
-            id: p.id,
-            title: p.title,
-            category: p.category.toLowerCase().replace(/ & /g, '-'), // normalizes "Haldi & Sangeet" to "haldi-sangeet"
-            location: p.venue,
-            img: p.imageUrl
-          }));
-          setGalleryItems(mapped);
+          const mappedData = data.map(item => {
+            let catKey = 'wedding';
+            if (item.category === 'Pre-Wedding') catKey = 'pre-wedding';
+            else if (item.category === 'Haldi & Sangeet') catKey = 'haldi-sangeet';
+            
+            return {
+              id: item.id || Math.random().toString(),
+              title: item.title,
+              category: catKey,
+              location: item.location,
+              img: item.imageUrl
+            };
+          });
+          setGalleryItems(mappedData);
         }
+        setIsLoading(false);
       })
-      .catch(err => console.error("Error fetching photography:", err));
-
-    // 2. Cross-tab sync for deletions
-    const handleStorageChange = (e) => {
-      if (e.key === 'weddingpur_photo_deleted' && e.newValue) {
-        try {
-          const { id } = JSON.parse(e.newValue);
-          setGalleryItems(prev => prev.filter(photo => photo.id !== id));
-        } catch (err) {
-          console.error("Error parsing deleted photo event:", err);
-        }
-      }
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+      .catch(err => {
+        console.error("Error fetching photography:", err);
+        setIsLoading(false);
+      });
   }, []);
 
   const filteredItems = activeFilter === 'all'
@@ -56,10 +51,7 @@ export default function PortfolioPage() {
     <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
       {/* 1. PORTFOLIO HERO HEADER */}
-      <section className=" pb-12 px-6 text-center max-w-4xl mx-auto">
-        {/* <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-black block  mb-3">
-          PORTFOLIO
-        </span> */}
+      <section className="pt-4 sm:pt-6 pb-12 px-6 text-center max-w-4xl mx-auto">
         <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
           Recent Captures
         </h1>
@@ -86,49 +78,59 @@ export default function PortfolioPage() {
       </section>
 
       {/* 2. BALANCED GALLERY GRID (UNIFORM HEIGHT & CLEAN BOTTOM MARGIN) */}
-      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8  py-8 ">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {filteredItems.map((item, idx) => (
-            <div
-              key={idx}
-              className="group flex flex-col justify-between bg-[#121518] rounded-3xl p-3 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40/40 transition-all duration-500"
-            >
-              {/* Strict aspect ratio container locks every card to the identical height */}
-              <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#121518]">
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                />
-                
-                {/* Subtle vignette hover gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <div className="text-white">
-                    <span className="text-[10px] uppercase tracking-widest text-[#C5B388]/80 block">
-                      {item.location}
-                    </span>
-                    <h3 className="font-serif text-2xl italic">{item.title}</h3>
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20 text-[#D4AF37]">
+            Loading...
+          </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="flex justify-center items-center py-20 text-[#C5B388]">
+            No captures available in this category.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {filteredItems.map((item) => (
+              <div
+                key={item.id}
+                className="group flex flex-col justify-between bg-[#121518] rounded-3xl p-3 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40 transition-all duration-500"
+              >
+                {/* Strict aspect ratio container locks every card to the identical height */}
+                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#121518]">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                  
+                  {/* Subtle vignette hover gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <div className="text-white">
+                      <span className="text-[10px] uppercase tracking-widest text-[#C5B388]/80 block">
+                        {item.location}
+                      </span>
+                      <h3 className="font-serif text-2xl italic">{item.title}</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Minimalist Card Details Below Image */}
-              <div className="pt-4 pb-2 px-3 flex items-center justify-between">
-                <div>
-                  <h4 className="font-serif text-lg text-[#F5F5F5] group-hover:text-[#D4AF37] transition-colors">
-                    {item.title}
-                  </h4>
-                  <p className="text-[10px] uppercase tracking-widest text-[#C5B388]">
-                    {item.location}
-                  </p>
+                {/* Minimalist Card Details Below Image */}
+                <div className="pt-4 pb-2 px-3 flex items-center justify-between">
+                  <div>
+                    <h4 className="font-serif text-lg text-[#F5F5F5] group-hover:text-[#D4AF37] transition-colors">
+                      {item.title}
+                    </h4>
+                    <p className="text-[10px] uppercase tracking-widest text-[#C5B388]">
+                      {item.location}
+                    </p>
+                  </div>
+                  <Link aria-label="Book a shoot" className="w-9 h-9 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:shadow-[0_0_15px_rgba(212,175,55,0.45)] transition-all text-xs" href="/contact">
+                    ↗
+                  </Link>
                 </div>
-                <Link aria-label="Book a shoot" className="w-9 h-9 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:shadow-[0_0_15px_rgba(212,175,55,0.45)] transition-all text-xs" href="/contact">
-                  ↗
-                </Link>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
     </main>

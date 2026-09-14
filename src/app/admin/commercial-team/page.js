@@ -105,6 +105,43 @@ function CrewDirectoryContent() {
     }
   };
 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState({ id: '', name: '', craftRole: '', city: '', agreedRate: '', phone: '', availabilityStatus: '' });
+
+  const handleEditClick = (member) => {
+    setEditingMember({ 
+      id: member._id || member.id,
+      name: member.name || '',
+      craftRole: member.craftRole || member.role || '',
+      city: member.city || '',
+      agreedRate: member.agreedRate || member.rate || '',
+      phone: member.phone || member.whatsapp || '',
+      availabilityStatus: member.availabilityStatus || member.status || 'AVAILABLE'
+    });
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateMember = async (e) => {
+    e.preventDefault();
+    if (!editingMember.name || !editingMember.craftRole) return;
+    
+    try {
+      const res = await fetch('/api/commercial/team', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editingMember)
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setTeamMembers(prev => prev.map(m => (m._id || m.id) === editingMember.id ? data.member : m));
+        setIsEditModalOpen(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Master Brand/Commercial Shoots Roster Database
   const allClientAssignments = [
     { crewName: "John Doe", clientName: "NIKE INDIA", date: "15 Sep", month: "September", eventName: "Brand Ad Shoot", location: "Mumbai Studio", roleAssigned: "Lead DP" },
@@ -284,6 +321,19 @@ function CrewDirectoryContent() {
                         </td>
 
                         <td className="py-4 px-6 text-center">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditClick(member);
+                            }}
+                            title="Edit Crew Member"
+                            className="p-2 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#8A7D5C] hover:text-[#D4AF37] hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/10 transition-all duration-200 cursor-pointer inline-flex items-center justify-center mr-2"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                          </button>
                           <button
                             type="button"
                             onClick={(e) => {
@@ -469,6 +519,56 @@ function CrewDirectoryContent() {
               </button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* EDIT CREW MEMBER MODAL */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 font-sans">
+          <div className="bg-[#121518] border border-[#2B2519] rounded-3xl p-8 shadow-2xl max-w-md w-full relative">
+            <button 
+              onClick={() => setIsEditModalOpen(false)}
+              className="absolute top-5 right-5 text-[#8A7D5C] hover:text-[#D4AF37] text-2xl leading-none cursor-pointer"
+            >
+              ✕
+            </button>
+            <h2 className="text-xl font-sans font-semibold tracking-tight text-white mb-6">Edit Team Member</h2>
+            <form onSubmit={handleUpdateMember} className="space-y-4">
+              <div>
+                <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Name *</label>
+                <input type="text" required value={editingMember.name} onChange={e => setEditingMember({...editingMember, name: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. Arjun Kumar" />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Craft / Role *</label>
+                <input type="text" required value={editingMember.craftRole} onChange={e => setEditingMember({...editingMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. LEAD CINEMATOGRAPHER" />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">City / Address</label>
+                <input type="text" value={editingMember.city} onChange={e => setEditingMember({...editingMember, city: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. Patna" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Payout Rate</label>
+                  <input type="text" value={editingMember.agreedRate} onChange={e => setEditingMember({...editingMember, agreedRate: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs font-mono text-emerald-400 focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. ₹5,000 / Day" />
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Mobile</label>
+                  <input type="text" value={editingMember.phone} onChange={e => setEditingMember({...editingMember, phone: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs font-mono text-white focus:outline-none focus:border-[#D4AF37]" placeholder="9876543210" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Availability</label>
+                <select value={editingMember.availabilityStatus} onChange={e => setEditingMember({...editingMember, availabilityStatus: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                  <option value="AVAILABLE">AVAILABLE</option>
+                  <option value="BOOKED">BOOKED</option>
+                  <option value="UNAVAILABLE">UNAVAILABLE</option>
+                </select>
+              </div>
+              <button type="submit" className="w-full mt-4 py-3.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs font-sans font-semibold uppercase tracking-wider transition-all cursor-pointer shadow-md">
+                Save Changes
+              </button>
+            </form>
           </div>
         </div>
       )}

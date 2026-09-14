@@ -140,10 +140,10 @@ export default function OverviewPage() {
               <span className="px-3 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] text-[10px] font-black uppercase tracking-[0.2em]">
                 ROYALE COMMAND • {currentDate || '2026'} • ENTERPRISE SUITE
               </span>
-              <span className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-medium">
+              {/* <span className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-medium">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 MongoDB Database Connected
-              </span>
+              </span> */}
             </div>
             
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white font-sans">

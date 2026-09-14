@@ -4,9 +4,11 @@ import Link from 'next/link';
 
 export default function BlogPage() {
   const [posts, setPosts] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetch('/api/blogs')
+    setIsLoading(true);
+    fetch('/api/blogs', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -15,13 +17,14 @@ export default function BlogPage() {
             id: b.id,
             category: "Journal", // Or extract from a field if we add it
             title: b.title,
-            image: b.img || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
+            image: b.img || "",
             slug: b.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
           }));
           setPosts(mapped);
         }
       })
-      .catch(err => console.error("Error fetching blogs:", err));
+      .catch(err => console.error("Error fetching blogs:", err))
+      .finally(() => setIsLoading(false));
 
     const handleStorageChange = (e) => {
       if (e.key === 'weddingpur_blog_deleted' && e.newValue) {
@@ -36,8 +39,16 @@ export default function BlogPage() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center pt-0 pb-12 px-6">
+        <div className="w-10 h-10 border-4 border-[#D4AF37]/30 border-t-[#D4AF37] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] pt-10 -mt-10 pb-28 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
+    <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] pt-0 pb-28 px-6 sm:px-12 font-sans selection:bg-[#5B6454] selection:text-[#FAF8F5]">
       
       {/* Header */}
       <section className="max-w-4xl mx-auto text-center mb-10">
@@ -85,13 +96,6 @@ export default function BlogPage() {
             </Link>
           ))}
         </div>
-      </section>
-
-      {/* Pagination / CTA */}
-      <section className="text-center mt-24">
-         <button className="bg-transparent border border-[#5B6454]/30 hover:border-[#D4AF37]/40 text-[#F5F5F5] px-10 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-medium transition focus:outline-none">
-           Load More Stories
-         </button>
       </section>
 
     </main>

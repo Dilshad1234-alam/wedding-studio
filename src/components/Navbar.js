@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
@@ -71,6 +72,7 @@ export default function Navbar() {
   };
 
   const navLinks = [
+    { name: 'Home', href: '/' },
     { name: 'Stories', href: '/stories' },
     { name: 'Photography', href: '/portfolio' },
     { name: 'Films', href: '/films' },
@@ -82,113 +84,148 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B0D0E]/85 backdrop-blur-lg border-b border-[#2B2519] py-2 lg:py-0 px-6 sm:px-12 transition-all duration-300">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#0B0D0E]/85 backdrop-blur-lg border-b border-[#2B2519] py-2 lg:py-0 px-6 md:px-12 transition-all duration-300">
       <nav className="w-full">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex justify-between items-center h-20">
+        <div className="w-full relative">
+          <div className="flex justify-between items-center h-20 sm:h-24">
             
-            {/* Left: Brand Identity */}
-            <div className="flex-shrink-0 flex items-center">
+            {/* Left Brand Identity */}
+            <div className="flex-shrink-0 flex items-center z-30">
               <a
                 href="/"
                 onClick={handleLogoClick}
-                className="flex flex-col items-center lg:items-start text-left group cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02] focus:outline-none bg-transparent"
+                className="flex flex-col items-center cursor-pointer select-none focus:outline-none bg-transparent"
               >
-                <img 
-                  src="/logo lens.png" 
+                <Image 
+                  src="/logo lens (2).png" 
                   alt="LensLoom Production" 
-                  className="h-16 sm:h-20 w-auto object-contain mix-blend-screen" 
-                  style={{ mixBlendMode: 'screen' }}
+                  width={600}
+                  height={213}
+                  priority
+                  quality={100}
+                  unoptimized
+                  className="h-16 sm:h-20 lg:h-24 w-auto object-contain -mt-2 lg:-mt-4" 
                 />
               </a>
             </div>
-            
-            {/* Center Nav Links */}
-            <div className="hidden xl:flex items-center justify-center gap-1.5 flex-1 px-8">
-              {navLinks.map((link, idx) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link 
-                    key={idx} 
-                    href={link.href} 
-                    className={`px-4 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${isActive ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-transparent hover:border-[#D4AF37] hover:text-[#D4AF37] hover:bg-[#121518]'}`}
-                  >
-                    {link.name}
-                  </Link>
-                );
-              })}
-            </div>
 
-            {/* Right CTAs */}
-            <div className="hidden lg:flex items-center space-x-6 shrink-0">
+            {/* Right Side Container */}
+            <div className="flex items-center ml-auto gap-4 z-20">
+              
+              {/* Desktop Nav Links */}
+              <div className="hidden lg:flex items-center justify-end gap-1 xl:gap-2">
+                {navLinks.map((link, idx) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link 
+                      key={idx} 
+                      href={link.href} 
+                      className={`px-3 xl:px-4 py-2 rounded-full text-[10px] xl:text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${isActive ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-transparent hover:border-[#D4AF37] hover:text-[#D4AF37] hover:bg-[#121518]'}`}
+                    >
+                      {link.name}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Desktop CTAs (Auth / Admin) */}
               {currentUser && (
-                <div className="flex items-center gap-2">
+                <div className="hidden lg:flex items-center gap-2">
                   {currentUser.role === 'admin' ? (
-                    <Link href="/admin" className={`px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/admin' ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-[#2B2519] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518]'}`}>
+                    <Link href="/admin" className={`px-4 py-1.5 rounded-full text-[10px] xl:text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${pathname === '/admin' ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-[#2B2519] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518]'}`}>
                       Admin OS
                     </Link>
                   ) : (
-                    <span className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-widest font-medium border border-[#2B2519] text-[#C5B388]">
+                    <span className="px-4 py-1.5 rounded-full text-[10px] xl:text-[11px] uppercase tracking-widest font-medium border border-[#2B2519] text-[#C5B388]">
                       {currentUser.name}
                     </span>
                   )}
-                  <button onClick={handleLogout} className="px-4 py-1.5 rounded-full text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border border-[#2B2519] text-[#C5B388] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518] focus:outline-none">
+                  <button onClick={handleLogout} className="px-4 py-1.5 rounded-full text-[10px] xl:text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border border-[#2B2519] text-[#C5B388] hover:border-[#D4AF37] hover:text-white hover:bg-[#121518] focus:outline-none">
                     Logout
                   </button>
                 </div>
               )}
-            </div>
 
-            {/* Mobile menu hamburger */}
-            <div className="xl:hidden flex items-center">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-[#C5B388] hover:text-[#D4AF37] p-2 focus:outline-none"
-                aria-label="Toggle menu"
-              >
-                {isOpen ? <X size={28} /> : <Menu size={28} />}
-              </button>
+              {/* Mobile Menu Hamburger */}
+              <div className="lg:hidden flex items-center shrink-0">
+                <button
+                  onClick={() => setIsOpen(true)}
+                  className="text-[#C5B388] hover:text-[#D4AF37] p-2 focus:outline-none transition-transform"
+                  aria-label="Open menu"
+                >
+                  <Menu size={28} />
+                </button>
+              </div>
+
             </div>
+            
           </div>
         </div>
 
-        {/* Mobile Responsive Sliding Drawer */}
+        {/* Mobile Responsive Slide-Out Drawer */}
+        {/* Overlay */}
         <div 
-          className={`xl:hidden absolute top-full left-0 w-full bg-[#0B0D0E]/95 backdrop-blur-xl border-b border-[#2B2519] transition-all duration-300 ease-in-out shadow-2xl ${isOpen ? 'max-h-[85vh] opacity-100 overflow-y-auto pb-6' : 'max-h-0 opacity-0 overflow-hidden'}`}
+          className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] transition-opacity duration-300 lg:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          onClick={() => setIsOpen(false)}
+        ></div>
+
+        {/* Drawer */}
+        <div 
+          className={`fixed top-0 right-0 h-[100dvh] w-[85vw] max-w-[400px] bg-[#0B0D0E] border-l border-[#2B2519] z-[70] transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col shadow-2xl lg:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
-          <div className="px-6 pt-4 space-y-1">
+          <div className="flex justify-between items-center p-6 border-b border-[#2B2519]">
+            <Image 
+              src="/logo lens (2).png" 
+              alt="LensLoom Production" 
+              width={300}
+              height={107}
+              priority
+              quality={100}
+              unoptimized
+              className="h-10 w-auto object-contain" 
+            />
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-[#C5B388] hover:text-[#D4AF37] p-2 focus:outline-none transition-transform hover:rotate-90"
+              aria-label="Close menu"
+            >
+              <X size={28} />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto py-8 px-6 space-y-2">
             {navLinks.map((link) => (
                <Link 
                   key={link.name}
                   onClick={() => setIsOpen(false)} 
                   href={link.href} 
-                  className={`block px-3 py-4 text-xs uppercase tracking-[0.2em] font-medium border-b border-[#2B2519] ${pathname === link.href ? 'text-[#D4AF37]' : 'text-[#C5B388] hover:text-[#D4AF37]'}`}
+                  className={`block px-4 py-4 text-xs sm:text-sm uppercase tracking-[0.25em] font-medium rounded-xl transition-all duration-300 ${pathname === link.href ? 'bg-[#121518] text-[#D4AF37] border border-[#D4AF37]/30' : 'text-[#C5B388] hover:text-[#D4AF37] hover:bg-[#121518]/50 border border-transparent'}`}
                >
                   {link.name}
                </Link>
             ))}
+          </div>
 
-            <div className="pt-8 pb-4 space-y-5 px-3">
-              {currentUser && (
-                <div className="flex flex-col space-y-4">
-                  {currentUser.role === 'admin' && (
-                    <Link 
-                      onClick={() => setIsOpen(false)} 
-                      href="/admin" 
-                      className="block w-full bg-[#121518] border border-[#D4AF37] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-white hover:bg-[#D4AF37] hover:text-black"
-                    >
-                      Admin OS
-                    </Link>
-                  )}
-                  <button 
-                    onClick={handleLogout} 
-                    className="w-full bg-transparent border border-[#2B2519] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-semibold text-[#C5B388] hover:bg-[#121518] hover:text-white hover:border-[#D4AF37] focus:outline-none"
+          <div className="p-6 border-t border-[#2B2519] space-y-4 shrink-0">
+            {currentUser && (
+              <div className="flex flex-col space-y-3 mt-4">
+                {currentUser.role === 'admin' && (
+                  <Link 
+                    onClick={() => setIsOpen(false)} 
+                    href="/admin" 
+                    className="block w-full bg-[#121518] border border-[#2B2519] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-medium text-[#C5B388] hover:border-[#D4AF37] hover:text-white"
                   >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+                    Admin OS
+                  </Link>
+                )}
+                <button 
+                  onClick={handleLogout} 
+                  className="w-full bg-transparent border border-[#2B2519] text-center px-6 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-medium text-[#C5B388] hover:bg-[#121518] hover:text-white hover:border-[#D4AF37] focus:outline-none"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </nav>

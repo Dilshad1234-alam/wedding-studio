@@ -7,15 +7,12 @@ export async function proxy(request) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('token')?.value;
 
-  // 1. Agar user sirf /admin ya /admin/ likh kar enter kare, toh login page par bhej dein
-  if (pathname === '/admin' || pathname === '/admin/') {
-    return NextResponse.redirect(new URL('/admin/auth-login', request.url));
-  }
-
-  // 2. Protect /admin routes (except the secret auth gateway)
-  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/auth-login')) {
+  // 1. The /admin route is now the login page, no need to redirect it.
+  
+  // 2. Protect /admin routes (except the secret auth gateway which is /admin)
+  if (pathname.startsWith('/admin') && pathname !== '/admin') {
     if (!token) {
-      return NextResponse.redirect(new URL('/admin/auth-login', request.url));
+      return NextResponse.redirect(new URL('/admin', request.url));
     }
 
     try {
@@ -23,11 +20,11 @@ export async function proxy(request) {
       const { payload } = await jwtVerify(token, secret);
       
       if (payload.role !== 'admin') {
-        return NextResponse.redirect(new URL('/admin/auth-login', request.url));
+        return NextResponse.redirect(new URL('/admin', request.url));
       }
     } catch (error) {
       console.error('Middleware Token Error:', error);
-      return NextResponse.redirect(new URL('/admin/auth-login', request.url));
+      return NextResponse.redirect(new URL('/admin', request.url));
     }
   }
 

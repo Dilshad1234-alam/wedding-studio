@@ -7,90 +7,6 @@ export default function FilmsPage() {
   const { handleProtectedAction } = useProtectedAction();
   const [activeCategory, setActiveCategory] = useState('all');
 
-  // Hero showcase films mapped to each category
-  const heroShowcases = {
-    all: {
-      tag: "FEATURED MASTER REEL • 4K UHD",
-      title: "A Royal Affair in Udaipur — Arjun & Maya",
-      location: "CITY PALACE & LAKE PICHOLA, UDAIPUR",
-      duration: "18:40 MIN",
-      img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    teasers: {
-      tag: "CINEMATIC TEASER • 4K UHD",
-      title: "Aditya & Riya's Sacred Pheras",
-      location: "TAJ NADESAR PALACE, VARANASI",
-      duration: "04:12 MIN",
-      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    feature: {
-      tag: "FULL CINEMA FEATURE • 4K UHD",
-      title: "Sandhya & Pratik — Forever Beginnings",
-      location: "VISHWANATH FARMS, PATNA",
-      duration: "24:30 MIN",
-      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    'pre-wedding': {
-      tag: "PRE-WEDDING CINEMA • 4K UHD",
-      title: "Ghats of Eternity — Whispers of Ganga",
-      location: "ASSI GHAT & CHET SINGH FORT, VARANASI",
-      duration: "02:50 MIN",
-      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    teasers: {
-      tag: "CINEMATIC TEASER • 4K UHD",
-      title: "Aditya & Riya's Sacred Pheras",
-      location: "TAJ NADESAR PALACE, VARANASI",
-      duration: "04:12 MIN",
-      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    feature: {
-      tag: "FULL CINEMA FEATURE • 4K UHD",
-      title: "Sandhya & Pratik — Forever Beginnings",
-      location: "VISHWANATH FARMS, PATNA",
-      duration: "24:30 MIN",
-      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    'pre-wedding': {
-      tag: "PRE-WEDDING CINEMA • 4K UHD",
-      title: "Ghats of Eternity — Whispers of Ganga",
-      location: "ASSI GHAT & CHET SINGH FORT, VARANASI",
-      duration: "02:50 MIN",
-      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    teasers: {
-      tag: "CINEMATIC TEASER • 4K UHD",
-      title: "Aditya & Riya's Sacred Pheras",
-      location: "TAJ NADESAR PALACE, VARANASI",
-      duration: "04:12 MIN",
-      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    feature: {
-      tag: "FULL CINEMA FEATURE • 4K UHD",
-      title: "Sandhya & Pratik — Forever Beginnings",
-      location: "VISHWANATH FARMS, PATNA",
-      duration: "24:30 MIN",
-      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    },
-    'pre-wedding': {
-      tag: "PRE-WEDDING CINEMA • 4K UHD",
-      title: "Ghats of Eternity — Whispers of Ganga",
-      location: "ASSI GHAT & CHET SINGH FORT, VARANASI",
-      duration: "02:50 MIN",
-      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1400&q=85",
-      youtubeUrl: "https://www.youtube.com/@WeddingPur"
-    }
-  };
-
   const categories = [
     { label: "ALL FILMS", key: "all" },
     { label: "CINEMATIC TEASERS", key: "teasers" },
@@ -99,15 +15,17 @@ export default function FilmsPage() {
   ];
 
   const [filmsList, setFilmsList] = useState([]);
+  const [featuredFilm, setFeaturedFilm] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
     // 1. Initial Fetch
-    fetch('/api/films')
+    fetch('/api/films', { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
           const mapped = data.map(f => ({
-            id: f.id,
+            id: f.id || f._id,
             title: f.title,
             location: f.venue,
             duration: f.runtime + " MIN",
@@ -115,12 +33,25 @@ export default function FilmsPage() {
             quality: "4K UHD",
             img: f.posterUrl,
             youtubeUrl: f.videoUrl,
-            couple: f.couple
+            couple: f.couple,
+            isFeatured: f.isFeatured || false,
+            tag: "FEATURED CINEMA • 4K UHD"
           }));
-          setFilmsList(mapped);
+          
+          // Separate featured and remaining
+          const featured = mapped.find(f => f.isFeatured) || (mapped.length > 0 ? mapped[0] : null);
+          setFeaturedFilm(featured);
+          
+          // Filter out the featured film from the grid
+          const remaining = mapped.filter(f => f.id !== (featured ? featured.id : null));
+          setFilmsList(remaining);
         }
+        setIsLoading(false);
       })
-      .catch(err => console.error("Error fetching films:", err));
+      .catch(err => {
+        console.error("Error fetching films:", err);
+        setIsLoading(false);
+      });
 
     // 2. Cross-tab sync for deletions
     const handleStorageChange = (e) => {
@@ -138,7 +69,7 @@ export default function FilmsPage() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const currentHero = heroShowcases[activeCategory] || heroShowcases.all;
+  const currentHero = featuredFilm;
 
   const filteredFilms = activeCategory === 'all'
     ? filmsList
@@ -147,8 +78,8 @@ export default function FilmsPage() {
   return (
     <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
-      {/* 1. CINEMA HEADER */}
-      <section className="pt-5 -mt-10 pb-10 px-6 text-center max-w-4xl mx-auto">
+      {/* 1. CINEMA HERO HEADER */}
+      <section className="pb-10 px-6 text-center max-w-4xl mx-auto">
   
         <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
           Moving Portraits
@@ -183,51 +114,53 @@ export default function FilmsPage() {
           </span>
         </div>
 
-        <a
-          key={currentHero.title}
-          href={currentHero.youtubeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleProtectedAction()}
-          className="w-full group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-[#121518] cursor-pointer animate-fadeIn transition-all duration-700 mb-12"
-        >
-          <img
-            src={currentHero.img}
-            alt={currentHero.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"></div>
+        {currentHero && (
+          <a
+            key={currentHero.title}
+            href={currentHero.youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleProtectedAction()}
+            className="w-full group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-[#121518] cursor-pointer animate-fadeIn transition-all duration-700 mb-12"
+          >
+            <img
+              src={currentHero.img}
+              alt={currentHero.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"></div>
 
-          {/* Animated Center Play Button */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#121518]/20 backdrop-blur-md border border-[#2B2519] group-hover:bg-gradient-to-r group-hover:from-[#F3E5AB] group-hover:to-[#D4AF37] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300">
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-white group-hover:fill-black ml-1" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-            <span className="text-[11px] uppercase tracking-[0.3em] mt-4 font-medium text-white/90 group-hover:text-white">
-              Watch The Film on YouTube ↗
-            </span>
-          </div>
-
-          {/* Dynamic Film Meta Info */}
-          <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2">
-            <div>
-              <span className="text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">
-                {currentHero.tag}
+            {/* Animated Center Play Button */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-white ml-1" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <span className="text-[11px] uppercase tracking-[0.3em] mt-4 font-medium text-white/90 group-hover:text-white">
+                Watch The Film on YouTube ↗
               </span>
-              <h3 className="font-serif text-2xl sm:text-4xl italic">
-                {currentHero.title}
-              </h3>
-              <p className="text-[11px] uppercase tracking-wider text-white/70 mt-1">
-                {currentHero.location}
-              </p>
             </div>
-            <span className="text-xs text-white/80 tracking-wider font-mono">
-              Runtime: {currentHero.duration}
-            </span>
-          </div>
-        </a>
+
+            {/* Dynamic Film Meta Info */}
+            <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2">
+              <div>
+                <span className="text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">
+                  {currentHero.tag}
+                </span>
+                <h3 className="font-serif text-2xl sm:text-4xl italic">
+                  {currentHero.title}
+                </h3>
+                <p className="text-[11px] uppercase tracking-wider text-white/70 mt-1">
+                  {currentHero.location}
+                </p>
+              </div>
+              <span className="text-xs text-white/80 tracking-wider font-mono">
+                Runtime: {currentHero.duration}
+              </span>
+            </div>
+          </a>
+        )}
       </section>
 
       {/* 3. 2-COLUMN LUXURY FILM GRID */}
@@ -260,8 +193,8 @@ export default function FilmsPage() {
                 </div>
 
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-[#121518]/30 backdrop-blur-sm border border-[#2B2519] group-hover:bg-gradient-to-r group-hover:from-[#F3E5AB] group-hover:to-[#D4AF37] flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                    <svg className="w-5 h-5 fill-white group-hover:fill-black ml-0.5" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <svg className="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>

@@ -86,7 +86,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased px-6 sm:px-12 selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased pt-0 px-6 sm:px-12 selection:bg-[#D4AF37] selection:text-black">
       
       {/* Background Subtle Gold Aura */}
       <div className="fixed inset-0 pointer-events-none flex items-center justify-center">
@@ -123,7 +123,7 @@ export default function ContactPage() {
                 },
                 { 
                   icon: <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3.81l.39-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>, 
-                  href: "#", 
+                  href: "https://www.facebook.com/people/LensLoom-Production/61586068716821/", 
                   label: "Facebook" 
                 }
               ].map((item, idx) => (
@@ -156,7 +156,7 @@ export default function ContactPage() {
                 <div>
                   <span className="block font-semibold text-white">Main Studio & Office</span>
                   <p className="text-[#A89D84] mt-0.5 leading-relaxed">
-                    Heritage Lane, Bailey Road, Patna, Bihar 800001
+                    2nd Floor, Gopal Market, Bhikhna Pahari More, Makhania Kuan, Patna, Bihar – 800004
                   </p>
                 </div>
               </div>
@@ -168,8 +168,8 @@ export default function ContactPage() {
                 </span>
                 <div>
                   <span className="block font-semibold text-white">Direct Line</span>
-                  <a href="tel:+918235109707" className="text-[#C5B388] hover:text-[#D4AF37] transition-colors">
-                    +91 8235 109 707
+                  <a href="tel:+917209886900" className="text-[#C5B388] hover:text-[#D4AF37] transition-colors">
+                    +91 7209886900
                   </a>
                 </div>
               </div>
@@ -181,8 +181,21 @@ export default function ContactPage() {
                 </span>
                 <div>
                   <span className="block font-semibold text-white">Concierge & Bookings</span>
-                  <a href="mailto:inquiries@weddingpurindia.com" className="text-[#C5B388] hover:text-[#D4AF37] transition-colors">
-                    inquiries@weddingpurindia.com
+                  <a href="mailto:lensloomofficial@gmail.com" className="text-[#C5B388] hover:text-[#D4AF37] transition-colors">
+                    lensloomofficial@gmail.com
+                  </a>
+                </div>
+              </div>
+
+              {/* Website */}
+              <div className="flex items-center gap-4">
+                <span className="text-[#D4AF37] shrink-0">
+                  <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                </span>
+                <div>
+                  <span className="block font-semibold text-white">Website</span>
+                  <a href="https://www.lensloom.in" target="_blank" rel="noopener noreferrer" className="text-[#C5B388] hover:text-[#D4AF37] transition-colors">
+                    www.lensloom.in
                   </a>
                 </div>
               </div>
@@ -196,6 +209,20 @@ export default function ContactPage() {
               <p className="text-[11px] text-[#8A7D5C]">
                 Available worldwide for destination weddings and signature cinematic shoots.
               </p>
+            </div>
+            
+            {/* Embedded Google Map */}
+            <div className="w-full mt-4 rounded-2xl overflow-hidden border border-[#2B2519]">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.558230788649!2d85.1438258!3d25.6195744!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed585ce0923f65%3A0xc3cf3fbd1cfa068e!2sGopal%20Market%2C%20Bhikhna%20Pahari%20More%2C%20Makhania%20Kuan%2C%20Patna%2C%20Bihar%20800004!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+                width="100%" 
+                height="200" 
+                style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }} 
+                allowFullScreen="" 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Studio Location"
+              ></iframe>
             </div>
           </div>
         </div>

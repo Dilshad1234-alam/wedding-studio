@@ -7,7 +7,7 @@ export default function AdminLayout({ children }) {
   const pathname = usePathname();
 
   // Hide sidebar on auth pages
-  const isAuthPage = pathname === '/admin/auth-login' || pathname === '/admin/auth-register';
+  const isAuthPage = pathname === '/admin';
 
   if (isAuthPage) {
     return <main className="min-h-screen bg-[#0B0D0E] w-full">{children}</main>;
@@ -19,6 +19,7 @@ export default function AdminLayout({ children }) {
     { label: 'COMMERCIAL MANAGEMENT', href: '/admin/commercial-management' },
     { label: 'WEBSITE MANAGEMENT', href: '/admin/website-management' },
     { label: 'CLIENT INQUIRIES', href: '/admin/inquiries' },
+    { label: 'LEADS MANAGEMENT', href: '/admin/leads' },
     { label: 'SETTINGS', href: '/admin/settings' },
   ];
 
@@ -26,7 +27,7 @@ export default function AdminLayout({ children }) {
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     sessionStorage.removeItem('weddingpur_user');
     sessionStorage.removeItem('weddingpur_token');
-    window.location.href = '/admin/auth-login';
+    window.location.href = '/admin';
   };
 
   return (
@@ -36,14 +37,13 @@ export default function AdminLayout({ children }) {
         <div>
           {/* Logo */}
           <div className="mb-10 bg-transparent">
-            <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block mb-3">
+            {/* <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block mb-3">
               ROYALE COMMAND
-            </span>
+            </span> */}
             <img 
-              src="/logo lens_3.png" 
+              src="/logo lens (2).png" 
               alt="LensLoom Production" 
-              className="h-16 w-auto object-contain mix-blend-screen"
-              style={{ mixBlendMode: 'screen' }}
+              className="h-16 w-auto object-contain"
             />
           </div>
 

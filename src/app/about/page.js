@@ -57,17 +57,20 @@ export default function AboutPage() {
   ];
 
   const [aboutConfig, setAboutConfig] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchAbout = () => {
-      fetch('/api/about')
+      setIsLoading(true);
+      fetch('/api/about', { cache: 'no-store' })
         .then(res => res.json())
         .then(data => {
           if (data && data.directorName) {
             setAboutConfig(data);
           }
         })
-        .catch(err => console.error("Error fetching about config:", err));
+        .catch(err => console.error("Error fetching about config:", err))
+        .finally(() => setIsLoading(false));
     };
 
     fetchAbout();
@@ -82,15 +85,23 @@ export default function AboutPage() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center pt-0 pb-12 px-6">
+        <div className="w-10 h-10 border-4 border-[#D4AF37]/30 border-t-[#D4AF37] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased py-12 px-6 sm:px-10 lg:px-16 selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased pt-0 pb-12 px-6 sm:px-10 lg:px-16 selection:bg-[#D4AF37] selection:text-black">
       
       {/* Background Subtle Gold Aura */}
       <div className="fixed inset-0 pointer-events-none flex items-center justify-center">
         <div className="w-[650px] h-[650px] bg-[#D4AF37]/5 blur-[150px] rounded-full"></div>
       </div>
 
-      <div className="relative w-full max-w-[1440px] mx-auto space-y-24 pt-10">
+      <div className="relative w-full max-w-[1440px] mx-auto space-y-24">
         
         {/* 1. HERO STORY & ARCH PHOTO */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
@@ -161,6 +172,43 @@ export default function AboutPage() {
           </div>
 
         </div>
+
+        {/* 1.5 OUR CORE TEAM */}
+        {aboutConfig?.teamMembers && aboutConfig.teamMembers.length > 0 && (
+          <div className="space-y-10 pt-8 border-t border-[#1C1F24]">
+            <div className="text-center space-y-2">
+              <span className="text-[10px] uppercase font-black tracking-[0.3em] text-[#D4AF37] block">
+                MEET THE EXPERTS
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-serif text-white tracking-tight">
+                Our Core <span className="italic text-[#D4AF37]">Team</span>
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+              {aboutConfig.teamMembers.map((member, idx) => (
+                <div key={idx} className="group flex flex-col items-center text-center bg-[#121518] border border-[#2B2519] rounded-t-[100px] rounded-b-3xl p-6 transition-all duration-500 hover:border-[#D4AF37] hover:-translate-y-2 shadow-xl hover:shadow-[#D4AF37]/10">
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-2 border-[#D4AF37]/50 mb-6 bg-[#181B20] relative">
+                    {member.photoUrl ? (
+                      <img src={member.photoUrl} alt={member.name} className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[#8A7D5C] text-xs uppercase font-mono bg-[#0B0D0E]">
+                        LensLoom
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="text-lg font-bold text-white tracking-wide mb-1 group-hover:text-[#F3E5AB] transition-colors">{member.name}</h3>
+                  <span className="text-[10px] uppercase font-black tracking-[0.2em] text-[#D4AF37] block mb-4">
+                    {member.role}
+                  </span>
+                  <p className="text-xs text-[#A89D84] leading-relaxed font-light line-clamp-4">
+                    {member.bio}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* 2. RECOGNITION / GLOBAL ACCLAIM */}
         <div className="space-y-8">

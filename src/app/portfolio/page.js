@@ -12,104 +12,36 @@ export default function PortfolioPage() {
     { label: "HALDI & SANGEET", key: "haldi-sangeet" }
   ];
 
-  const galleryItems = [
-    {
-      title: "Royal Rajputana Vows",
-      category: "wedding",
-      location: "Jaipur Palace",
-      img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg"
-    },
-    {
-      title: "Monsoon Garland Celebration",
-      category: "wedding",
-      location: "Patna Greens",
-      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Heirloom Bridal Jewelry",
-      category: "wedding",
-      location: "Heritage Courtyard",
-      img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Golden Hour Whispers",
-      category: "pre-wedding",
-      location: "Varanasi Ghats",
-      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Marigold Symphony",
-      category: "haldi-sangeet",
-      location: "Shangri-La Palace",
-      img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Midnight Sangeet Beats",
-      category: "haldi-sangeet",
-      location: "Hotel Maurya",
-      img: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Timeless Traditions",
-      category: "wedding",
-      location: "Udaipur Fort",
-      img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Ethereal Moments",
-      category: "pre-wedding",
-      location: "Taj Lake Palace",
-      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Royal Rajputana Vows",
-      category: "wedding",
-      location: "Jaipur Palace",
-      img: "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/wedding-editorial-shoot-weddingpur-scaled-e1773261531589.jpg"
-    },
-    {
-      title: "Monsoon Garland Celebration",
-      category: "wedding",
-      location: "Patna Greens",
-      img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Heirloom Bridal Jewelry",
-      category: "wedding",
-      location: "Heritage Courtyard",
-      img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Golden Hour Whispers",
-      category: "pre-wedding",
-      location: "Varanasi Ghats",
-      img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=85"
-    },
-        {
-      title: "Marigold Symphony",
-      category: "haldi-sangeet",
-      location: "Shangri-La Palace",
-      img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Midnight Sangeet Beats",
-      category: "haldi-sangeet",
-      location: "Hotel Maurya",
-      img: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Timeless Traditions",
-      category: "wedding",
-      location: "Udaipur Fort",
-      img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1000&q=85"
-    },
-    {
-      title: "Ethereal Moments",
-      category: "pre-wedding",
-      location: "Taj Lake Palace",
-      img: "https://images.unsplash.com/photo-1545232979-8bf68ee9b1af?auto=format&fit=crop&w=1000&q=85"
-    },
-  ];
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  React.useEffect(() => {
+    fetch('/api/photography', { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          const mappedData = data.map(item => {
+            let catKey = 'wedding';
+            if (item.category === 'Pre-Wedding') catKey = 'pre-wedding';
+            else if (item.category === 'Haldi & Sangeet') catKey = 'haldi-sangeet';
+            
+            return {
+              id: item.id || Math.random().toString(),
+              title: item.title,
+              category: catKey,
+              location: item.location,
+              img: item.imageUrl
+            };
+          });
+          setGalleryItems(mappedData);
+        }
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching photography:", err);
+        setIsLoading(false);
+      });
+  }, []);
 
   const filteredItems = activeFilter === 'all'
     ? galleryItems
@@ -119,10 +51,7 @@ export default function PortfolioPage() {
     <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
       {/* 1. PORTFOLIO HERO HEADER */}
-      <section className=" pb-12 px-6 text-center max-w-4xl mx-auto">
-        {/* <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-black block  mb-3">
-          PORTFOLIO
-        </span> */}
+      <section className="pt-4 sm:pt-6 pb-12 px-6 text-center max-w-4xl mx-auto">
         <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
           Recent Captures
         </h1>
@@ -150,48 +79,58 @@ export default function PortfolioPage() {
 
       {/* 2. BALANCED GALLERY GRID (UNIFORM HEIGHT & CLEAN BOTTOM MARGIN) */}
       <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {filteredItems.map((item, idx) => (
-            <div
-              key={idx}
-              className="group flex flex-col justify-between bg-[#121518] rounded-3xl p-3 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40/40 transition-all duration-500"
-            >
-              {/* Strict aspect ratio container locks every card to the identical height */}
-              <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#121518]">
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                />
-                
-                {/* Subtle vignette hover gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <div className="text-white">
-                    <span className="text-[10px] uppercase tracking-widest text-[#C5B388]/80 block">
-                      {item.location}
-                    </span>
-                    <h3 className="font-serif text-2xl italic">{item.title}</h3>
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20 text-[#D4AF37]">
+            Loading...
+          </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="flex justify-center items-center py-20 text-[#C5B388]">
+            No captures available in this category.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {filteredItems.map((item) => (
+              <div
+                key={item.id}
+                className="group flex flex-col justify-between bg-[#121518] rounded-3xl p-3 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40 transition-all duration-500"
+              >
+                {/* Strict aspect ratio container locks every card to the identical height */}
+                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#121518]">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                  
+                  {/* Subtle vignette hover gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <div className="text-white">
+                      <span className="text-[10px] uppercase tracking-widest text-[#C5B388]/80 block">
+                        {item.location}
+                      </span>
+                      <h3 className="font-serif text-2xl italic">{item.title}</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Minimalist Card Details Below Image */}
-              <div className="pt-4 pb-2 px-3 flex items-center justify-between">
-                <div>
-                  <h4 className="font-serif text-lg text-[#F5F5F5] group-hover:text-[#D4AF37] transition-colors">
-                    {item.title}
-                  </h4>
-                  <p className="text-[10px] uppercase tracking-widest text-[#C5B388]">
-                    {item.location}
-                  </p>
+                {/* Minimalist Card Details Below Image */}
+                <div className="pt-4 pb-2 px-3 flex items-center justify-between">
+                  <div>
+                    <h4 className="font-serif text-lg text-[#F5F5F5] group-hover:text-[#D4AF37] transition-colors">
+                      {item.title}
+                    </h4>
+                    <p className="text-[10px] uppercase tracking-widest text-[#C5B388]">
+                      {item.location}
+                    </p>
+                  </div>
+                  <Link aria-label="Book a shoot" className="w-9 h-9 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:shadow-[0_0_15px_rgba(212,175,55,0.45)] transition-all text-xs" href="/contact">
+                    ↗
+                  </Link>
                 </div>
-                <Link aria-label="Book a shoot" className="w-9 h-9 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:shadow-[0_0_15px_rgba(212,175,55,0.45)] transition-all text-xs" href="/contact">
-                  ↗
-                </Link>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
     </main>

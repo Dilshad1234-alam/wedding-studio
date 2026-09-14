@@ -31,14 +31,13 @@ function WebsiteManagementContent() {
 
   // 1. Landing Page State
   const [landingConfig, setLandingConfig] = useState({
-    badge: "LENSLOOM — BESPOKE WEDDING CINEMA & STILLS",
-    titleLine1: "Best Wedding Photographers",
-    titleLine2: "In Patna, Bihar",
+    topBadge: "LENSLOOM — BESPOKE WEDDING CINEMA & STILLS",
+    headlineWhite: "Best Wedding Photographers",
+    headlineGold: "In Patna, Bihar",
     subtitle: "We capture timeless weddings for modern couples who want their story told beautifully.",
-    bgImage: "https://ik.imagekit.io/weddingpur/hero-cover.jpg",
-    ctaPrimaryText: "CONTACT US",
-    ctaSecondaryText: "EXPLORE PORTFOLIO",
-    serviceCities: "PATNA • VARANASI • JAIPUR • GOA",
+    heroImageUrl: "https://ik.imagekit.io/weddingpur/hero-cover.jpg",
+    heroVideoUrl: "",
+    footerCities: "PATNA • VARANASI • JAIPUR • GOA",
     philosophy: {
       badge: "OUR EDITORIAL PHILOSOPHY",
       title: "Unposed. Pure. Poetic.",
@@ -114,12 +113,55 @@ function WebsiteManagementContent() {
     fetch('/api/landing')
       .then(res => res.json())
       .then(data => {
-        if (data && Object.keys(data).length > 0) setLandingConfig(data);
+        if (data && Object.keys(data).length > 0) {
+          // Normalize old schema to new schema to prevent empty inputs
+          const normalized = {
+            ...data,
+            topBadge: data.topBadge || data.badge || "LENSLOOM — BESPOKE WEDDING CINEMA & STILLS",
+            headlineWhite: data.headlineWhite || data.titleLine1 || "Best Wedding Photographers",
+            headlineGold: data.headlineGold || data.titleLine2 || "In Patna, Bihar",
+            subtitle: data.subtitle || "We capture timeless weddings for modern couples who want their story told beautifully.",
+            heroImageUrl: data.heroImageUrl || data.bgImage || "https://ik.imagekit.io/weddingpur/hero-cover.jpg",
+            heroVideoUrl: data.heroVideoUrl || data.bgVideoUrl || "",
+            footerCities: data.footerCities || data.serviceCities || "PATNA • VARANASI • JAIPUR • GOA",
+          };
+          setLandingConfig(normalized);
+        }
       })
       .catch(err => console.error("Error fetching landing config:", err));
   }, []);
 
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [editingPillarIndex, setEditingPillarIndex] = useState(null);
+
+  const handleVideoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingVideo(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setLandingConfig((prev) => ({ ...prev, heroVideoUrl: data.url }));
+      } else {
+        console.error(data.error || 'Upload failed');
+      }
+    } catch (err) {
+      console.error('Upload failed', err);
+    } finally {
+      setIsUploadingVideo(false);
+      // Reset input value to allow selecting same file again
+      e.target.value = null;
+    }
+  };
+
   const [isNewPillarModal, setIsNewPillarModal] = useState(false);
   const [pillarFormData, setPillarFormData] = useState({ title: '', desc: '', image: '', link: '' });
 
@@ -284,7 +326,7 @@ function WebsiteManagementContent() {
   const [isNewPhotoModal, setIsNewPhotoModal] = useState(false);
   const [photoFormData, setPhotoFormData] = useState({
     title: '',
-    venue: '',
+    location: '',
     category: 'Wedding',
     imageUrl: ''
   });
@@ -295,14 +337,14 @@ function WebsiteManagementContent() {
       setIsNewPhotoModal(false);
       setPhotoFormData({
         title: photo.title,
-        venue: photo.venue,
+        location: photo.location,
         category: photo.category,
         imageUrl: photo.imageUrl
       });
     } else {
       setEditingPhoto(null);
       setIsNewPhotoModal(true);
-      setPhotoFormData({ title: '', venue: '', category: 'Wedding', imageUrl: '' });
+      setPhotoFormData({ title: '', location: '', category: 'Wedding', imageUrl: '' });
     }
   };
 
@@ -375,7 +417,8 @@ function WebsiteManagementContent() {
     runtime: '',
     videoUrl: '',
     posterUrl: '',
-    description: ''
+    description: '',
+    isFeatured: false
   });
 
   const openFilmModal = (film = null) => {
@@ -389,12 +432,13 @@ function WebsiteManagementContent() {
         runtime: film.runtime,
         videoUrl: film.videoUrl,
         posterUrl: film.posterUrl,
-        description: film.description
+        description: film.description,
+        isFeatured: film.isFeatured || false
       });
     } else {
       setEditingFilm(null);
       setIsNewFilmModal(true);
-      setFilmFormData({ title: '', couple: '', venue: '', runtime: '', videoUrl: '', posterUrl: '', description: '' });
+      setFilmFormData({ title: '', couple: '', venue: '', runtime: '', videoUrl: '', posterUrl: '', description: '', isFeatured: false });
     }
   };
 
@@ -446,16 +490,16 @@ function WebsiteManagementContent() {
     }
   };
 
-  // 5. Services State
+  // 5. Packages (Services) State
   const [services, setServices] = useState([]);
   
   React.useEffect(() => {
-    fetch('/api/services')
+    fetch('/api/packages')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setServices(data);
       })
-      .catch(err => console.error("Error fetching services:", err));
+      .catch(err => console.error("Error fetching packages:", err));
   }, []);
 
   const [editingService, setEditingService] = useState(null);
@@ -519,28 +563,28 @@ function WebsiteManagementContent() {
         whyChooseFeatures: serviceFormData.whyChooseFeatures.split('\n').map(s => s.trim()).filter(Boolean)
       };
       if (editingService) {
-        payload.id = editingService.id;
-        const res = await fetch('/api/services', {
+        payload.id = editingService.id || editingService._id;
+        const res = await fetch('/api/packages', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         if (res.ok) {
-          setServices(services.map(s => s.id === editingService.id ? { ...s, ...payload } : s));
+          setServices(services.map(s => (s.id || s._id) === (editingService.id || editingService._id) ? { ...s, ...payload } : s));
         }
       } else {
-        const res = await fetch('/api/services', {
+        const res = await fetch('/api/packages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         if (res.ok) {
           const result = await res.json();
-          setServices([result.service, ...services]);
+          setServices([result.package, ...services]);
         }
       }
     } catch (err) {
-      console.error("Failed to save service", err);
+      console.error("Failed to save package", err);
     }
     closeServiceModal();
     triggerSave();
@@ -552,7 +596,7 @@ function WebsiteManagementContent() {
       localStorage.setItem('weddingpur_service_deleted', JSON.stringify({ id, timestamp: Date.now() }));
     }
     try {
-      await fetch(`/api/services?id=${id}`, { method: 'DELETE', headers: { 'Cache-Control': 'no-cache' } });
+      await fetch(`/api/packages?id=${id}`, { method: 'DELETE', headers: { 'Cache-Control': 'no-cache' } });
     } catch (err) {
       console.error("Silent delete error:", err);
     }
@@ -723,7 +767,8 @@ function WebsiteManagementContent() {
     directorRole: "",
     bio: "",
     directorPhoto: "",
-    awards: ""
+    awards: "",
+    teamMembers: []
   });
 
   React.useEffect(() => {
@@ -747,8 +792,8 @@ function WebsiteManagementContent() {
     setIsEditAboutModal(false);
   };
 
-  const saveAbout = async () => {
-    const payload = { ...aboutFormData };
+  const saveAbout = async (overridePayload = null) => {
+    const payload = overridePayload || { ...aboutFormData };
     try {
       const res = await fetch('/api/about', {
         method: 'PUT',
@@ -764,8 +809,53 @@ function WebsiteManagementContent() {
     } catch (err) {
       console.error("Failed to save about config", err);
     }
-    closeAboutModal();
+    if (!overridePayload) {
+      closeAboutModal();
+    }
     triggerSave();
+  };
+
+  // Team Members handlers
+  const [isNewTeamMemberModal, setIsNewTeamMemberModal] = useState(false);
+  const [editingTeamIndex, setEditingTeamIndex] = useState(null);
+  const [teamFormData, setTeamFormData] = useState({ name: '', role: '', bio: '', photoUrl: '' });
+
+  const openTeamModal = (index = null) => {
+    if (index !== null) {
+      setEditingTeamIndex(index);
+      setIsNewTeamMemberModal(false);
+      setTeamFormData(aboutConfig.teamMembers[index] || { name: '', role: '', bio: '', photoUrl: '' });
+    } else {
+      setEditingTeamIndex(null);
+      setIsNewTeamMemberModal(true);
+      setTeamFormData({ name: '', role: '', bio: '', photoUrl: '' });
+    }
+  };
+
+  const closeTeamModal = () => {
+    setEditingTeamIndex(null);
+    setIsNewTeamMemberModal(false);
+  };
+
+  const saveTeamMember = () => {
+    const newTeam = [...(aboutConfig.teamMembers || [])];
+    if (editingTeamIndex !== null) {
+      newTeam[editingTeamIndex] = teamFormData;
+    } else {
+      newTeam.push({ ...teamFormData, id: Date.now().toString() });
+    }
+    const updatedConfig = { ...aboutConfig, teamMembers: newTeam };
+    setAboutConfig(updatedConfig);
+    saveAbout(updatedConfig); // Auto save to API when a team member is added/edited
+    closeTeamModal();
+  };
+
+  const deleteTeamMember = (index) => {
+    const newTeam = [...(aboutConfig.teamMembers || [])];
+    newTeam.splice(index, 1);
+    const updatedConfig = { ...aboutConfig, teamMembers: newTeam };
+    setAboutConfig(updatedConfig);
+    saveAbout(updatedConfig); // Auto save to API when a team member is deleted
   };
 
   // 9. Contact State
@@ -879,22 +969,14 @@ function WebsiteManagementContent() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs font-sans">
-              <div className="md:col-span-2">
-                <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Top Badge Tagline</label>
-                <input
-                  type="text"
-                  value={landingConfig.badge}
-                  onChange={e => setLandingConfig({ ...landingConfig, badge: e.target.value })}
-                  className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D4AF37] font-mono font-bold focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
+              {/* Top Badge Removed as per request */}
 
               <div>
                 <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Headline Line 1 (White)</label>
                 <input
                   type="text"
-                  value={landingConfig.titleLine1}
-                  onChange={e => setLandingConfig({ ...landingConfig, titleLine1: e.target.value })}
+                  value={landingConfig.headlineWhite || ''}
+                  onChange={e => setLandingConfig({ ...landingConfig, headlineWhite: e.target.value })}
                   className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-white font-extrabold text-base focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
@@ -903,8 +985,8 @@ function WebsiteManagementContent() {
                 <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Headline Line 2 (Gold Accent)</label>
                 <input
                   type="text"
-                  value={landingConfig.titleLine2}
-                  onChange={e => setLandingConfig({ ...landingConfig, titleLine2: e.target.value })}
+                  value={landingConfig.headlineGold || ''}
+                  onChange={e => setLandingConfig({ ...landingConfig, headlineGold: e.target.value })}
                   className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D4AF37] font-extrabold text-base focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
@@ -913,7 +995,7 @@ function WebsiteManagementContent() {
                 <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Supporting Narrative Subtitle</label>
                 <textarea
                   rows={2}
-                  value={landingConfig.subtitle}
+                  value={landingConfig.subtitle || ''}
                   onChange={e => setLandingConfig({ ...landingConfig, subtitle: e.target.value })}
                   className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-white focus:outline-none focus:border-[#D4AF37] font-normal leading-relaxed"
                 />
@@ -927,32 +1009,43 @@ function WebsiteManagementContent() {
 
                 <div className="pt-2 space-y-4">
                   <div>
-                    <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Hero Background Video URL (YouTube)</label>
-                    <input
-                      type="text"
-                      value={landingConfig.bgVideoUrl || ''}
-                      onChange={e => setLandingConfig({ ...landingConfig, bgVideoUrl: e.target.value })}
-                      placeholder="https://www.youtube.com/watch?v=3ImICPkGAkg"
-                      className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37]"
-                    />
+                    <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Hero Background Video URL (YouTube or MP4)</label>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="text"
+                        value={landingConfig.heroVideoUrl || ''}
+                        onChange={e => setLandingConfig({ ...landingConfig, heroVideoUrl: e.target.value })}
+                        placeholder="https://ik.imagekit.io/weddingpur/video.mp4"
+                        className="flex-1 bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37]"
+                      />
+                      <label className={`shrink-0 flex items-center justify-center bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D4AF37] font-sans text-xs font-semibold uppercase tracking-wider cursor-pointer hover:bg-[#121518] hover:border-[#D4AF37] transition-colors ${isUploadingVideo ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                        {isUploadingVideo ? 'Uploading...' : 'Upload Video'}
+                        <input
+                          type="file"
+                          accept="video/mp4,video/webm"
+                          className="hidden"
+                          onChange={handleVideoUpload}
+                          disabled={isUploadingVideo}
+                        />
+                      </label>
+                    </div>
                   </div>
                   <div>
                     <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Hero Fallback Background Image (CDN URL)</label>
                     <input
                       type="text"
-                      value={landingConfig.bgImage || ''}
-                      onChange={e => setLandingConfig({ ...landingConfig, bgImage: e.target.value })}
+                      value={landingConfig.heroImageUrl || ''}
+                      onChange={e => setLandingConfig({ ...landingConfig, heroImageUrl: e.target.value })}
                       placeholder="https://ik.imagekit.io/..."
                       className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37]"
                     />
                   </div>
                 </div>
 
-                {/* Live Preview Box */}
                 <div className="mt-4 border border-[#2B2519] rounded-xl bg-[#0B0D0E] overflow-hidden flex flex-col md:flex-row">
                   <div className="w-full md:w-1/3 bg-[#181B20] flex items-center justify-center p-4 border-b md:border-b-0 md:border-r border-[#2B2519]">
                     <span className="text-4xl text-[#2B2519]">
-                      {landingConfig.bgVideoUrl ? '🎬' : '🖼️'}
+                      {landingConfig.heroVideoUrl ? '🎬' : '🖼️'}
                     </span>
                   </div>
                   <div className="w-full md:w-2/3 p-4 flex flex-col justify-center">
@@ -976,8 +1069,8 @@ function WebsiteManagementContent() {
                 <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Footer Cities Tag</label>
                 <input
                   type="text"
-                  value={landingConfig.serviceCities}
-                  onChange={e => setLandingConfig({ ...landingConfig, serviceCities: e.target.value })}
+                  value={landingConfig.footerCities || ''}
+                  onChange={e => setLandingConfig({ ...landingConfig, footerCities: e.target.value })}
                   className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#8A7D5C] font-mono focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
@@ -1157,7 +1250,7 @@ function WebsiteManagementContent() {
                   <div className="p-5 space-y-2 flex-1 flex flex-col justify-between">
                     <div>
                       <h4 className="text-base font-sans font-semibold tracking-tight text-white leading-snug truncate group-hover:text-[#D4AF37] transition-colors">{p.title}</h4>
-                      <p className="text-[10px] font-mono text-[#8A7D5C] uppercase tracking-wider mt-1">{p.venue}</p>
+                      <p className="text-[10px] font-mono text-[#8A7D5C] uppercase tracking-wider mt-1">{p.location}</p>
                     </div>
                     <div className="flex justify-between items-center pt-3 mt-3 border-t border-[#1C1F24]">
                       <button onClick={() => openPhotoModal(p)} className="text-[#D4AF37] text-xs font-sans font-semibold hover:text-[#F3E5AB] cursor-pointer">Edit</button>
@@ -1202,7 +1295,12 @@ function WebsiteManagementContent() {
                   </div>
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
-                      <h4 className="text-base font-sans font-semibold tracking-tight text-white">{f.title}</h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-base font-sans font-semibold tracking-tight text-white">{f.title}</h4>
+                        {f.isFeatured && (
+                          <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-[#D4AF37] text-black">FEATURED</span>
+                        )}
+                      </div>
                       <div className="flex justify-between items-center mt-1">
                         <span className="text-[10px] font-mono uppercase tracking-wider text-[#8A7D5C]">{f.venue}</span>
                         <span className="text-[11px] font-sans font-semibold text-emerald-400">{f.couple}</span>
@@ -1408,6 +1506,46 @@ function WebsiteManagementContent() {
                 </div>
               </div>
             </div>
+
+            {/* CORE TEAM MEMBERS SECTION */}
+            <div className="pt-10 border-t border-[#1C1F24] mt-10">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white font-sans">Core Team Members</h2>
+                  <p className="text-xs font-sans text-[#8A7D5C] mt-1 font-normal">Manage the experts displayed on the About page.</p>
+                </div>
+                <button onClick={() => openTeamModal()} className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs font-sans font-semibold uppercase tracking-wider transition-all cursor-pointer shadow-md">
+                  + Add Team Member
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {(aboutConfig.teamMembers || []).map((member, idx) => (
+                  <div key={idx} className="bg-[#121518] border border-[#2B2519] rounded-3xl p-6 hover:border-[#D4AF37] transition-all flex flex-col items-center text-center shadow-xl group">
+                    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#D4AF37]/50 mb-4 bg-[#181B20] transition-transform group-hover:scale-105">
+                      {member.photoUrl ? (
+                        <img src={member.photoUrl} alt={member.name} className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-[#8A7D5C] text-[10px] uppercase font-mono text-center leading-tight">No<br/>Photo</div>
+                      )}
+                    </div>
+                    <h4 className="text-base font-bold text-white mb-1">{member.name}</h4>
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-[#D4AF37] block mb-3">{member.role}</span>
+                    <p className="text-xs text-[#A89D84] line-clamp-3 mb-4 leading-relaxed font-light">{member.bio}</p>
+                    <div className="flex space-x-3 mt-auto pt-4 w-full justify-center border-t border-[#1C1F24]">
+                      <button onClick={() => openTeamModal(idx)} className="text-[#D4AF37] text-[11px] font-sans font-semibold uppercase tracking-wider hover:text-[#F3E5AB] cursor-pointer">Edit</button>
+                      <button onClick={() => deleteTeamMember(idx)} className="text-rose-400 text-[11px] font-sans font-semibold uppercase tracking-wider hover:text-rose-300 cursor-pointer">Delete</button>
+                    </div>
+                  </div>
+                ))}
+                {(aboutConfig.teamMembers || []).length === 0 && (
+                  <div className="col-span-full py-12 text-center text-[#8A7D5C] border border-dashed border-[#2B2519] rounded-3xl">
+                    No team members added yet. Click "+ Add Team Member" to get started.
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
         )}
 
@@ -1558,7 +1696,7 @@ function WebsiteManagementContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Venue / Location</label>
-                  <input type="text" value={photoFormData.venue} onChange={e => setPhotoFormData({...photoFormData, venue: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D4AF37] font-mono focus:outline-none focus:border-[#D4AF37]" placeholder="e.g. JAIPUR PALACE" />
+                  <input type="text" value={photoFormData.location} onChange={e => setPhotoFormData({...photoFormData, location: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D4AF37] font-mono focus:outline-none focus:border-[#D4AF37]" placeholder="e.g. JAIPUR PALACE" />
                 </div>
                 <div>
                   <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Category Filter</label>
@@ -1618,6 +1756,11 @@ function WebsiteManagementContent() {
               <div>
                 <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Description</label>
                 <textarea rows={2} value={filmFormData.description} onChange={e => setFilmFormData({...filmFormData, description: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-[#A89D84] font-normal leading-relaxed focus:outline-none focus:border-[#D4AF37]" placeholder="A short descriptive text..." />
+              </div>
+
+              <div className="flex items-center gap-3 bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3">
+                <input type="checkbox" checked={filmFormData.isFeatured} onChange={e => setFilmFormData({...filmFormData, isFeatured: e.target.checked})} className="w-4 h-4 accent-[#D4AF37] cursor-pointer" id="isFeaturedCheck" />
+                <label htmlFor="isFeaturedCheck" className="text-[#D4AF37] text-xs font-semibold cursor-pointer">Set as Featured Hero Film</label>
               </div>
 
               <div>
@@ -1892,6 +2035,48 @@ function WebsiteManagementContent() {
             <div className="flex justify-end gap-3 pt-4 border-t border-[#2B2519]">
               <button onClick={closePillarModal} className="px-5 py-2.5 rounded-xl border border-[#2B2519] text-[#8A7D5C] hover:text-white font-sans font-semibold uppercase text-xs tracking-wider transition-all cursor-pointer">Cancel</button>
               <button onClick={savePillar} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-sans font-semibold uppercase tracking-wider text-xs transition-all cursor-pointer">Save Pillar</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT / ADD TEAM MEMBER */}
+      {(editingTeamIndex !== null || isNewTeamMemberModal) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 font-sans">
+          <div className="bg-[#121518] border border-[#2B2519] rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 lg:p-8 space-y-6 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-[#2B2519] pb-4">
+              <h2 className="text-xl font-sans font-semibold tracking-tight text-white">
+                {isNewTeamMemberModal ? "Add New Team Member" : "Edit Team Member"}
+              </h2>
+              <button onClick={closeTeamModal} className="text-[#8A7D5C] hover:text-white text-2xl leading-none cursor-pointer">&times;</button>
+            </div>
+            
+            <div className="space-y-4 text-xs font-sans">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Name</label>
+                  <input type="text" value={teamFormData.name} onChange={e => setTeamFormData({...teamFormData, name: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#D4AF37]" placeholder="e.g. Rahul Sharma" />
+                </div>
+                <div>
+                  <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Role / Designation</label>
+                  <input type="text" value={teamFormData.role} onChange={e => setTeamFormData({...teamFormData, role: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D4AF37] font-mono focus:outline-none focus:border-[#D4AF37]" placeholder="e.g. Lead Cinematographer" />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Short Bio</label>
+                <textarea rows={3} value={teamFormData.bio} onChange={e => setTeamFormData({...teamFormData, bio: e.target.value})} className="w-full bg-[#181B20] border border-[#2B2519] rounded-xl p-4 text-[#A89D84] font-normal leading-relaxed focus:outline-none focus:border-[#D4AF37]" placeholder="A brief description of their expertise..." />
+              </div>
+
+              <div>
+                <label className="block text-[#8A7D5C] uppercase font-semibold tracking-wider text-[10px] mb-1">Portrait Photo URL</label>
+                <input type="text" value={teamFormData.photoUrl} onChange={e => setTeamFormData({...teamFormData, photoUrl: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono focus:outline-none focus:border-[#D4AF37]" placeholder="https://..." />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-[#2B2519]">
+              <button onClick={closeTeamModal} className="px-5 py-2.5 rounded-xl border border-[#2B2519] text-[#8A7D5C] hover:text-white font-sans font-semibold uppercase text-xs tracking-wider transition-all cursor-pointer">Cancel</button>
+              <button onClick={saveTeamMember} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black font-sans font-semibold uppercase tracking-wider text-xs transition-all cursor-pointer">Save Member</button>
             </div>
           </div>
         </div>

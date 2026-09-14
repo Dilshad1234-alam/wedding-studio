@@ -10,6 +10,7 @@ const CommercialClientSchema = new mongoose.Schema({
   location: { type: String },
   totalBudget: { type: Number },
   status: { type: String, enum: ['Lead', 'Pre-Production', 'Production', 'Post-Production', 'Completed'], default: 'Lead' },
+  documentUrl: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true, collection: 'commercialclients' });
 

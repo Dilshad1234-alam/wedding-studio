@@ -25,13 +25,7 @@ export default function LandingPage({ initialData = null }) {
       });
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0B0D0E] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#D4AF37]"></div>
-      </div>
-    );
-  }
+
 
   const safeConfig = landingConfig || {};
 
@@ -109,7 +103,9 @@ export default function LandingPage({ initialData = null }) {
     return match ? match[1] : null;
   };
 
-  const heroVideoId = getYoutubeId(safeConfig.bgVideoUrl || "https://www.youtube.com/watch?v=3ImICPkGAkg");
+  const rawVideoUrl = safeConfig.heroVideoUrl || safeConfig.bgVideoUrl; // Added bgVideoUrl for backward compatibility temporarily
+  const isDirectVideo = rawVideoUrl && (rawVideoUrl.toLowerCase().endsWith('.mp4') || rawVideoUrl.toLowerCase().endsWith('.webm') || rawVideoUrl.startsWith('/uploads/') || rawVideoUrl.includes('.mp4'));
+  const heroVideoId = !isDirectVideo ? getYoutubeId(rawVideoUrl) : null;
 
   return (
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-[#0B0D0E] to-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
@@ -117,44 +113,66 @@ export default function LandingPage({ initialData = null }) {
       {/* 1. CINEMATIC PATNA HERO */}
       <section className="relative min-h-[92vh] flex flex-col justify-center items-center text-center px-6 overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center z-0 scale-100"
+          className="absolute inset-0 bg-cover bg-center z-0 scale-100 overflow-hidden flex justify-center items-center"
           style={{
-            backgroundImage: !heroVideoId ? `url('${safeConfig.bgImage || 'https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%202.avif'}')` : 'none'
+            backgroundImage: (!heroVideoId && !isDirectVideo) ? `url('${safeConfig.heroImageUrl || safeConfig.bgImage || 'https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%202.avif'}')` : 'none'
           }}
         >
+          {isDirectVideo && (
+            <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
+              >
+                <source src={rawVideoUrl} type="video/mp4" />
+              </video>
+            </div>
+          )}
           {heroVideoId && (
-            <iframe
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-125 sm:scale-150"
-              src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&playlist=${heroVideoId}&controls=0&showinfo=0&autohide=1&modestbranding=1&iv_load_policy=3&disablekb=1`}
-              frameBorder="0"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            ></iframe>
+            <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+              <iframe
+                className="absolute top-1/2 left-1/2 pointer-events-none -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: '100vw',
+                  height: '100vh',
+                  minWidth: '177.77vh',
+                  minHeight: '56.25vw'
+                }}
+                src={`https://www.youtube.com/embed/${heroVideoId}?autoplay=1&mute=1&loop=1&playlist=${heroVideoId}&controls=0&showinfo=0&autohide=1&modestbranding=1&iv_load_policy=3&disablekb=1`}
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              ></iframe>
+            </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-b from-[#1E221D]/75 via-[#1E221D]/55 to-[#1E221D]/85 z-10"></div>
         </div>
 
-        <div className="w-full min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-8 text-center relative z-10 mx-auto">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#F5F5F5] tracking-tight leading-[1.12] drop-shadow-md">
-            {safeConfig.titleLine1 || "Best Wedding Photographers"} <br className="hidden sm:inline" />
-            <span className="italic font-light text-[#D4AF37]">{safeConfig.titleLine2 || "In Patna, Bihar"}</span>
+        <div className="w-full min-h-[90vh] flex flex-col justify-center items-center px-4 sm:px-8 pt-24 sm:pt-0 text-center relative z-10 mx-auto">
+
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#F5F5F5] tracking-tight leading-[1.15] sm:leading-[1.12] drop-shadow-md">
+            {safeConfig.headlineWhite || safeConfig.titleLine1 || "Best Wedding Photographers"} <br className="hidden sm:inline" />
+            <span className="italic font-light text-[#D4AF37] block sm:inline mt-2 sm:mt-0">{safeConfig.headlineGold || safeConfig.titleLine2 || "In Patna, Bihar"}</span>
           </h1>
 
-          <p className="text-[#F5F5F5]/90 text-sm sm:text-lg font-light tracking-wide max-w-2xl mx-auto mt-6 mb-4">
+          <p className="text-[#F5F5F5]/90 text-sm sm:text-lg font-light tracking-wide max-w-2xl mx-auto mt-6 sm:mt-6 mb-4 px-2">
             {safeConfig.subtitle || "We capture timeless weddings for modern couples who want their story told beautifully."}
           </p>
 
-          <div className="flex flex-wrap gap-4 justify-center items-center mt-6">
-            <Link onClick={handleProtectedAction()} className="border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/portfolio">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center mt-6 sm:mt-8 w-full sm:w-auto px-4 sm:px-0">
+            <Link onClick={handleProtectedAction()} className="w-full sm:w-auto border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-6 sm:px-9 py-3.5 rounded-full text-[11px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/portfolio">
               Explore Portfolio
             </Link>
-            <Link onClick={handleProtectedAction()} className="bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 px-9 py-3.5 rounded-full text-xs tracking-[0.25em] uppercase font-medium shadow-md transition-all duration-300 font-black" href="/contact">
+            <Link onClick={handleProtectedAction()} className="w-full sm:w-auto bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 px-6 sm:px-9 py-3.5 rounded-full text-[11px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase font-medium transition-all duration-300 font-black" href="/contact">
               Contact Us
             </Link>
           </div>
 
-          <span className="text-[10px] tracking-[0.3em] uppercase text-[#C5B388] mt-10">
-            Patna • Varanasi • Jaipur • Goa
+          <span className="text-[9px] sm:text-[10px] tracking-[0.25em] sm:tracking-[0.3em] uppercase text-[#C5B388] mt-10 sm:mt-12 px-4 text-center leading-relaxed">
+            {safeConfig.footerCities || safeConfig.serviceCities || "Patna • Varanasi • Jaipur • Goa"}
           </span>
         </div>
 
@@ -314,7 +332,7 @@ export default function LandingPage({ initialData = null }) {
             
             <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] gap-6 px-3">
               {[...(safeConfig.servicesPillars || []), ...(safeConfig.servicesPillars || [])].map((pillar, i) => (
-                <div key={`set1-${i}`} className="w-[320px] sm:w-[350px] shrink-0 bg-[#121518] rounded-3xl p-6 sm:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group/card hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 min-h-[460px]">
+                <div key={`set1-${i}`} className="w-[85vw] max-w-[300px] sm:max-w-none sm:w-[350px] shrink-0 bg-[#121518] rounded-3xl p-6 sm:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group/card hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 min-h-[460px]">
                   <div>
                     <div className="w-full h-[240px] mb-6 rounded-2xl overflow-hidden bg-[#0B0D0E] border border-[#2B2519]">
                       <img 
@@ -344,7 +362,7 @@ export default function LandingPage({ initialData = null }) {
 
             <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] gap-6 px-3" aria-hidden="true">
               {[...(safeConfig.servicesPillars || []), ...(safeConfig.servicesPillars || [])].map((pillar, i) => (
-                <div key={`set2-${i}`} className="w-[320px] sm:w-[350px] shrink-0 bg-[#121518] rounded-3xl p-6 sm:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group/card hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 min-h-[460px]">
+                <div key={`set2-${i}`} className="w-[85vw] max-w-[300px] sm:max-w-none sm:w-[350px] shrink-0 bg-[#121518] rounded-3xl p-6 sm:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group/card hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 min-h-[460px]">
                   <div>
                     <div className="w-full h-[240px] mb-6 rounded-2xl overflow-hidden bg-[#0B0D0E] border border-[#2B2519]">
                       <img 
@@ -379,7 +397,7 @@ export default function LandingPage({ initialData = null }) {
 
       {/* 5. CINEMATIC WEDDING FILMS SHOWCASE (WEDDINGPUR YOUTUBE REEL) */}
       <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
-        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
+        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 pt-16 pb-4">
           
           {/* Header */}
           <div className="text-center mb-16">
@@ -519,7 +537,7 @@ export default function LandingPage({ initialData = null }) {
 
       {/* 6. VERIFIED GOOGLE REVIEWS SECTION (REAL CLIENT FEEDBACK) */}
       <section className="bg-[#0B0D0E] text-[#F5F5F5]">
-        <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 py-16">
+        <div className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 pt-4 pb-16">
           
           {/* Header */}
           <div className="text-center mb-16">
@@ -550,32 +568,32 @@ export default function LandingPage({ initialData = null }) {
             </button>
 
             {/* Carousel Track */}
-            <div className="overflow-hidden relative min-h-[300px]">
+            <div className="overflow-hidden relative min-h-[550px] sm:min-h-[450px] py-4">
               {realGoogleReviews.map((review, idx) => (
                 <div 
                   key={idx}
-                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === reviewIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out flex justify-center items-center px-4 ${idx === reviewIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
                 >
-                  <div className="flex flex-col justify-between h-full border-l border-[#2B2519] pl-8 py-4">
+                  <div className="bg-[#14171A] border border-[#2B2519] rounded-[2rem] p-8 sm:p-12 shadow-2xl max-w-4xl w-full flex flex-col justify-between h-full hover:border-[#D4AF37]/50 transition-colors duration-500">
                     <div>
-                      <div className="flex items-center gap-1 text-[#D4AF37] text-sm mb-4">
+                      <div className="flex justify-center items-center gap-1 text-[#D4AF37] text-xl mb-6">
                         ★★★★★
                       </div>
-                      <p className="text-sm sm:text-base md:text-lg text-[#C5B388] italic leading-relaxed mb-8 font-light">
+                      <p className="text-base sm:text-lg md:text-xl text-[#F5F5F5] italic leading-relaxed mb-8 font-light text-center">
                         "{review.text}"
                       </p>
                     </div>
 
                     <div className="pt-6 border-t border-[#2B2519] flex items-center justify-between">
-                      <div>
-                        <span className="text-xs uppercase tracking-wider font-semibold block text-[#C5B388]">
+                      <div className="text-left">
+                        <span className="text-xs sm:text-sm uppercase tracking-wider font-semibold block text-[#F5F5F5]">
                           {review.name}
                         </span>
-                        <span className="text-[10px] text-[#C5B388] block tracking-wide">
+                        <span className="text-[10px] sm:text-xs text-[#8A7D5C] block tracking-wide mt-1">
                           {review.date} • {review.role}
                         </span>
                       </div>
-                      <div className="w-6 h-6 rounded-full bg-[#121518]/10 flex items-center justify-center p-1.5 shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-[#121518]/10 flex items-center justify-center p-1.5 shrink-0">
                         <svg viewBox="0 0 24 24" className="w-full h-full">
                           <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
                           <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/>
@@ -609,12 +627,7 @@ export default function LandingPage({ initialData = null }) {
               ))}
             </div>          </div>
 
-          {/* Bottom Footer Rating Summary */}
-          <div className="mt-16 pt-8 border-t border-[#2B2519] text-center">
-            <span className="text-[11px] uppercase tracking-widest text-[#C5B388] hover:text-white transition cursor-pointer inline-flex items-center gap-2">
-              Rated 4.9 / 5.0 across 120+ Verified Google Reviews ↗
-            </span>
-          </div>
+
 
         </div>
       </section>
@@ -622,7 +635,7 @@ export default function LandingPage({ initialData = null }) {
 
       {/* 6.5. FREQUENTLY ASKED QUESTIONS */}
       <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
-        <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 py-16">
+        <div className="w-full max-w-[1200px] mx-auto px-6 sm:px-8 pt-16 pb-4">
           <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
             FAQS
           </span>
@@ -633,6 +646,10 @@ export default function LandingPage({ initialData = null }) {
           <div className="space-y-4">
             {[
               {
+                q: "What is the signature style of LensLoom Production?",
+                a: "Our signature style at LensLoom is a blend of cinematic storytelling and fine-art portraiture. We focus on natural, candid moments infused with a touch of editorial luxury, ensuring your memories look timeless and grand."
+              },
+              {
                 q: "How far in advance should we book your services?",
                 a: "We typically book 6-12 months in advance for peak wedding seasons. To ensure we can dedicate our full creative energy to your celebration, we take on a limited number of commissions each year."
               },
@@ -642,7 +659,15 @@ export default function LandingPage({ initialData = null }) {
               },
               {
                 q: "How many photographers will be present on our wedding day?",
-                a: "Our standard luxury collections include a lead photographer (or cinematographer) and an associate to ensure every angle, fleeting moment, and grand detail is impeccably documented."
+                a: "Our standard luxury collections include a lead photographer, a cinematographer, and an associate to ensure every angle, fleeting moment, and grand detail is impeccably documented."
+              },
+              {
+                q: "Do you provide raw footage of our wedding?",
+                a: "As a premium production house, we deliver meticulously edited, color-graded, and sound-designed final films that reflect the true essence of your day. We typically do not provide unedited raw footage, but extended cuts can be curated upon request."
+              },
+              {
+                q: "How does the booking process work?",
+                a: "Once you reach out via our contact page, we'll schedule a personalized consultation to understand your vision. After finalizing your bespoke collection, a signed agreement and retainer secure your date on our calendar."
               },
               {
                 q: "When will we receive our final photos and films?",
@@ -657,17 +682,17 @@ export default function LandingPage({ initialData = null }) {
                   className="w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none"
                   onClick={() => toggleFaq(index)}
                 >
-                  <h3 className="text-sm font-semibold text-white">{faq.q}</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-white pr-4">{faq.q}</h3>
                   <span className={`text-[#D4AF37] transition-transform duration-300 flex-shrink-0 ml-4 ${openFaq === index ? 'rotate-180' : ''}`}>
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
                     </svg>
                   </span>
                 </button>
                 <div 
-                  className={`px-6 overflow-hidden transition-all duration-500 ease-in-out ${openFaq === index ? 'max-h-40 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
+                  className={`px-6 overflow-hidden transition-all duration-500 ease-in-out ${openFaq === index ? 'max-h-60 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
                 >
-                  <p className="text-xs text-[#C5B388] font-light leading-relaxed border-t border-[#2B2519] pt-4">
+                  <p className="text-sm sm:text-base text-[#C5B388] font-light leading-relaxed border-t border-[#2B2519] pt-4">
                     {faq.a}
                   </p>
                 </div>
@@ -679,8 +704,8 @@ export default function LandingPage({ initialData = null }) {
 
 
       {/* 7. LIVE INSTAGRAM FEED SHOWCASE (@weddingpur) */}
-      <section className="bg-[#0B0D0E] border-t border-[#2B2519]">
-        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 py-16">
+      <section className="bg-[#0B0D0E]">
+        <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 pt-4 pb-16">
           
           {/* Instagram Profile Header Dynamic */}
           <div className="flex flex-col items-center text-center mb-12">

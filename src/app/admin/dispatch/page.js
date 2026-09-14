@@ -7,6 +7,8 @@ export default function ClientDispatchConsole() {
   const [selectedMonth, setSelectedMonth] = useState('SEP');
   const [expandedClientId, setExpandedClientId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingClientId, setEditingClientId] = useState(null);
+  const [uploadingPdfId, setUploadingPdfId] = useState(null);
 
   const monthsList = [
     { key: 'JAN', name: 'JAN', num: 1 },
@@ -299,33 +301,64 @@ export default function ClientDispatchConsole() {
       date: formatFullDate(day.dayOfMonth, formData.month, formData.year)
     }));
 
-    const newClient = {
-      id: Date.now(),
-      clientName: formData.clientName || "Unnamed Client",
-      destination: formData.destination || "Patna",
-      totalBudget: formData.totalBudget.startsWith('₹') ? formData.totalBudget : `₹${formData.totalBudget}`,
-      status: formData.status,
-      daysCount: formData.days.length,
-      year: parseInt(formData.year, 10),
-      month: formData.month,
-      schedule: formattedSchedule
-    };
+    if (editingClientId) {
+      setClients(prev => prev.map(c => {
+        if (c.id === editingClientId) {
+          const updated = {
+            ...c,
+            clientName: formData.clientName || "Unnamed Client",
+            destination: formData.destination || "Patna",
+            totalBudget: formData.totalBudget.startsWith('₹') ? formData.totalBudget : `₹${formData.totalBudget}`,
+            status: formData.status,
+            daysCount: formData.days.length,
+            year: parseInt(formData.year, 10),
+            month: formData.month,
+            schedule: formattedSchedule
+          };
+          if (updated._id) {
+            fetch('/api/wedding/clients', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updated)
+            }).catch(console.error);
+          }
+          return updated;
+        }
+        return c;
+      }));
+      setExpandedClientId(editingClientId);
+      handleYearTabChange(parseInt(formData.year, 10));
+      handleMonthTabChange(formData.month);
+    } else {
+      const newClient = {
+        id: Date.now(),
+        clientName: formData.clientName || "Unnamed Client",
+        destination: formData.destination || "Patna",
+        totalBudget: formData.totalBudget.startsWith('₹') ? formData.totalBudget : `₹${formData.totalBudget}`,
+        status: formData.status,
+        daysCount: formData.days.length,
+        year: parseInt(formData.year, 10),
+        month: formData.month,
+        schedule: formattedSchedule
+      };
 
-    const updatedClients = [newClient, ...clients];
-    setClients(updatedClients);
-    setExpandedClientId(newClient.id);
+      const updatedClients = [newClient, ...clients];
+      setClients(updatedClients);
+      setExpandedClientId(newClient.id);
+      
+      handleYearTabChange(newClient.year);
+      handleMonthTabChange(newClient.month);
+    }
+
     setIsModalOpen(false);
-
-    handleYearTabChange(newClient.year);
-    handleMonthTabChange(newClient.month);
-
+    setEditingClientId(null);
     setFormData({
       clientName: "",
       destination: "",
       totalBudget: "",
       status: "SCHEDULED",
-      year: newClient.year,
-      month: newClient.month,
+      year: selectedYear,
+      month: selectedMonth,
       days: [
         {
           dayNo: 1,
@@ -342,6 +375,63 @@ export default function ClientDispatchConsole() {
         }
       ]
     });
+  };
+
+  const openEditModal = (client) => {
+    setEditingClientId(client.id);
+    setFormData({
+      clientName: client.clientName || "",
+      destination: client.destination || "",
+      totalBudget: client.totalBudget || "",
+      status: client.status || "SCHEDULED",
+      year: client.year || selectedYear,
+      month: client.month || selectedMonth,
+      days: client.schedule && client.schedule.length > 0 ? client.schedule.map(d => ({
+        ...d,
+        dayOfMonth: d.date ? d.date.split(' ')[0] : ''
+      })) : [
+        { dayNo: 1, dayOfMonth: "", eventName: "Event", location: "", tradPhoto: "", candidPhoto: "", allTypePhoto: "", tradVideo: "", cinema: "", drone: "", reportingTime: "10:00 AM" }
+      ]
+    });
+    setIsModalOpen(true);
+  };
+
+  const handlePdfUpload = async (e, clientId) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingPdfId(clientId);
+    const formUpload = new FormData();
+    formUpload.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formUpload,
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setClients(prev => prev.map(c => {
+          if (c.id === clientId) {
+            const updated = { ...c, documentUrl: data.url };
+            if (updated._id) {
+               fetch('/api/wedding/clients', {
+                 method: 'PUT',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify(updated)
+               }).catch(console.error);
+            }
+            return updated;
+          }
+          return c;
+        }));
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploadingPdfId(null);
+    }
   };
 
   const deleteClient = (id) => {
@@ -372,7 +462,30 @@ export default function ClientDispatchConsole() {
           </Link>
           <button
             onClick={() => {
-              setFormData((prev) => ({ ...prev, year: selectedYear, month: selectedMonth }));
+              setEditingClientId(null);
+              setFormData({
+                clientName: "",
+                destination: "",
+                totalBudget: "",
+                status: "SCHEDULED",
+                year: selectedYear,
+                month: selectedMonth,
+                days: [
+                  {
+                    dayNo: 1,
+                    dayOfMonth: "15",
+                    eventName: "Haldi Shoot",
+                    location: "",
+                    tradPhoto: "",
+                    candidPhoto: "",
+                    allTypePhoto: "",
+                    tradVideo: "",
+                    cinema: "",
+                    drone: "",
+                    reportingTime: "10:00 AM"
+                  }
+                ]
+              });
               setIsModalOpen(true);
             }}
             className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89018] hover:from-[#F3E5AB] hover:to-[#D4AF37] text-black text-xs font-sans font-semibold uppercase tracking-wider shadow-lg shadow-[#D4AF37]/25 transition-all cursor-pointer"
@@ -536,6 +649,31 @@ export default function ClientDispatchConsole() {
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
+                      openEditModal(client);
+                    }}
+                    className="p-2 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#8A7D5C] hover:text-[#D4AF37] hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/10 transition-all duration-200 cursor-pointer inline-flex items-center justify-center"
+                    title="Edit Record"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                  </button>
+
+                  <label 
+                    onClick={(e) => e.stopPropagation()}
+                    className={`p-2 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#8A7D5C] hover:text-emerald-400 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all duration-200 cursor-pointer inline-flex items-center justify-center ${uploadingPdfId === client.id ? 'animate-pulse' : ''}`}
+                    title="Upload Document / PDF"
+                  >
+                    <input type="file" className="hidden" accept=".pdf,image/*" onChange={(e) => handlePdfUpload(e, client.id)} />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                  </label>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       deleteClient(client.id);
                     }}
                     className="p-2 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#8A7D5C] hover:text-rose-400 hover:border-rose-500/50 hover:bg-rose-500/10 transition-all duration-200 cursor-pointer inline-flex items-center justify-center"
@@ -545,6 +683,18 @@ export default function ClientDispatchConsole() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>
+
+                  {client.documentUrl && (
+                    <a
+                      href={client.documentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all"
+                    >
+                      View PDF
+                    </a>
+                  )}
 
                   <span className="text-xs text-[#8A7D5C] font-mono">
                     {isExpanded ? '▲ HIDE' : '▼ ROSTER'}
@@ -616,7 +766,7 @@ export default function ClientDispatchConsole() {
                   WEDDING SHOOT BUILDER
                 </span>
                 <h3 className="text-xl font-bold text-white">
-                  Add New Client & Multi-Day Crew Roster
+                  {editingClientId ? "Edit Client & Multi-Day Crew Roster" : "Add New Client & Multi-Day Crew Roster"}
                 </h3>
               </div>
               <button

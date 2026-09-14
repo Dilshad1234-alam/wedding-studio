@@ -53,7 +53,7 @@ export default function StoriesPage() {
   return (
     <div className="min-h-screen bg-[#0B0D0E] text-white selection:bg-[#D4AF37] selection:text-black">
       
-      {/* 1. ORIGINAL HEADER */}
+      {/* 1. STORIES HERO HEADER */}
       <section className=" pb-14 px-6 text-center space-y-3 max-w-2xl mx-auto">
         <span className="text-[10px] font-mono tracking-[0.25em] text-[#D4AF37] uppercase font-bold block">
           ROYAL NARRATIVES & SACRED VOWS

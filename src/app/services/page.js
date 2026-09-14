@@ -9,12 +9,12 @@ export default function ServicesPage() {
 
   const fetchPackages = async () => {
     try {
-      const res = await fetch('/api/services', { cache: 'no-store' });
+      const res = await fetch('/api/packages', { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         setPackages(data);
         if (data.length > 0) {
-          setActiveTabId(data[0].id);
+          setActiveTabId(data[0].id || data[0]._id);
         }
       }
     } catch (err) {
@@ -44,11 +44,19 @@ export default function ServicesPage() {
     return 'luxury';
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#07090A] flex items-center justify-center pt-0 pb-12 px-6">
+        <div className="w-10 h-10 border-4 border-[#D4AF37]/30 border-t-[#D4AF37] rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#07090A] text-[#F5F5F5] font-sans antialiased selection:bg-[#D4AF37] selection:text-black">
       
-      {/* 1. HERO HEADER */}
-      <section className=" pb-12 px-4 sm:px-8 lg:px-12 text-center relative overflow-hidden">
+      {/* 1. HERO SERVICES HEADER */}
+      <section className="pt-0 pb-12 px-4 sm:px-8 lg:px-12 text-center relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-[#D4AF37]/5 blur-[140px] pointer-events-none rounded-full" />
         
         <div className="max-w-4xl mx-auto space-y-4 relative z-10">
@@ -67,14 +75,15 @@ export default function ServicesPage() {
         {packages.length > 0 && (
           <div className="max-w-5xl mx-auto mt-10 grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-2 bg-[#101317] border border-[#222832] rounded-2xl">
             {packages.map((pkg) => {
-              const isActive = activeTabId === pkg.id;
+              const currentId = pkg.id || pkg._id;
+              const isActive = activeTabId === currentId;
               return (
                 <button
-                  key={pkg.id}
+                  key={currentId}
                   type="button"
                   onClick={() => {
-                    setActiveTabId(pkg.id);
-                    const el = document.getElementById(`suite-${pkg.id}`);
+                    setActiveTabId(currentId);
+                    const el = document.getElementById(`suite-${currentId}`);
                     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
                   className={`py-3 px-3 rounded-xl text-xs font-mono font-bold uppercase transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
@@ -98,11 +107,12 @@ export default function ServicesPage() {
       <section className="max-w-[1440px] mx-auto px-4 sm:px-8 pb-16 space-y-12">
         {packages.map((pkg, pIdx) => {
           const pkgKey = getPackageKey(pkg.title);
+          const currentId = pkg.id || pkg._id;
 
           return (
             <div
-              key={pkg.id}
-              id={`suite-${pkg.id}`}
+              key={currentId}
+              id={`suite-${currentId}`}
               className="w-full bg-[#0E1114] border border-[#222832] hover:border-[#D4AF37]/50 rounded-[28px] p-6 lg:p-8 shadow-2xl relative transition-all duration-300"
             >
               {/* 1. COMPACT TOP HEADER BAR */}

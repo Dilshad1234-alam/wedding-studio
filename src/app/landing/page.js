@@ -103,7 +103,9 @@ export default function LandingPage({ initialData = null }) {
     return match ? match[1] : null;
   };
 
-  const rawVideoUrl = safeConfig.heroVideoUrl || safeConfig.bgVideoUrl; // Added bgVideoUrl for backward compatibility temporarily
+  const fallbackVideoUrl = "https://res.cloudinary.com/demo/video/upload/v1684497672/docs/nature.mp4"; 
+  const configuredVideoUrl = safeConfig.heroVideoUrl || safeConfig.bgVideoUrl;
+  const rawVideoUrl = configuredVideoUrl || fallbackVideoUrl; 
   const isDirectVideo = rawVideoUrl && (rawVideoUrl.toLowerCase().endsWith('.mp4') || rawVideoUrl.toLowerCase().endsWith('.webm') || rawVideoUrl.startsWith('/uploads/') || rawVideoUrl.includes('.mp4'));
   const heroVideoId = !isDirectVideo ? getYoutubeId(rawVideoUrl) : null;
 
@@ -127,11 +129,10 @@ export default function LandingPage({ initialData = null }) {
                 playsInline
                 preload="auto"
                 key={videoError ? 'fallback' : rawVideoUrl}
+                src={videoError ? fallbackVideoUrl : rawVideoUrl}
                 className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
                 onError={() => setVideoError(true)}
-              >
-                <source src={videoError ? "https://res.cloudinary.com/demo/video/upload/v1652343202/elephants.mp4" : rawVideoUrl} type="video/mp4" />
-              </video>
+              />
             </div>
           )}
           {heroVideoId && (

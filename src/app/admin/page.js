@@ -65,7 +65,7 @@ export default function LoginPage() {
             <img 
               src="/lensloom-logo.png" 
               alt="LensLoom Production" 
-              className="h-24 w-auto object-contain mx-auto scale-[1.4]" 
+              className="h-24 w-auto object-contain mx-auto scale-[2.5]" 
             />
           </Link>
         </div>

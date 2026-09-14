@@ -75,7 +75,7 @@ export default function Footer() {
                 height={107}
                 quality={100}
                 unoptimized
-                className="h-10 sm:h-12 w-auto object-contain"
+                className="h-14 sm:h-16 w-auto object-contain scale-[1.3] origin-left md:origin-left origin-center"
               />
             </Link>
             <p className="text-sm text-[#C5B388] font-light leading-relaxed mb-8 max-w-xs">

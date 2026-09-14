@@ -104,7 +104,7 @@ export default function Navbar() {
                   priority
                   quality={100}
                   unoptimized
-                  className="h-16 sm:h-20 lg:h-24 w-auto object-contain -mt-2 lg:-mt-4" 
+                  className="h-24 sm:h-28 lg:h-[100px] w-auto object-contain scale-[3.0] sm:scale-[3.5] lg:scale-[3.5] origin-left" 
                 />
               </a>
             </div>
@@ -182,7 +182,7 @@ export default function Navbar() {
               priority
               quality={100}
               unoptimized
-              className="h-10 w-auto object-contain" 
+              className="h-12 w-auto object-contain scale-[1.4] origin-left" 
             />
             <button
               onClick={() => setIsOpen(false)}

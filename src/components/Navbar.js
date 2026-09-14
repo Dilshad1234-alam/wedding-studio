@@ -94,7 +94,7 @@ export default function Navbar() {
               <a
                 href="/"
                 onClick={handleLogoClick}
-                className="flex flex-col items-center cursor-pointer select-none focus:outline-none bg-transparent"
+                className="flex flex-col items-center cursor-pointer select-none focus:outline-none bg-transparent -ml-10 sm:-ml-6 md:ml-0"
               >
                 <Image 
                   src="/lensloom-logo.png" 
@@ -182,7 +182,7 @@ export default function Navbar() {
               priority
               quality={100}
               unoptimized
-              className="h-12 w-auto object-contain scale-[1.4] origin-left" 
+              className="h-12 w-auto object-contain scale-[2.5] origin-left" 
             />
             <button
               onClick={() => setIsOpen(false)}

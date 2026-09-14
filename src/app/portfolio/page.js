@@ -51,20 +51,20 @@ export default function PortfolioPage() {
     <main className="min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans antialiased selection:bg-[#5B6454] selection:text-white">
       
       {/* 1. PORTFOLIO HERO HEADER */}
-      <section className="pt-4 sm:pt-6 pb-12 px-6 text-center max-w-4xl mx-auto">
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-4">
+      <section className="pt-2 sm:pt-6 pb-2 sm:pb-8 px-6 text-center max-w-4xl mx-auto">
+        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl italic font-normal text-[#F5F5F5] tracking-tight mb-2">
           Recent Captures
         </h1>
 
-        {/* Category Pill Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-10">
+        {/* Category Pill Filters (Horizontal Scroll on Mobile) */}
+        <div className="flex overflow-x-auto w-full gap-3 mt-6 sm:mt-10 pb-2 justify-start sm:justify-center px-1 sm:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {categories.map((cat) => {
             const isActive = activeFilter === cat.key;
             return (
               <button
                 key={cat.key}
                 onClick={() => setActiveFilter(cat.key)}
-                className={`px-6 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer ${
+                className={`shrink-0 px-6 py-2.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer ${
                   isActive
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black shadow-md shadow-[#D4AF37]/20 border-transparent'
                     : 'bg-[#121518] border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37]/40'
@@ -78,7 +78,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* 2. BALANCED GALLERY GRID (UNIFORM HEIGHT & CLEAN BOTTOM MARGIN) */}
-      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
+      <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 pt-4 sm:pt-6 pb-12">
         {isLoading ? (
           <div className="flex justify-center items-center py-20 text-[#D4AF37]">
             Loading...
@@ -113,17 +113,21 @@ export default function PortfolioPage() {
                   </div>
                 </div>
 
-                {/* Minimalist Card Details Below Image */}
-                <div className="pt-4 pb-2 px-3 flex items-center justify-between">
-                  <div>
-                    <h4 className="font-serif text-lg text-[#F5F5F5] group-hover:text-[#D4AF37] transition-colors">
+                {/* Premium Card Details Below Image */}
+                <div className="pt-5 pb-3 px-2 sm:px-3 flex items-center justify-between gap-4">
+                  <div className="flex flex-col">
+                    <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] mb-1.5">
+                      {item.location || 'Wedding Event'}
+                    </p>
+                    <h4 className="font-serif text-xl sm:text-2xl text-[#F5F5F5] group-hover:text-[#D4AF37] transition-colors duration-300 leading-tight">
                       {item.title}
                     </h4>
-                    <p className="text-[10px] uppercase tracking-widest text-[#C5B388]">
-                      {item.location}
-                    </p>
                   </div>
-                  <Link aria-label="Book a shoot" className="w-9 h-9 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:shadow-[0_0_15px_rgba(212,175,55,0.45)] transition-all text-xs" href="/contact">
+                  <Link 
+                    aria-label="View Project" 
+                    className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[#D4AF37]/30 bg-[#0B0D0E] flex items-center justify-center text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:border-transparent hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all duration-300 text-sm sm:text-base group-hover:scale-110" 
+                    href="/contact"
+                  >
                     ↗
                   </Link>
                 </div>

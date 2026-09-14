@@ -130,7 +130,7 @@ export default function LandingPage({ initialData = null }) {
                 preload="auto"
                 key={videoError ? 'fallback' : rawVideoUrl}
                 src={videoError ? fallbackVideoUrl : rawVideoUrl}
-                className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-[70%_center] md:object-center"
                 onError={() => setVideoError(true)}
               />
             </div>
@@ -286,31 +286,37 @@ export default function LandingPage({ initialData = null }) {
                 description: "Some weddings are beautiful. Some are unforgettable. Abhishek and Ruchi's wedding was one of a kind. A Marwadi wedding full of life, laughter, and love that every single frame told a story worth saving forever. Click on the button to feel every moment of this beautiful union."
               }
             ]).map((story, i) => (
-              <div key={i} className="group cursor-pointer flex flex-col items-start text-left">
-                <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-5 bg-[#121518] border border-[#2B2519]">
+              <div key={i} className="group cursor-pointer flex flex-col h-full bg-[#121518]/40 border border-[#2B2519]/50 hover:border-[#D4AF37]/40 hover:bg-[#121518] transition-all duration-500 rounded-[2rem] p-4 sm:p-5 overflow-hidden shadow-lg hover:shadow-2xl">
+                <div className="w-full aspect-[4/5] rounded-[1.5rem] overflow-hidden mb-6 bg-[#0B0D0E] relative">
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
                   <img 
                     src={story.img} 
                     alt={story.title || story.names} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" 
                   />
                 </div>
-                <h3 className="font-serif text-2xl text-white mb-1">{story.title || story.names}</h3>
-                <p className="text-[10px] tracking-[0.25em] uppercase text-[#C5B388] mb-2">{story.location || story.sub}</p>
                 
-                {story.description ? (
-                  <>
-                    <p className="text-[#C5B388] text-[13px] leading-[1.8] mt-3 mb-6 pr-4">
-                      {story.description}
-                    </p>
-                    <Link href={`/stories/${story.slug || ''}`} className="inline-block border border-[#D4AF37]/50 text-[#C5B388] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:font-black hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] px-7 py-2.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer">
-                      View Story
-                    </Link>
-                  </>
-                ) : (
-                  <span className="text-[11px] uppercase tracking-wider text-[#D4AF37] group-hover:underline inline-flex items-center gap-1 mt-2">
-                    View Complete Story ↗
-                  </span>
-                )}
+                <div className="flex flex-col flex-grow px-2 pb-2">
+                  <p className="text-[10px] tracking-[0.3em] font-semibold uppercase text-[#D4AF37] mb-3">{story.location || story.sub}</p>
+                  <h3 className="font-serif text-3xl text-white mb-4 group-hover:text-[#D4AF37] transition-colors duration-300">{story.title || story.names}</h3>
+                  
+                  {story.description ? (
+                    <>
+                      <p className="text-[#A0A0A0] text-sm leading-relaxed mb-8 line-clamp-3 font-light">
+                        {story.description}
+                      </p>
+                      <div className="mt-auto">
+                        <Link href={`/stories/${story.slug || ''}`} className="inline-flex items-center justify-center border border-[#D4AF37]/50 text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:border-transparent px-8 py-3.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold transition-all duration-300 w-full sm:w-auto shadow-sm group-hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+                          View Story
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="mt-auto text-[11px] uppercase tracking-wider text-[#D4AF37] group-hover:underline inline-flex items-center gap-1 font-semibold">
+                      View Complete Story <span className="text-lg leading-none">&rarr;</span>
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -332,9 +338,16 @@ export default function LandingPage({ initialData = null }) {
           </div>
 
           {/* Services Carousel Dynamic */}
-          <div className="flex overflow-hidden w-full py-4 group">
+          <div 
+            className="flex overflow-hidden w-full py-4"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             
-            <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused] gap-6 px-3">
+            <div 
+              className="flex w-max animate-marquee gap-6 px-3"
+              style={{ animationPlayState: isHovered ? 'paused' : 'running' }}
+            >
               {[...(safeConfig.servicesPillars || []), ...(safeConfig.servicesPillars || [])].map((pillar, i) => (
                 <div key={`set1-${i}`} className="w-[85vw] max-w-[300px] sm:max-w-none sm:w-[350px] shrink-0 bg-[#121518] rounded-3xl p-6 sm:p-8 border border-[#2B2519] shadow-sm flex flex-col justify-between text-center group/card hover:shadow-xl hover:border-[#D4AF37]/50 hover:-translate-y-1.5 transition-all duration-500 min-h-[460px]">
                   <div>

@@ -67,7 +67,7 @@ export default function Footer() {
           
           {/* Column 1: Brand & Logo */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <Link href="/" className="inline-block mb-6 hover:scale-[1.02] transition-transform duration-300">
+            <Link href="/" className="inline-block mb-12 hover:scale-[1.02] transition-transform duration-300">
               <Image 
                 src="/lensloom-logo.png" 
                 alt="LensLoom Production" 
@@ -75,13 +75,13 @@ export default function Footer() {
                 height={107}
                 quality={100}
                 unoptimized
-                className="h-14 sm:h-16 w-auto object-contain scale-[1.3] origin-left md:origin-left origin-center"
+                className="h-20 sm:h-24 w-auto object-contain scale-[2.2] origin-center md:origin-left"
               />
             </Link>
-            <p className="text-sm text-[#C5B388] font-light leading-relaxed mb-8 max-w-xs">
+            <p className="text-[15px] text-[#A0A0A0] font-light leading-relaxed mb-8 max-w-sm">
               Capturing pure elegance and timeless love stories through cinematic films and fine-art luxury photography.
             </p>
-            <div className="flex flex-col gap-3 text-sm font-semibold tracking-wide text-[#F5F5F5]">
+            <div className="flex flex-col gap-4 text-sm font-semibold tracking-widest uppercase text-[#F5F5F5]">
               <a href="https://lensloom.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition-colors inline-block">
                 lensloom.in
               </a>
@@ -92,40 +92,39 @@ export default function Footer() {
           </div>
 
           {/* Column 2: Categories */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-8 md:mt-0">
-            <h4 className="text-[#D4AF37] text-xs uppercase tracking-[0.2em] font-semibold mb-6">Categories</h4>
-            <ul className="flex flex-col gap-4 text-sm text-[#F5F5F5]/80 font-light">
-              <li><Link href="/stories" className="hover:text-[#D4AF37] transition-colors">Stories</Link></li>
-              <li><Link href="/portfolio" className="hover:text-[#D4AF37] transition-colors">Photography</Link></li>
-              <li><Link href="/films" className="hover:text-[#D4AF37] transition-colors">Films</Link></li>
-              <li><Link href="/services" className="hover:text-[#D4AF37] transition-colors">Services</Link></li>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-10 md:mt-0">
+            <h4 className="text-[#D4AF37] text-xs uppercase tracking-[0.25em] font-bold mb-8">Categories</h4>
+            <ul className="flex flex-col gap-5 text-[15px] text-[#F5F5F5]/80 font-light">
+              <li><Link href="/stories" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">Stories</Link></li>
+              <li><Link href="/portfolio" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">Photography</Link></li>
+              <li><Link href="/films" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">Films</Link></li>
+              <li><Link href="/services" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">Services</Link></li>
             </ul>
           </div>
 
           {/* Column 3: Explore */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-8 md:mt-0">
-            <h4 className="text-[#D4AF37] text-xs uppercase tracking-[0.2em] font-semibold mb-6">Explore</h4>
-            <ul className="flex flex-col gap-4 text-sm text-[#F5F5F5]/80 font-light">
-              <li><Link href="/albums" className="hover:text-[#D4AF37] transition-colors">Albums</Link></li>
-              <li><Link href="/blog" className="hover:text-[#D4AF37] transition-colors">Blog</Link></li>
-              <li><Link href="/about" className="hover:text-[#D4AF37] transition-colors">About Us</Link></li>
-              <li><Link href="/privacy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</Link></li>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-10 md:mt-0">
+            <h4 className="text-[#D4AF37] text-xs uppercase tracking-[0.25em] font-bold mb-8">Explore</h4>
+            <ul className="flex flex-col gap-5 text-[15px] text-[#F5F5F5]/80 font-light">
+              <li><Link href="/albums" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">Albums</Link></li>
+              <li><Link href="/blog" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">Blog</Link></li>
+              <li><Link href="/about" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">About Us</Link></li>
+              <li><Link href="/privacy" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">Privacy Policy</Link></li>
             </ul>
           </div>
 
           {/* Column 4: Contact & Socials */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-8 lg:mt-0">
-            <h4 className="text-[#D4AF37] text-xs uppercase tracking-[0.2em] font-semibold mb-6">Connect</h4>
-            <div className="flex flex-col gap-3 text-sm text-[#F5F5F5]/80 font-light mb-8">
-              <a href="mailto:hello@lensloom.in" className="hover:text-[#D4AF37] transition-colors">hello@lensloom.in</a>
-              <span className="opacity-70 mt-2 text-xs uppercase tracking-widest text-[#C5B388]">Available Globally</span>
+          <div className="flex flex-col items-center md:items-start text-center md:text-left mt-10 lg:mt-0">
+            <h4 className="text-[#D4AF37] text-xs uppercase tracking-[0.25em] font-bold mb-8">Connect</h4>
+            <div className="flex flex-col gap-4 text-[15px] text-[#F5F5F5]/80 font-light mb-10">
+              <a href="mailto:hello@lensloom.in" className="hover:text-[#D4AF37] transition-all hover:translate-x-1 inline-block duration-300">hello@lensloom.in</a>
+              <span className="opacity-80 mt-2 text-[11px] uppercase tracking-widest text-[#D4AF37] font-semibold">Available Globally</span>
             </div>
             
             <div className="flex gap-4">
               {[
                 { icon: <InstagramIcon />, label: "Instagram", href: "https://www.instagram.com/lensloom_official?stkn=MTc3Zzl0c2c1dWo4ag%3D%3D" },
                 { icon: <YoutubeIcon />, label: "YouTube", href: "https://www.youtube.com/@lensloom_official" },
-                // { icon: <PinterestIcon />, label: "Pinterest", href: "https://in.pinterest.com/lensloom_official/" },
                 { icon: <FacebookIcon />, label: "Facebook", href: "https://www.facebook.com/people/LensLoom-Production/61586068716821/" }
               ].map((social, idx) => (
                 <a 
@@ -134,7 +133,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-full border border-[#2B2519] text-[#C5B388] flex items-center justify-center hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all duration-300"
+                  className="w-11 h-11 rounded-full border border-[#2B2519] bg-[#121518] text-[#C5B388] flex items-center justify-center hover:border-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-500"
                 >
                   {social.icon}
                 </a>

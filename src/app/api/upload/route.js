@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile } from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
 export async function POST(request) {
@@ -16,14 +17,18 @@ export async function POST(request) {
     
     // Create uploads directory if it doesn't exist
     const uploadDir = path.join(process.cwd(), 'public/uploads');
-    try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (e) {
-      // Ignore if directory exists
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     const filepath = path.join(uploadDir, filename);
-    await writeFile(filepath, buffer);
+    
+    try {
+      await writeFile(filepath, buffer);
+    } catch (writeError) {
+      console.error('File write error:', writeError);
+      return NextResponse.json({ error: 'Failed to write file to disk.', details: writeError.message }, { status: 500 });
+    }
 
     return NextResponse.json({
       success: true,
@@ -31,6 +36,6 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error('Error occurred while uploading file:', error);
-    return NextResponse.json({ error: 'Failed to upload file.', details: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to process file upload.', details: error.message }, { status: 500 });
   }
 }

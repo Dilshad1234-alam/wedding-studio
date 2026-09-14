@@ -36,7 +36,7 @@ export default function AdminLayout({ children }) {
       <aside className="w-64 border-r border-[#1F242D] bg-[#0E1114] flex flex-col justify-between p-6 shrink-0 sticky top-0 h-screen overflow-y-auto">
         <div>
           {/* Logo */}
-          <div className="mb-10 bg-transparent flex items-center justify-start -ml-4">
+          <div className="mb-10 bg-transparent flex items-center justify-start -ml-4 pointer-events-none">
             {/* <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block mb-3">
               ROYALE COMMAND
             </span> */}
@@ -48,13 +48,14 @@ export default function AdminLayout({ children }) {
           </div>
 
           {/* Navigation Links */}
-          <nav className="space-y-2">
+          <nav className="space-y-2 relative z-10">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={false}
                   className={`block px-4 py-3 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase transition-all ${
                     isActive
                       ? 'bg-[#D4AF37] text-black shadow-lg shadow-[#D4AF37]/20 font-black'

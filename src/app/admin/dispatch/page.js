@@ -84,20 +84,24 @@ export default function ClientDispatchConsole() {
     }
   ];
 
-  // 1. Initial State from localStorage (Prevents data loss on refresh)
-  const [clients, setClients] = useState(() => {
+  // 1. Initial State matching server render
+  const [clients, setClients] = useState(defaultClients);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Restore state on client side after hydration
+  useEffect(() => {
+    setIsMounted(true);
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('weddingpur_dispatch_clients');
       if (saved) {
         try {
-          return JSON.parse(saved);
+          setClients(JSON.parse(saved));
         } catch (e) {
           console.error(e);
         }
       }
     }
-    return defaultClients;
-  });
+  }, []);
 
   // Restore Active Tab on Refresh
   useEffect(() => {
@@ -109,12 +113,12 @@ export default function ClientDispatchConsole() {
     }
   }, []);
 
-  // Sync clients to localStorage whenever updated
+  // Sync clients to localStorage whenever updated, but skip the very first render cycle
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (isMounted && typeof window !== 'undefined') {
       localStorage.setItem('weddingpur_dispatch_clients', JSON.stringify(clients));
     }
-  }, [clients]);
+  }, [clients, isMounted]);
 
   const [registeredCrew, setRegisteredCrew] = useState([]);
 
@@ -169,6 +173,8 @@ export default function ClientDispatchConsole() {
     const normMember = memberName.toLowerCase().trim();
 
     for (const client of clients) {
+      if (editingClientId && client.id === editingClientId) continue;
+
       for (const day of client.schedule) {
         if (cleanDate(day.date) === normTarget) {
           const booked = [
@@ -898,9 +904,11 @@ export default function ClientDispatchConsole() {
                         className="bg-[#181B20] border border-[#2B2519] rounded-2xl p-4 space-y-3"
                       >
                         <div className="flex items-center justify-between pb-2 border-b border-[#20252F]">
-                          <span className="px-3 py-0.5 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-bold text-xs border border-[#2B2519]">
-                            DAY {day.dayNo}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <span className="px-3 py-0.5 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-bold text-xs border border-[#2B2519]">
+                              DAY {day.dayNo}
+                            </span>
+                          </div>
                           {formData.days.length > 1 && (
                             <button
                               type="button"
@@ -977,6 +985,9 @@ export default function ClientDispatchConsole() {
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
                               >
                                 <option value="">— Free Crew —</option>
+                                {day.tradPhoto && !availableTradPhoto.some(m => m.name === day.tradPhoto) && (
+                                  <option value={day.tradPhoto}>{day.tradPhoto} (Assigned)</option>
+                                )}
                                 {availableTradPhoto.map((m) => (
                                   <option key={m._id || m.id || m.name} value={m.name}>
                                     {m.name}
@@ -993,6 +1004,9 @@ export default function ClientDispatchConsole() {
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-[#C5B388] text-[11px] focus:outline-none focus:border-[#D4AF37]"
                               >
                                 <option value="">— Free Crew —</option>
+                                {day.candidPhoto && !availableCandidPhoto.some(m => m.name === day.candidPhoto) && (
+                                  <option value={day.candidPhoto}>{day.candidPhoto} (Assigned)</option>
+                                )}
                                 {availableCandidPhoto.map((m) => (
                                   <option key={m._id || m.id || m.name} value={m.name}>
                                     {m.name}
@@ -1009,6 +1023,9 @@ export default function ClientDispatchConsole() {
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-cyan-400 text-[11px] focus:outline-none focus:border-cyan-400"
                               >
                                 <option value="">— Free Crew —</option>
+                                {day.allTypePhoto && !availableAllTypePhoto.some(m => m.name === day.allTypePhoto) && (
+                                  <option value={day.allTypePhoto}>{day.allTypePhoto} (Assigned)</option>
+                                )}
                                 {availableAllTypePhoto.map((m) => (
                                   <option key={m._id || m.id || m.name} value={m.name}>
                                     {m.name}
@@ -1025,6 +1042,9 @@ export default function ClientDispatchConsole() {
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
                               >
                                 <option value="">— Free Crew —</option>
+                                {day.tradVideo && !availableTradVideo.some(m => m.name === day.tradVideo) && (
+                                  <option value={day.tradVideo}>{day.tradVideo} (Assigned)</option>
+                                )}
                                 {availableTradVideo.map((m) => (
                                   <option key={m._id || m.id || m.name} value={m.name}>
                                     {m.name}
@@ -1041,6 +1061,9 @@ export default function ClientDispatchConsole() {
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-emerald-400 text-[11px] font-bold focus:outline-none focus:border-emerald-400"
                               >
                                 <option value="">— Free Crew —</option>
+                                {day.cinema && !availableCinema.some(m => m.name === day.cinema) && (
+                                  <option value={day.cinema}>{day.cinema} (Assigned)</option>
+                                )}
                                 {availableCinema.map((m) => (
                                   <option key={m._id || m.id || m.name} value={m.name}>
                                     {m.name}
@@ -1057,6 +1080,9 @@ export default function ClientDispatchConsole() {
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-amber-400 text-[11px] focus:outline-none focus:border-amber-400"
                               >
                                 <option value="">— Free Crew —</option>
+                                {day.drone && !availableDrone.some(m => m.name === day.drone) && (
+                                  <option value={day.drone}>{day.drone} (Assigned)</option>
+                                )}
                                 {availableDrone.map((m) => (
                                   <option key={m._id || m.id || m.name} value={m.name}>
                                     {m.name}

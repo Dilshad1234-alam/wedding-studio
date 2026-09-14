@@ -1018,16 +1018,6 @@ function WebsiteManagementContent() {
                         placeholder="https://ik.imagekit.io/weddingpur/video.mp4"
                         className="flex-1 bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D1C7A5] font-mono text-xs focus:outline-none focus:border-[#D4AF37]"
                       />
-                      <label className={`shrink-0 flex items-center justify-center bg-[#181B20] border border-[#2B2519] rounded-xl px-4 py-3 text-[#D4AF37] font-sans text-xs font-semibold uppercase tracking-wider cursor-pointer hover:bg-[#121518] hover:border-[#D4AF37] transition-colors ${isUploadingVideo ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                        {isUploadingVideo ? 'Uploading...' : 'Upload Video'}
-                        <input
-                          type="file"
-                          accept="video/mp4,video/webm"
-                          className="hidden"
-                          onChange={handleVideoUpload}
-                          disabled={isUploadingVideo}
-                        />
-                      </label>
                     </div>
                   </div>
                   <div>

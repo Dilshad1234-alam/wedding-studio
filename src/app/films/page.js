@@ -86,14 +86,14 @@ export default function FilmsPage() {
         </h1>
 
         {/* Category Pill Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-10">
+        <div className="flex overflow-x-auto w-full gap-3 mt-6 sm:mt-10 pb-2 justify-start sm:justify-center px-1 sm:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {categories.map((cat) => {
             const isActive = activeCategory === cat.key;
             return (
               <button
                 key={cat.key}
                 onClick={() => setActiveCategory(cat.key)}
-                className={`px-6 py-2 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer ${
+                className={`shrink-0 px-6 py-2.5 rounded-full text-[11px] uppercase tracking-[0.2em] font-medium transition-all duration-300 cursor-pointer ${
                   isActive
                     ? 'bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black font-black shadow-md shadow-[#D4AF37]/20 border-transparent'
                     : 'bg-[#121518] border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37]/40'
@@ -131,31 +131,31 @@ export default function FilmsPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"></div>
 
             {/* Animated Center Play Button */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-white pb-8 sm:pb-0">
+              <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
                 <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-white ml-1" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
-              <span className="text-[11px] uppercase tracking-[0.3em] mt-4 font-medium text-white/90 group-hover:text-white">
+              <span className="hidden sm:block text-[11px] uppercase tracking-[0.3em] mt-4 font-medium text-white/90 group-hover:text-white">
                 Watch The Film on YouTube ↗
               </span>
             </div>
 
             {/* Dynamic Film Meta Info */}
-            <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2">
-              <div>
-                <span className="text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">
+            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-1 sm:gap-2">
+              <div className="flex-1 pr-2">
+                <span className="text-[9px] sm:text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">
                   {currentHero.tag}
                 </span>
-                <h3 className="font-serif text-2xl sm:text-4xl italic">
+                <h3 className="font-serif text-xl sm:text-4xl italic leading-tight">
                   {currentHero.title}
                 </h3>
-                <p className="text-[11px] uppercase tracking-wider text-white/70 mt-1">
+                <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70 mt-1">
                   {currentHero.location}
                 </p>
               </div>
-              <span className="text-xs text-white/80 tracking-wider font-mono">
+              <span className="text-[10px] sm:text-xs text-white/80 tracking-wider font-mono shrink-0">
                 Runtime: {currentHero.duration}
               </span>
             </div>

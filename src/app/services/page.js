@@ -92,7 +92,7 @@ export default function ServicesPage() {
                       : 'bg-[#15191F] text-[#A89D84] hover:text-white hover:bg-[#1A2027] border border-[#222832]'
                   }`}
                 >
-                  <span className="text-[11px] truncate">{pkg.title.split('(')[0].trim()}</span>
+                  <span className="text-[9px] sm:text-[10px] text-center w-full leading-tight break-words">{pkg.title.split('(')[0].trim()}</span>
                   <span className={`text-xs ${isActive ? 'text-black font-black' : 'text-[#D4AF37]'}`}>
                     {pkg.offerPrice}
                   </span>

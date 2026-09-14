@@ -97,7 +97,7 @@ export default function Navbar() {
                 className="flex flex-col items-center cursor-pointer select-none focus:outline-none bg-transparent"
               >
                 <Image 
-                  src="/logo lens (2).png" 
+                  src="/lensloom-logo.png" 
                   alt="LensLoom Production" 
                   width={600}
                   height={213}
@@ -175,7 +175,7 @@ export default function Navbar() {
         >
           <div className="flex justify-between items-center p-6 border-b border-[#2B2519]">
             <Image 
-              src="/logo lens (2).png" 
+              src="/lensloom-logo.png" 
               alt="LensLoom Production" 
               width={300}
               height={107}

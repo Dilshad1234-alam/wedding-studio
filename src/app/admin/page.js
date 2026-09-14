@@ -63,7 +63,7 @@ export default function LoginPage() {
         <div className="text-center mb-6">
           <Link className="inline-block group cursor-pointer transition-transform duration-300 hover:scale-[1.03]" href="/" title="Back to Home">
             <img 
-              src="/logo lens (2).png" 
+              src="/lensloom-logo.png" 
               alt="LensLoom Production" 
               className="h-16 w-auto object-contain mx-auto" 
             />

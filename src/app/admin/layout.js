@@ -41,7 +41,7 @@ export default function AdminLayout({ children }) {
               ROYALE COMMAND
             </span> */}
             <img 
-              src="/logo lens (2).png" 
+              src="/lensloom-logo.png" 
               alt="LensLoom Production" 
               className="h-16 w-auto object-contain"
             />

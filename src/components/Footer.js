@@ -69,7 +69,7 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <Link href="/" className="inline-block mb-6 hover:scale-[1.02] transition-transform duration-300">
               <Image 
-                src="/logo lens (2).png" 
+                src="/lensloom-logo.png" 
                 alt="LensLoom Production" 
                 width={300}
                 height={107}

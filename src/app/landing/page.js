@@ -125,7 +125,12 @@ export default function LandingPage({ initialData = null }) {
                 loop
                 muted
                 playsInline
+                key={rawVideoUrl}
                 className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
+                onError={(e) => {
+                  e.target.onerror = null; 
+                  e.target.src = "https://res.cloudinary.com/demo/video/upload/v1652343202/elephants.mp4"; // Reliable fallback if local upload is missing
+                }}
               >
                 <source src={rawVideoUrl} type="video/mp4" />
               </video>

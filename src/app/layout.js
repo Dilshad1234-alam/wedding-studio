@@ -21,8 +21,8 @@ export const metadata = {
   title: 'LensLoom Production | Luxury Wedding Cinema & Photography',
   description: 'Luxury candid wedding photography, pre-weddings, and cinematic films.',
   icons: {
-    icon: '/layer 0.png',
-    apple: '/layer 0.png',
+    icon: '/favicon-lens.png',
+    apple: '/favicon-lens.png',
   },
 };
 

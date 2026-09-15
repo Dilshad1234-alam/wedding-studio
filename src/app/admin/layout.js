@@ -29,7 +29,8 @@ export default function AdminLayout({ children }) {
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     sessionStorage.removeItem('weddingpur_user');
     sessionStorage.removeItem('weddingpur_token');
-    window.location.href = '/admin';
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+    window.location.href = '/admin'; // Using window.location to force full reload and clear state
   };
 
   return (

@@ -52,6 +52,7 @@ export default function Navbar() {
     sessionStorage.removeItem('weddingpur_user');
     sessionStorage.removeItem('weddingpur_token');
     setCurrentUser(null);
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = '/';
   };
 

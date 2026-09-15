@@ -42,6 +42,7 @@ export default function LoginPage() {
       if (data.user?.role === 'admin') {
         router.push('/admin/overview');
       } else {
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
         window.location.href = '/';
       }
 

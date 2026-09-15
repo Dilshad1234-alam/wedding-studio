@@ -142,65 +142,63 @@ function CrewDirectoryContent() {
     }
   };
 
-  // Master Client Shoots Roster Database
-  const allClientAssignments = [
-    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "22 Apr", month: "April", eventName: "Rituals (Bride)", location: "Sitamarhi Home", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "23 Apr", month: "April", eventName: "Haldi Shoot", location: "Sitamarhi Home", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "25 Apr", month: "April", eventName: "Rituals (Groom)", location: "Begusarai Home", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "04 May", month: "May", eventName: "Sangeet", location: "Hotel Anand Sagar, Kankarbagh", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "05 May", month: "May", eventName: "Haldi, Mehndi", location: "Biscomaun Colony, Kumhrar", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "06 May", month: "May", eventName: "Madwa", location: "Biscomaun Colony, Kumhrar", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "RAVI RANJAN", date: "07 May", month: "May", eventName: "Wedding Day", location: "Bhagwat Banquet Hall", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "ABHINAV KRISHNA", date: "08 May", month: "May", eventName: "Haldi Kutai", location: "Bihar Sharif", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "ABHINAV KRISHNA", date: "09 May", month: "May", eventName: "Tilak", location: "Bihar Sharif", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "ABHINAV KRISHNA", date: "10 May", month: "May", eventName: "Puja & Matkor", location: "Bihar Sharif", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "NIKITA KUMARI", date: "27 Apr", month: "April", eventName: "Engagement", location: "Begusarai", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "NIKITA KUMARI", date: "22 June", month: "June", eventName: "Haldi", location: "Barh", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "NIKITA KUMARI", date: "24 June", month: "June", eventName: "Wedding Day", location: "Patna Bailey Road", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "APARNA", date: "01 Dec", month: "December", eventName: "Rituals (Groom)", location: "Patliputra, Patna", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "SHYAMLI SHARMA", date: "23 Nov", month: "November", eventName: "Rituals (Bride)", location: "Sherghati", roleAssigned: "Traditional Photographer" },
-    { crewName: "Rohit", clientName: "ANKIT KUMAR", date: "29 Nov", month: "November", eventName: "Tilak", location: "Patna to Siwan", roleAssigned: "Traditional Photographer" },
+  // Dynamic Client Shoots Roster Database
+  const [allClientAssignments, setAllClientAssignments] = useState([]);
 
-    { crewName: "Sanoj", clientName: "PRIYA KUMARI", date: "22 Apr", month: "April", eventName: "Rituals (Bride)", location: "Sitamarhi Home", roleAssigned: "Traditional Videographer & Drone" },
-    { crewName: "Sanoj", clientName: "PRIYA KUMARI", date: "23 Apr", month: "April", eventName: "Haldi Shoot", location: "Sitamarhi Home", roleAssigned: "Traditional Videographer" },
-    { crewName: "Sanoj", clientName: "PRIYA KUMARI", date: "25 Apr", month: "April", eventName: "Rituals (Groom)", location: "Begusarai Home", roleAssigned: "Traditional Videographer" },
-    { crewName: "Sanoj", clientName: "RAVI RANJAN", date: "04-07 May", month: "May", eventName: "Full 4 Days Coverage", location: "Kankarbagh & Kumhrar", roleAssigned: "Traditional Videographer" },
-    { crewName: "Sanoj", clientName: "ABHINAV KRISHNA", date: "08-10 May", month: "May", eventName: "3 Days Rituals", location: "Bihar Sharif", roleAssigned: "Traditional Videographer" },
-    { crewName: "Sanoj", clientName: "FREELANCE GAYA", date: "22 June", month: "June", eventName: "Engagement", location: "Gaya", roleAssigned: "Traditional Photographer" },
-    { crewName: "Sanoj", clientName: "ROHIT KUMAR", date: "24 June", month: "June", eventName: "Pre-Wed & Wedding", location: "Rajgir", roleAssigned: "Cinematographer" },
-    { crewName: "Sanoj", clientName: "APARNA", date: "02 Dec", month: "December", eventName: "Wedding Day", location: "Dakbunglow, Patna", roleAssigned: "Traditional Videographer" },
-    { crewName: "Sanoj", clientName: "KINSHUK SHANKAR", date: "24-25 Nov", month: "November", eventName: "Haldi & Wedding", location: "Munger Club", roleAssigned: "Traditional Video & Cinema" },
-
-    { crewName: "Sanjeet", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Candid Photographer" },
-    { crewName: "Sanjeet", clientName: "RAVI RANJAN", date: "07 May", month: "May", eventName: "Wedding Ceremony", location: "Bhagwat Banquet Hall", roleAssigned: "Candid Photographer" },
-    { crewName: "Sanjeet", clientName: "NIKITA KUMARI", date: "27 Apr & 24 June", month: "April & June", eventName: "Engagement & Wedding", location: "Begusarai / Patna", roleAssigned: "Candid Photographer" },
-    { crewName: "Sanjeet", clientName: "APARNA", date: "02 Dec", month: "December", eventName: "Wedding Day", location: "Dakbunglow, Patna", roleAssigned: "Candid Photographer" },
-
-    { crewName: "Ritik Saw Kolkata", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Grand Wedding Day", location: "Hajipur, Patna", roleAssigned: "Lead Cinematographer" },
-    { crewName: "Ritik Saw Kolkata", clientName: "NIKITA KUMARI", date: "27 Apr", month: "April", eventName: "Engagement Ceremony", location: "Begusarai", roleAssigned: "Cinematographer" },
-
-    { crewName: "Manikant (Monu)", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Professional Drone Pilot" },
-    { crewName: "Manikant (Monu)", clientName: "RAVI RANJAN", date: "07 May", month: "May", eventName: "Wedding Day", location: "Bhagwat Banquet Hall", roleAssigned: "Drone Pilot" },
-    { crewName: "Manikant (Monu)", clientName: "NIKITA KUMARI", date: "24 June", month: "June", eventName: "Wedding Day", location: "Patna Bailey Road", roleAssigned: "Drone Pilot" },
-    { crewName: "Manikant (Monu)", clientName: "SURAJ SINHA", date: "21 Nov", month: "November", eventName: "Wedding Day", location: "Bhusaula Danapur", roleAssigned: "Drone Pilot" },
-    { crewName: "Manikant (Monu)", clientName: "SHYAMLI SHARMA", date: "24 Nov", month: "November", eventName: "Wedding Day", location: "Sherghati", roleAssigned: "Drone Pilot" },
-
-    { crewName: "Sumit", clientName: "PRIYA KUMARI", date: "26 Apr", month: "April", eventName: "Wedding Day", location: "Hajipur, Patna", roleAssigned: "Production Assistant" },
-
-    { crewName: "Sikandar", clientName: "AMAR KUMAR VIVEK", date: "01-02 Dec", month: "December", eventName: "Rituals & Wedding", location: "Begusarai", roleAssigned: "Traditional Video & Photo" },
-    { crewName: "Sikandar", clientName: "ANKIT & SNEHA", date: "02-06 Dec", month: "December", eventName: "3 Days Wedding Festival", location: "Bhagalpur Palace", roleAssigned: "Traditional Lead" },
-
-    { crewName: "Vinod Kumar", clientName: "GUDDU KUMAR", date: "18-20 Nov", month: "November", eventName: "3-Day Wedding", location: "Akangarsarai", roleAssigned: "Traditional Photographer" },
-    { crewName: "Vinod Kumar", clientName: "ANURADHA RANI", date: "19-21 Nov", month: "November", eventName: "3-Day Wedding", location: "Akangarsarai", roleAssigned: "Traditional Photographer" },
-    { crewName: "Vinod Kumar", clientName: "ROHIT KUMAR", date: "24 June", month: "June", eventName: "Pre-Wed & Wedding", location: "Rajgir", roleAssigned: "Traditional Photographer" },
-
-    { crewName: "Pintu Kumar", clientName: "NIKITA KUMARI", date: "24 June", month: "June", eventName: "Wedding Day", location: "Patna Bailey Road", roleAssigned: "Traditional Videographer" }
-  ];
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedClients = localStorage.getItem('weddingpur_dispatch_clients');
+      if (savedClients) {
+        try {
+          const parsed = JSON.parse(savedClients);
+          const assignments = [];
+          
+          parsed.forEach(client => {
+            if (client.schedule) {
+              client.schedule.forEach(day => {
+                const roles = [
+                  { key: 'tradPhoto', label: 'Traditional Photographer' },
+                  { key: 'candidPhoto', label: 'Candid Photographer' },
+                  { key: 'allTypePhoto', label: 'All Type Photographer' },
+                  { key: 'tradVideo', label: 'Traditional Videographer' },
+                  { key: 'cinema', label: 'Cinematographer' },
+                  { key: 'drone', label: 'Drone Pilot' },
+                ];
+                
+                roles.forEach(role => {
+                  const crewName = day[role.key];
+                  if (crewName && crewName !== '—' && crewName !== '-') {
+                    // split comma separated names if multiple assigned to same role
+                    const names = crewName.split(',').map(n => n.trim());
+                    names.forEach(name => {
+                      assignments.push({
+                        crewName: name,
+                        clientName: client.clientName,
+                        date: day.date,
+                        month: client.month || client.schedule[0]?.date?.split(' ')[1] || 'ALL',
+                        eventName: day.eventName,
+                        location: day.location,
+                        roleAssigned: role.label,
+                      });
+                    });
+                  }
+                });
+              });
+            }
+          });
+          setAllClientAssignments(assignments);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
 
   const getAssignmentsForCrew = (memberName) => {
+    if (!memberName) return [];
     return allClientAssignments.filter((a) => {
-      const matchCrew = a.crewName.toLowerCase().trim() === memberName.toLowerCase().trim();
+      // Use includes for partial matching (e.g. if memberName is "Sanoj Kr LLP" and assigned name is "Sanoj")
+      const matchCrew = a.crewName.toLowerCase().includes(memberName.toLowerCase().trim()) || memberName.toLowerCase().includes(a.crewName.toLowerCase().trim());
       if (!matchCrew) return false;
       if (selectedMonth === 'ALL') return true;
       return a.month.toLowerCase().includes(selectedMonth.toLowerCase());
@@ -505,7 +503,16 @@ function CrewDirectoryContent() {
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Craft / Role *</label>
-                <input type="text" required value={newMember.craftRole} onChange={e => setNewMember({...newMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. LEAD CINEMATOGRAPHER" />
+                <select required value={newMember.craftRole} onChange={e => setNewMember({...newMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                  <option value="" disabled>Select a role...</option>
+                  <option value="Trad. Photo">Trad. Photo</option>
+                  <option value="Trad. Video">Trad. Video</option>
+                  <option value="Candid Photo">Candid Photo</option>
+                  <option value="Cinematic">Cinematic</option>
+                  <option value="Drone Pilot">Drone Pilot</option>
+                  <option value="Crane Operator">Crane Operator</option>
+                  <option value="Assistance">Assistance</option>
+                </select>
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">City / Address</label>
@@ -591,7 +598,16 @@ function CrewDirectoryContent() {
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Craft / Role *</label>
-                <input type="text" required value={editingMember.craftRole} onChange={e => setEditingMember({...editingMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. LEAD CINEMATOGRAPHER" />
+                <select required value={editingMember.craftRole} onChange={e => setEditingMember({...editingMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                  <option value="" disabled>Select a role...</option>
+                  <option value="Trad. Photo">Trad. Photo</option>
+                  <option value="Trad. Video">Trad. Video</option>
+                  <option value="Candid Photo">Candid Photo</option>
+                  <option value="Cinematic">Cinematic</option>
+                  <option value="Drone Pilot">Drone Pilot</option>
+                  <option value="Crane Operator">Crane Operator</option>
+                  <option value="Assistance">Assistance</option>
+                </select>
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">City / Address</label>

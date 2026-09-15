@@ -36,32 +36,17 @@ export async function POST(request) {
       });
     }
 
-    // Fallback for localhost / VPS using local fs
-    const { writeFile } = require('fs/promises');
-    const fs = require('fs');
-    const path = require('path');
-
+    // Fallback for Vercel / Production: Convert to Base64 String
     const buffer = Buffer.from(await file.arrayBuffer());
-    const filename = Date.now() + '_' + file.name.replace(/\s+/g, '_');
+    const base64String = buffer.toString('base64');
+    const mimeType = file.type || 'application/pdf';
     
-    // Create uploads directory if it doesn't exist
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    const filepath = path.join(uploadDir, filename);
-    
-    try {
-      await writeFile(filepath, buffer);
-    } catch (writeError) {
-      console.error('File write error:', writeError);
-      return NextResponse.json({ error: 'Failed to write file to disk.', details: writeError.message }, { status: 500 });
-    }
+    // Construct the data URI
+    const dataUri = `data:${mimeType};base64,${base64String}`;
 
     return NextResponse.json({
       success: true,
-      url: `/uploads/${filename}`,
+      url: dataUri,
     });
   } catch (error) {
     console.error('Error occurred while uploading file:', error);

@@ -142,15 +142,68 @@ function CrewDirectoryContent() {
     }
   };
 
-  // Master Brand/Commercial Shoots Roster Database
-  const allClientAssignments = [
-    { crewName: "John Doe", clientName: "NIKE INDIA", date: "15 Sep", month: "September", eventName: "Brand Ad Shoot", location: "Mumbai Studio", roleAssigned: "Lead DP" },
-    { crewName: "Jane Smith", clientName: "SAMSUNG", date: "20 Sep", month: "September", eventName: "Product Launch Video", location: "Delhi", roleAssigned: "Gaffer" }
-  ];
+  // Dynamic Commercial Client Shoots Roster Database
+  const [allClientAssignments, setAllClientAssignments] = useState([]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedClients = localStorage.getItem('weddingpur_commercial_dispatch_clients');
+      if (savedClients) {
+        try {
+          const parsed = JSON.parse(savedClients);
+          const assignments = [];
+          
+          parsed.forEach(client => {
+            if (client.schedule) {
+              client.schedule.forEach(day => {
+                const roles = [
+                  { key: 'leadDp', label: 'Lead DP / Cinematographer' },
+                  { key: 'cameraOperator', label: 'Camera Operator' },
+                  { key: 'dronePilot', label: 'Drone Pilot' },
+                  { key: 'gaffer', label: 'Gaffer / Light Chief' },
+                  { key: 'soundRecordist', label: 'Sound Recordist' },
+                  { key: 'productionAssistant', label: 'Production Assistant' },
+                  // Added common roles in case it uses same as wedding
+                  { key: 'tradPhoto', label: 'Traditional Photographer' },
+                  { key: 'candidPhoto', label: 'Candid Photographer' },
+                  { key: 'allTypePhoto', label: 'All Type Photographer' },
+                  { key: 'tradVideo', label: 'Traditional Videographer' },
+                  { key: 'cinema', label: 'Cinematographer' },
+                  { key: 'drone', label: 'Drone Pilot' },
+                ];
+                
+                roles.forEach(role => {
+                  const crewName = day[role.key];
+                  if (crewName && crewName !== '—' && crewName !== '-') {
+                    const names = crewName.split(',').map(n => n.trim());
+                    names.forEach(name => {
+                      assignments.push({
+                        crewName: name,
+                        clientName: client.clientName,
+                        date: day.date,
+                        month: client.month || client.schedule[0]?.date?.split(' ')[1] || 'ALL',
+                        eventName: day.eventName,
+                        location: day.location,
+                        roleAssigned: role.label,
+                      });
+                    });
+                  }
+                });
+              });
+            }
+          });
+          setAllClientAssignments(assignments);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
 
   const getAssignmentsForCrew = (memberName) => {
+    if (!memberName) return [];
     return allClientAssignments.filter((a) => {
-      const matchCrew = a.crewName.toLowerCase().trim() === memberName.toLowerCase().trim();
+      const matchCrew = a.crewName.toLowerCase().includes(memberName.toLowerCase().trim()) || memberName.toLowerCase().includes(a.crewName.toLowerCase().trim());
       if (!matchCrew) return false;
       if (selectedMonth === 'ALL') return true;
       return a.month.toLowerCase().includes(selectedMonth.toLowerCase());
@@ -455,7 +508,16 @@ function CrewDirectoryContent() {
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Craft / Role *</label>
-                <input type="text" required value={newMember.craftRole} onChange={e => setNewMember({...newMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. LEAD CINEMATOGRAPHER" />
+                <select required value={newMember.craftRole} onChange={e => setNewMember({...newMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                  <option value="" disabled>Select a role...</option>
+                  <option value="Trad. Photo">Trad. Photo</option>
+                  <option value="Trad. Video">Trad. Video</option>
+                  <option value="Candid Photo">Candid Photo</option>
+                  <option value="Cinematic">Cinematic</option>
+                  <option value="Drone Pilot">Drone Pilot</option>
+                  <option value="Crane Operator">Crane Operator</option>
+                  <option value="Assistance">Assistance</option>
+                </select>
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">City / Address</label>
@@ -478,6 +540,8 @@ function CrewDirectoryContent() {
           </div>
         </div>
       )}
+
+
 
       {/* 5. CONFIRM DELETE MODAL (YES / NO) */}
       {memberToDelete && (
@@ -541,7 +605,16 @@ function CrewDirectoryContent() {
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">Craft / Role *</label>
-                <input type="text" required value={editingMember.craftRole} onChange={e => setEditingMember({...editingMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="E.g. LEAD CINEMATOGRAPHER" />
+                <select required value={editingMember.craftRole} onChange={e => setEditingMember({...editingMember, craftRole: e.target.value})} className="w-full bg-[#0B0D0E] border border-[#2B2519] rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37]">
+                  <option value="" disabled>Select a role...</option>
+                  <option value="Trad. Photo">Trad. Photo</option>
+                  <option value="Trad. Video">Trad. Video</option>
+                  <option value="Candid Photo">Candid Photo</option>
+                  <option value="Cinematic">Cinematic</option>
+                  <option value="Drone Pilot">Drone Pilot</option>
+                  <option value="Crane Operator">Crane Operator</option>
+                  <option value="Assistance">Assistance</option>
+                </select>
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-semibold tracking-wider text-[#8A7D5C] mb-1">City / Address</label>

@@ -34,6 +34,7 @@ export async function POST(req) {
       bookingYear: body.bookingYear || 2026,
       bookingMonth: body.bookingMonth?.trim(),
       clientName: body.clientName?.trim(),
+      clientPhone: body.clientPhone?.trim(),
       primaryDestination: body.primaryDestination?.trim(),
       contractFee: body.contractFee || '₹0',
       shootStatus: body.shootStatus || 'SCHEDULED',

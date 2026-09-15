@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function CompletedClientsPage() {
+  const [clientToDelete, setClientToDelete] = useState(null);
   const [selectedYear, setSelectedYear] = useState(2026);
   const [selectedMonth, setSelectedMonth] = useState('SEP');
   const [expandedClientId, setExpandedClientId] = useState(null);
@@ -94,12 +95,14 @@ export default function CompletedClientsPage() {
     return completedList.filter((c) => c.year === selectedYear && c.month === mKey).length;
   };
 
-  const deleteCompletedClient = (id) => {
-    const updated = completedList.filter(c => c.id !== id);
+  const confirmDeleteCompletedClient = () => {
+    if (!clientToDelete) return;
+    const updated = completedList.filter(c => c.id !== clientToDelete.id);
     setCompletedList(updated);
     if (typeof window !== 'undefined') {
       localStorage.setItem('weddingpur_completed_clients_dispatch', JSON.stringify(updated));
     }
+    setClientToDelete(null);
   };
 
   return (
@@ -267,7 +270,7 @@ export default function CompletedClientsPage() {
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteCompletedClient(client.id);
+                        setClientToDelete(client);
                       }}
                       className="p-2 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#8A7D5C] hover:text-rose-400 hover:border-rose-500/50 hover:bg-rose-500/10 transition-all duration-200 cursor-pointer inline-flex items-center justify-center"
                       title="Remove from archive"
@@ -336,6 +339,48 @@ export default function CompletedClientsPage() {
           })
         )}
       </div>
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {clientToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 font-sans">
+          <div className="bg-[#121518] border border-[#2B2519] rounded-3xl p-7 shadow-2xl max-w-sm w-full relative space-y-5 animate-in fade-in zoom-in duration-200">
+            
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+
+            <div className="text-center space-y-1.5">
+              <h3 className="text-base font-sans font-semibold text-white">
+                Delete Client Record?
+              </h3>
+              <p className="text-xs text-[#A89D84] leading-relaxed">
+                Are you sure you want to remove <strong className="text-white">{clientToDelete.clientName}</strong>? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setClientToDelete(null)}
+                className="w-full py-2.5 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#A89D84] hover:text-white hover:border-[#D4AF37]/50 text-xs font-sans font-semibold uppercase tracking-wider transition-all cursor-pointer"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmDeleteCompletedClient}
+                className="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-sans font-semibold uppercase tracking-wider transition-all shadow-md shadow-rose-600/30 cursor-pointer"
+              >
+                Yes, Delete
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );

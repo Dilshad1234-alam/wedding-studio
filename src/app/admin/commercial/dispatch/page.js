@@ -553,7 +553,7 @@ export default function CommercialDispatchPage() {
                       <tbody className="divide-y divide-[#1C2027]">
                         {client.schedule.map((day) => (
                           <tr key={day.dayNo} className="hover:bg-[#151921] transition-colors">
-                            <td className="p-3 font-mono font-bold text-white bg-[#121518]">Day {day.dayNo}</td>
+                            <td className="p-3 font-mono font-bold text-white bg-[#121518]">{day.dayLabel || `Day ${day.dayNo}`}</td>
                             <td className="p-3 font-mono font-bold text-[#D4AF37]">{day.date}</td>
                             <td className="p-3 font-semibold text-white">{day.eventName}</td>
                             <td className="p-3 text-[#A89D84]">{day.location}</td>
@@ -637,7 +637,13 @@ export default function CommercialDispatchPage() {
                   {formData.days.map((day, idx) => (
                     <div key={day.dayNo} className="bg-[#181B20] border border-[#2B2519] rounded-2xl p-4 space-y-3">
                       <div className="flex items-center justify-between pb-2 border-b border-[#20252F]">
-                        <span className="px-3 py-0.5 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-bold text-xs border border-[#2B2519]">DAY {day.dayNo}</span>
+                            <input
+                              type="text"
+                              value={day.dayLabel || `DAY ${day.dayNo}`}
+                              onChange={(e) => updateDayField(idx, 'dayLabel', e.target.value)}
+                              className="px-3 py-1 w-24 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-bold text-xs border border-[#2B2519] focus:outline-none focus:border-[#D4AF37]"
+                              placeholder={`DAY ${day.dayNo}`}
+                            />
                         {formData.days.length > 1 && <button type="button" onClick={() => removeDayRow(idx)} className="text-rose-400 text-xs hover:underline cursor-pointer">Remove Day</button>}
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

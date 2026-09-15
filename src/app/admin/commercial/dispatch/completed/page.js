@@ -201,7 +201,7 @@ export default function CompletedCommercialPage() {
                       <tbody className="divide-y divide-[#1C2027]">
                         {client.schedule.map((day) => (
                           <tr key={day.dayNo} className="hover:bg-[#151921] transition-colors">
-                            <td className="p-3 font-mono font-bold text-white bg-[#121518]">Day {day.dayNo}</td>
+                            <td className="p-3 font-mono font-bold text-white bg-[#121518]">{day.dayLabel || `Day ${day.dayNo}`}</td>
                             <td className="p-3 font-mono font-bold text-emerald-400">{day.date}</td>
                             <td className="p-3 font-semibold text-white">{day.eventName}</td>
                             <td className="p-3 text-[#A89D84]">{day.location}</td>

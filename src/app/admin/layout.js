@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Hide sidebar on auth pages
   const isAuthPage = pathname === '/admin';
@@ -31,20 +33,59 @@ export default function AdminLayout({ children }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#0B0D0E] text-[#F5F5F5] font-sans">
+      
+      {/* Mobile Top Header (Visible only on small screens) */}
+      <div className="lg:hidden flex items-center justify-between bg-[#0E1114] border-b border-[#1F242D] p-4 sticky top-0 z-40">
+        <div className="flex items-center -ml-4 pointer-events-none">
+          <img 
+            src="/lensloom-logo.png" 
+            alt="LensLoom Production" 
+            className="h-12 w-auto object-contain scale-[3.0] origin-left"
+          />
+        </div>
+        <button 
+          onClick={() => setIsSidebarOpen(true)}
+          className="p-2 text-[#8A7D5C] hover:text-white"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Permanent Admin Sidebar */}
-      <aside className="w-64 border-r border-[#1F242D] bg-[#0E1114] flex flex-col justify-between p-6 shrink-0 sticky top-0 h-screen overflow-y-auto">
+      <aside className={`
+        fixed lg:static inset-y-0 left-0 z-50
+        transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        lg:translate-x-0 transition-transform duration-300 ease-in-out
+        w-[280px] border-r border-[#1F242D] bg-[#0E1114] flex flex-col justify-between p-6 shrink-0 lg:sticky lg:top-0 h-screen overflow-y-auto overflow-x-hidden
+      `}>
         <div>
-          {/* Logo */}
-          <div className="mb-10 bg-transparent flex items-center justify-start -ml-4 pointer-events-none">
-            {/* <span className="text-[10px] font-mono tracking-[0.25em] text-[#8A7D5C] uppercase block mb-3">
-              ROYALE COMMAND
-            </span> */}
-            <img 
-              src="/lensloom-logo.png" 
-              alt="LensLoom Production" 
-              className="h-24 w-auto object-contain scale-[3.5] origin-left"
-            />
+          <div className="flex items-center justify-between mb-10">
+            {/* Logo (Desktop only) */}
+            <div className="hidden lg:flex bg-transparent items-center justify-start -ml-8 pointer-events-none">
+              <img 
+                src="/lensloom-logo.png" 
+                alt="LensLoom Production" 
+                className="h-24 w-auto object-contain scale-[3.5] origin-left"
+              />
+            </div>
+            
+            {/* Close Button (Mobile only) */}
+            <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-[#8A7D5C] hover:text-white ml-auto cursor-pointer">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           {/* Navigation Links */}
@@ -56,7 +97,8 @@ export default function AdminLayout({ children }) {
                   key={item.href}
                   href={item.href}
                   prefetch={false}
-                  className={`block px-4 py-3 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase transition-all ${
+                  onClick={() => setIsSidebarOpen(false)}
+                  className={`block px-4 py-3 rounded-xl text-[11px] font-mono font-bold tracking-wider uppercase whitespace-nowrap transition-all ${
                     isActive
                       ? 'bg-[#D4AF37] text-black shadow-lg shadow-[#D4AF37]/20 font-black'
                       : 'text-[#8A7D5C] hover:text-white hover:bg-[#15191F]'
@@ -84,6 +126,7 @@ export default function AdminLayout({ children }) {
             <Link
               href="/"
               target="_blank"
+              onClick={() => setIsSidebarOpen(false)}
               className="text-[11px] text-[#8A7D5C] hover:text-[#D4AF37] flex items-center gap-1.5 font-mono transition-colors"
             >
               ↗ OPEN LIVE SITE
@@ -100,7 +143,7 @@ export default function AdminLayout({ children }) {
       </aside>
 
       {/* Main Admin Content Dashboard */}
-      <main className="flex-1 min-w-0 overflow-y-auto">
+      <main className="flex-1 min-w-0 overflow-x-hidden overflow-y-auto">
         {children}
       </main>
     </div>

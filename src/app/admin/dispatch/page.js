@@ -462,7 +462,7 @@ export default function ClientDispatchConsole() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Link className="px-4 py-2.5 rounded-xl border border-[#2B2519] bg-[#121518] hover:border-[#D4AF37] text-[#D4AF37] text-xs font-sans font-semibold uppercase tracking-wider transition-all" href="/admin/wedding-management">
             ← Back to Wedding Management
           </Link>
@@ -739,7 +739,7 @@ export default function ClientDispatchConsole() {
                     <tbody className="divide-y divide-[#1C2027]">
                       {client.schedule.map((day) => (
                         <tr key={day.dayNo} className="hover:bg-[#151921] transition-colors">
-                          <td className="p-3 font-mono font-bold text-white bg-[#121518]">Day {day.dayNo}</td>
+                          <td className="p-3 font-mono font-bold text-white bg-[#121518]">{day.dayLabel || `Day ${day.dayNo}`}</td>
                           <td className="p-3 font-mono font-bold text-[#D4AF37]">{day.date}</td>
                           <td className="p-3 font-semibold text-white">{day.eventName}</td>
                           <td className="p-3 text-[#A89D84]">{day.location}</td>
@@ -905,9 +905,13 @@ export default function ClientDispatchConsole() {
                       >
                         <div className="flex items-center justify-between pb-2 border-b border-[#20252F]">
                           <div className="flex items-center gap-3">
-                            <span className="px-3 py-0.5 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-bold text-xs border border-[#2B2519]">
-                              DAY {day.dayNo}
-                            </span>
+                            <input
+                              type="text"
+                              value={day.dayLabel || `DAY ${day.dayNo}`}
+                              onChange={(e) => updateDayField(idx, 'dayLabel', e.target.value)}
+                              className="px-3 py-1 w-24 rounded-lg bg-[#0B0D0E] text-[#D4AF37] font-mono font-bold text-xs border border-[#2B2519] focus:outline-none focus:border-[#D4AF37]"
+                              placeholder={`DAY ${day.dayNo}`}
+                            />
                           </div>
                           {formData.days.length > 1 && (
                             <button

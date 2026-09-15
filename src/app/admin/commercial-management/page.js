@@ -90,7 +90,7 @@ export default function CommercialManagementPage() {
         </div>
 
         {/* 1 Month / 6 Months / Year Filter Buttons */}
-        <div className="flex items-center gap-1.5 bg-[#121518] p-1.5 rounded-2xl border border-[#2B2519] self-start lg:self-auto">
+        <div className="flex flex-wrap items-center gap-1.5 bg-[#121518] p-1.5 rounded-2xl border border-[#2B2519] self-start lg:self-auto">
           <button
             type="button"
             onClick={() => setTimeFilter('1M')}

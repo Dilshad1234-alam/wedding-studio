@@ -12,6 +12,7 @@ const DayScheduleSchema = new mongoose.Schema({
   dronePilot: { type: String, default: '—' },
   craneOperator: { type: String, default: '—' },
   callTime: { type: String, default: '10:00 AM' },
+  reportingTime: { type: String, default: '10:00 AM' },
   assistant: { type: String, default: '—' },
 });
 

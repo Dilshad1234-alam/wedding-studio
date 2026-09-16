@@ -34,47 +34,69 @@ export default function PendingClientsPage() {
   const [pendingList, setPendingList] = useState([]);
 
   useEffect(() => {
+    let localClients = [];
     if (typeof window !== 'undefined') {
-      const allClientsRaw = localStorage.getItem('weddingpur_dispatch_clients');
-      let allClients = [];
-      if (allClientsRaw) {
-        try { allClients = JSON.parse(allClientsRaw); } catch(e){}
+      try {
+        const saved = localStorage.getItem('weddingpur_dispatch_clients');
+        if (saved) localClients = JSON.parse(saved);
+      } catch (e) {
+        console.warn("localStorage error:", e);
       }
-
-      const today = new Date();
-
-      // Filter clients whose dates are still upcoming or ongoing (not completed yet)
-      const upcomingClients = allClients.filter(client => {
-        if (!client.schedule || client.schedule.length === 0) return true;
-        const lastDay = client.schedule[client.schedule.length - 1];
-        const endDate = parseDateString(lastDay?.date);
-        
-        if (endDate) {
-          return endDate >= today; // Still active or upcoming
-        }
-        return true; // Keep if date format is custom
-      });
-
-      setPendingList(upcomingClients);
     }
+
+    const today = new Date();
+
+    const filterUpcoming = (clientsList) => clientsList.filter(client => {
+      const scheduleArr = client.schedule || client.scheduleByDay || [];
+      if (scheduleArr.length === 0) return true;
+      const lastDay = scheduleArr[scheduleArr.length - 1];
+      const endDate = parseDateString(lastDay?.date);
+      if (endDate) return endDate >= today;
+      return true;
+    });
+
+    setPendingList(filterUpcoming(localClients));
+
+    fetch('/api/wedding/clients')
+      .then(res => res.json())
+      .then(data => {
+        let dbClients = [];
+        if (data.success && Array.isArray(data.data)) {
+          dbClients = data.data;
+        } else if (Array.isArray(data)) {
+          dbClients = data;
+        }
+        if (dbClients.length > 0) {
+          setPendingList(filterUpcoming(dbClients));
+        }
+      })
+      .catch(err => console.error("Failed to fetch clients from DB:", err));
   }, []);
 
   const filteredClients = pendingList.filter(
-    (c) => c.year === selectedYear && c.month === selectedMonth
+    (c) => (c.year === selectedYear || c.bookingYear === selectedYear) && 
+           (c.month === selectedMonth || c.bookingMonth === selectedMonth)
   );
 
   const getMonthClientCount = (mKey) => {
-    return pendingList.filter((c) => c.year === selectedYear && c.month === mKey).length;
+    return pendingList.filter((c) => (c.year === selectedYear || c.bookingYear === selectedYear) && 
+                                     (c.month === mKey || c.bookingMonth === mKey)).length;
   };
 
-  const confirmDeletePendingClient = () => {
+  const confirmDeletePendingClient = async () => {
     if (!clientToDelete) return;
-    const updated = pendingList.filter(c => c.id !== clientToDelete.id);
+    const clientId = clientToDelete.id || clientToDelete._id;
+    const updated = pendingList.filter(c => (c.id || c._id) !== clientId);
     setPendingList(updated);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('weddingpur_dispatch_clients', JSON.stringify(updated));
-    }
     setClientToDelete(null);
+
+    if (clientToDelete._id) {
+      try {
+        await fetch(`/api/wedding/clients?id=${clientToDelete._id}`, { method: 'DELETE' });
+      } catch (err) {
+        console.error(err);
+      }
+    }
   };
 
   return (
@@ -193,17 +215,17 @@ export default function PendingClientsPage() {
           </div>
         ) : (
           filteredClients.map((client, sIdx) => {
-            const isExpanded = expandedClientId === client.id;
+            const isExpanded = expandedClientId === (client.id || client._id);
             const serialNo = sIdx + 1;
 
             return (
               <div
-                key={client.id}
-                className="bg-[#121518] border border-[#2B2519] hover:border-amber-500/40 rounded-3xl overflow-hidden shadow-2xl transition-all"
+                key={client.id || client._id}
+                className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/40 rounded-3xl overflow-hidden shadow-2xl transition-all"
               >
                 {/* Card Header */}
                 <div
-                  onClick={() => setExpandedClientId(isExpanded ? null : client.id)}
+                  onClick={() => setExpandedClientId(isExpanded ? null : (client.id || client._id))}
                   className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-[#15191F] transition-colors"
                 >
                   <div className="flex items-center gap-4">

@@ -175,7 +175,7 @@ function CrewDirectoryContent() {
                         crewName: name,
                         clientName: client.clientName,
                         date: day.date,
-                        month: client.month || client.schedule[0]?.date?.split(' ')[1] || 'ALL',
+                        month: client.month || day.date || 'ALL',
                         eventName: day.eventName,
                         location: day.location,
                         roleAssigned: role.label,
@@ -201,7 +201,12 @@ function CrewDirectoryContent() {
       const matchCrew = a.crewName.toLowerCase().includes(memberName.toLowerCase().trim()) || memberName.toLowerCase().includes(a.crewName.toLowerCase().trim());
       if (!matchCrew) return false;
       if (selectedMonth === 'ALL') return true;
-      return a.month.toLowerCase().includes(selectedMonth.toLowerCase());
+      
+      const mStr = (a.month || '').toLowerCase();
+      const selStr = selectedMonth.toLowerCase();
+      const selStrShort = selStr.substring(0, 3);
+      
+      return mStr.includes(selStr) || mStr.includes(selStrShort);
     });
   };
 

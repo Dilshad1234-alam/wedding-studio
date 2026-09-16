@@ -18,7 +18,7 @@ export async function GET() {
       headers: { 'Cache-Control': 'no-store, max-age=0' },
     });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
   }
 }
 
@@ -43,7 +43,7 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true, client: newClient }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
   }
 }
 
@@ -69,7 +69,7 @@ export async function PUT(req) {
     
     return NextResponse.json({ success: true, client: updatedClient });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
   }
 }
 
@@ -91,6 +91,6 @@ export async function DELETE(req) {
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
   }
 }

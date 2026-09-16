@@ -14,12 +14,22 @@ const WeddingTeamMemberSchema = new mongoose.Schema(
     },
     craftRole: {
       type: String,
-      required: [true, 'Craft or role is required'],
+      required: false,
+      trim: true,
+    },
+    role: {
+      type: String,
+      required: false,
       trim: true,
     },
     phone: {
       type: String,
-      required: [true, 'Phone number is required'],
+      required: false,
+      trim: true,
+    },
+    mobile: {
+      type: String,
+      required: false,
       trim: true,
     },
     whatsapp: {
@@ -33,6 +43,10 @@ const WeddingTeamMemberSchema = new mongoose.Schema(
       trim: true,
     },
     agreedRate: {
+      type: String,
+      default: '₹4,000 / Day',
+    },
+    payoutRate: {
       type: String,
       default: '₹4,000 / Day',
     },

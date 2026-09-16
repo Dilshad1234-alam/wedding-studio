@@ -87,38 +87,80 @@ export default function ClientDispatchConsole() {
   // 1. Initial State matching server render
   const [clients, setClients] = useState(defaultClients);
   const [isMounted, setIsMounted] = useState(false);
+  const [teamMembers, setTeamMembers] = useState([]);
 
-  // Restore state on client side after hydration
+  // Safely restore state and fetch from MongoDB
   useEffect(() => {
     setIsMounted(true);
+    
+    // 1. Safely attempt to restore from localStorage FIRST to prevent data disappearance
+    let localClients = defaultClients;
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('weddingpur_dispatch_clients');
-      if (saved) {
-        try {
-          setClients(JSON.parse(saved));
-        } catch (e) {
-          console.error(e);
+      try {
+        const saved = localStorage.getItem('weddingpur_dispatch_clients');
+        if (saved) {
+          localClients = JSON.parse(saved);
+          setClients(localClients);
         }
+      } catch (e) {
+        console.warn("localStorage quota or access error:", e);
+      }
+    }
+
+    // 2. Fetch clients from MongoDB
+    fetch('/api/wedding/clients')
+      .then(res => res.json())
+      .then(data => {
+        let dbClients = [];
+        if (data.success && Array.isArray(data.data)) {
+          dbClients = data.data;
+        } else if (Array.isArray(data)) {
+          dbClients = data;
+        }
+        
+        // ONLY overwrite local state if the database actually has data.
+        // This prevents an empty database (or failed seeding) from wiping out the user's clients on refresh.
+        if (dbClients.length > 0) {
+          setClients(dbClients);
+        }
+      })
+      .catch(err => console.error("Failed to fetch clients from DB:", err));
+
+    // Fetch team members for dropdowns
+    fetch('/api/wedding/team')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTeamMembers(data);
+        }
+      })
+      .catch(err => console.error("Failed to fetch team:", err));
+  }, []);
+
+  // Sync clients safely to localStorage as a fallback cache
+  useEffect(() => {
+    if (isMounted && typeof window !== 'undefined' && clients.length > 0) {
+      try {
+        localStorage.setItem('weddingpur_dispatch_clients', JSON.stringify(clients));
+      } catch (e) {
+        console.warn("localStorage quota exceeded, skipping cache save:", e);
+      }
+    }
+  }, [clients, isMounted]);
+
+  // Restore Active Tab on Refresh safely
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedYr = localStorage.getItem('weddingpur_active_year');
+        const savedMo = localStorage.getItem('weddingpur_active_month');
+        if (savedYr) setSelectedYear(parseInt(savedYr, 10));
+        if (savedMo) setSelectedMonth(savedMo);
+      } catch (e) {
+        console.warn("localStorage quota or access error:", e);
       }
     }
   }, []);
-
-  // Restore Active Tab on Refresh
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedYr = localStorage.getItem('weddingpur_active_year');
-      const savedMo = localStorage.getItem('weddingpur_active_month');
-      if (savedYr) setSelectedYear(parseInt(savedYr, 10));
-      if (savedMo) setSelectedMonth(savedMo);
-    }
-  }, []);
-
-  // Sync clients to localStorage whenever updated, but skip the very first render cycle
-  useEffect(() => {
-    if (isMounted && typeof window !== 'undefined') {
-      localStorage.setItem('weddingpur_dispatch_clients', JSON.stringify(clients));
-    }
-  }, [clients, isMounted]);
 
   const [registeredCrew, setRegisteredCrew] = useState([]);
   const [clientToDelete, setClientToDelete] = useState(null);
@@ -169,22 +211,36 @@ export default function ClientDispatchConsole() {
   };
 
   const filteredClients = clients.filter(
-    (c) => c.year === selectedYear && c.month === selectedMonth
+    (c) => (c.year === selectedYear || c.bookingYear === selectedYear) && 
+           (c.month === selectedMonth || c.bookingMonth === selectedMonth)
   );
 
   const getMonthClientCount = (mKey) => {
-    return clients.filter((c) => c.year === selectedYear && c.month === mKey).length;
+    return clients.filter((c) => (c.year === selectedYear || c.bookingYear === selectedYear) && 
+                                 (c.month === mKey || c.bookingMonth === mKey)).length;
   };
 
   const handleYearTabChange = (yr) => {
     setSelectedYear(yr);
-    if (typeof window !== 'undefined') localStorage.setItem('weddingpur_active_year', yr);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('weddingpur_active_year', yr);
+      } catch (e) {
+        console.warn("localStorage quota exceeded:", e);
+      }
+    }
   };
 
   const handleMonthTabChange = (mKey) => {
     setSelectedMonth(mKey);
     setExpandedClientId(null);
-    if (typeof window !== 'undefined') localStorage.setItem('weddingpur_active_month', mKey);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('weddingpur_active_month', mKey);
+      } catch (e) {
+        console.warn("localStorage quota exceeded:", e);
+      }
+    }
   };
 
   const addDayRow = () => {
@@ -237,7 +293,7 @@ export default function ClientDispatchConsole() {
 
     if (editingClientId) {
       setClients(prev => prev.map(c => {
-        if (c.id === editingClientId) {
+        if ((c.id || c._id) === editingClientId) {
           const updated = {
             ...c,
             clientName: formData.clientName || "Unnamed Client",
@@ -344,8 +400,17 @@ export default function ClientDispatchConsole() {
     });
   };
 
+  const matchCrewName = (savedName) => {
+    if (!savedName || savedName === '—') return savedName;
+    const exactMatch = teamMembers.find(m => m.name === savedName);
+    if (exactMatch) return exactMatch.name;
+    const partialMatch = teamMembers.find(m => m.name.toLowerCase().includes(savedName.toLowerCase()) || savedName.toLowerCase().includes(m.name.toLowerCase()));
+    return partialMatch ? partialMatch.name : savedName;
+  };
+
   const openEditModal = (client) => {
-    setEditingClientId(client.id);
+    setEditingClientId(client.id || client._id);
+    const scheduleArr = client.schedule || client.scheduleByDay || [];
     setFormData({
       clientName: client.clientName || "",
       clientPhone: client.clientPhone || "",
@@ -354,9 +419,16 @@ export default function ClientDispatchConsole() {
       status: client.status || client.shootStatus || "SCHEDULED",
       year: client.year || client.bookingYear || selectedYear,
       month: client.month || client.bookingMonth || selectedMonth,
-      days: client.schedule && client.schedule.length > 0 ? client.schedule.map(d => ({
+      days: scheduleArr.length > 0 ? scheduleArr.map(d => ({
         ...d,
-        dayOfMonth: d.date ? d.date.split(' ')[0] : ''
+        dayOfMonth: d.date ? d.date.split(' ')[0] : '',
+        tradPhoto: matchCrewName(d.tradPhoto),
+        candidPhoto: matchCrewName(d.candidPhoto),
+        tradVideo: matchCrewName(d.tradVideo),
+        cinematic: matchCrewName(d.cinematic),
+        dronePilot: matchCrewName(d.dronePilot),
+        craneOperator: matchCrewName(d.craneOperator),
+        assistant: matchCrewName(d.assistant)
       })) : [
         { dayNo: 1, dayOfMonth: "", eventName: "Event", location: "", tradPhoto: "", candidPhoto: "", tradVideo: "", cinematic: "", dronePilot: "", craneOperator: "", assistant: "", reportingTime: "10:00 AM" }
       ]
@@ -381,7 +453,7 @@ export default function ClientDispatchConsole() {
       
       if (data.success) {
         setClients(prev => prev.map(c => {
-          if (c.id === clientId) {
+          if ((c.id || c._id) === clientId) {
             const updated = { ...c, pdfUrl: data.url };
             if (updated._id) {
                fetch('/api/wedding/clients', {
@@ -402,11 +474,65 @@ export default function ClientDispatchConsole() {
     }
   };
 
-  const confirmDeleteClient = () => {
+  const confirmDeleteClient = async () => {
     if (!clientToDelete) return;
-    const remaining = clients.filter((c) => c.id !== clientToDelete.id);
+    const clientId = clientToDelete.id || clientToDelete._id;
+    const remaining = clients.filter((c) => (c.id || c._id) !== clientId);
     setClients(remaining);
     setClientToDelete(null);
+
+    if (clientToDelete._id) {
+      try {
+        await fetch(`/api/wedding/clients?id=${clientToDelete._id}`, {
+          method: 'DELETE'
+        });
+      } catch (err) {
+        console.error("Failed to delete client from DB:", err);
+      }
+    }
+  };
+
+  // Helper to render role-sorted dropdown options
+  const renderCrewOptions = (roleKeywords) => {
+    const recommended = [];
+    const others = [];
+
+    teamMembers.forEach(m => {
+      const role = (m.craftRole || m.role || '');
+      const lowerRole = role.toLowerCase();
+      const isMatch = roleKeywords.some(keyword => {
+        if (Array.isArray(keyword)) {
+          return keyword.every(k => lowerRole.includes(k));
+        }
+        return lowerRole.includes(keyword);
+      });
+      
+      const optionLabel = `${m.name} (${role || 'Unspecified'})`;
+      const optionElem = <option key={m._id || m.id} value={m.name}>{optionLabel}</option>;
+
+      if (isMatch) {
+        recommended.push(optionElem);
+      } else {
+        others.push(optionElem);
+      }
+    });
+
+    return (
+      <>
+        <option value="">— Select —</option>
+        <option value="—">—</option>
+        {recommended.length > 0 && (
+          <optgroup label="Recommended Specialists">
+            {recommended}
+          </optgroup>
+        )}
+        {others.length > 0 && (
+          <optgroup label="Other Crew (Cross-Role)">
+            {others}
+          </optgroup>
+        )}
+      </>
+    );
   };
 
   return (
@@ -570,16 +696,16 @@ export default function ClientDispatchConsole() {
 
         {/* Serial-Wise Clients List */}
         {filteredClients.map((client, sIdx) => {
-          const isExpanded = expandedClientId === client.id;
+          const isExpanded = expandedClientId === (client.id || client._id);
           const serialNo = sIdx + 1;
 
           return (
             <div
-              key={client.id}
+              key={client.id || client._id}
               className="bg-[#121518] border border-[#2B2519] hover:border-[#D4AF37]/40 rounded-3xl overflow-hidden shadow-2xl transition-all"
             >
               <div
-                onClick={() => setExpandedClientId(isExpanded ? null : client.id)}
+                onClick={() => setExpandedClientId(isExpanded ? null : (client.id || client._id))}
                 className="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-[#15191F] transition-colors"
               >
                 <div className="flex items-center gap-4">
@@ -633,10 +759,10 @@ export default function ClientDispatchConsole() {
 
                   <label 
                     onClick={(e) => e.stopPropagation()}
-                    className={`p-2 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#8A7D5C] hover:text-emerald-400 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all duration-200 cursor-pointer inline-flex items-center justify-center ${uploadingPdfId === client.id ? 'animate-pulse' : ''}`}
+                    className={`p-2 rounded-xl border border-[#2B2519] bg-[#16191F] text-[#8A7D5C] hover:text-emerald-400 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all duration-200 cursor-pointer inline-flex items-center justify-center ${uploadingPdfId === (client.id || client._id) ? 'animate-pulse' : ''}`}
                     title="Upload Document / PDF"
                   >
-                    <input type="file" className="hidden" accept=".pdf,image/*" onChange={(e) => handlePdfUpload(e, client.id)} />
+                    <input type="file" className="hidden" accept=".pdf,image/*" onChange={(e) => handlePdfUpload(e, client.id || client._id)} />
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
@@ -704,7 +830,7 @@ export default function ClientDispatchConsole() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#1C2027]">
-                      {client.schedule.map((day) => (
+                      {(client.schedule || client.scheduleByDay || []).map((day) => (
                         <tr key={day.dayNo} className="hover:bg-[#151921] transition-colors">
                           <td className="p-3 font-mono font-bold text-white bg-[#121518]">{day.dayLabel || `Day ${day.dayNo}`}</td>
                           <td className="p-3 font-mono font-bold text-[#D4AF37]">{day.date}</td>
@@ -955,79 +1081,79 @@ export default function ClientDispatchConsole() {
                             
                             <div>
                               <label className="block text-[#8A7D5C] text-[9px] uppercase font-mono font-bold mb-1">Trad. Photo</label>
-                              <input
-                                type="text"
-                                placeholder="Type name..."
-                                value={day.tradPhoto}
+                              <select
+                                value={day.tradPhoto || ''}
                                 onChange={(e) => updateDayField(idx, 'tradPhoto', e.target.value)}
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
-                              />
+                              >
+                                {renderCrewOptions([['trad', 'photo'], 'all'])}
+                              </select>
                             </div>
 
                             <div>
                               <label className="block text-[#8A7D5C] text-[9px] uppercase font-mono font-bold mb-1">Candid Photo</label>
-                              <input
-                                type="text"
-                                placeholder="Type name..."
-                                value={day.candidPhoto}
+                              <select
+                                value={day.candidPhoto || ''}
                                 onChange={(e) => updateDayField(idx, 'candidPhoto', e.target.value)}
-                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-[#C5B388] text-[11px] focus:outline-none focus:border-[#D4AF37]"
-                              />
+                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
+                              >
+                                {renderCrewOptions(['candid', 'all'])}
+                              </select>
                             </div>
 
                             <div>
                               <label className="block text-[#8A7D5C] text-[9px] uppercase font-mono font-bold mb-1">Trad. Video</label>
-                              <input
-                                type="text"
-                                placeholder="Type name..."
-                                value={day.tradVideo}
+                              <select
+                                value={day.tradVideo || ''}
                                 onChange={(e) => updateDayField(idx, 'tradVideo', e.target.value)}
                                 className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
-                              />
+                              >
+                                {renderCrewOptions([['trad', 'video'], 'all'])}
+                              </select>
                             </div>
 
                             <div>
                               <label className="block text-[#8A7D5C] text-[9px] uppercase font-mono font-bold mb-1">Crane Operator</label>
-                              <input
-                                type="text"
-                                placeholder="Type name..."
-                                value={day.craneOperator}
+                              <select
+                                value={day.craneOperator || ''}
                                 onChange={(e) => updateDayField(idx, 'craneOperator', e.target.value)}
-                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-cyan-400 text-[11px] focus:outline-none focus:border-cyan-400"
-                              />
+                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
+                              >
+                                {renderCrewOptions(['crane'])}
+                              </select>
                             </div>
 
                             <div>
                               <label className="block text-[#8A7D5C] text-[9px] uppercase font-mono font-bold mb-1">Cinematic</label>
-                              <input
-                                type="text"
-                                placeholder="Type name..."
-                                value={day.cinematic}
+                              <select
+                                value={day.cinematic || ''}
                                 onChange={(e) => updateDayField(idx, 'cinematic', e.target.value)}
-                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-emerald-400 text-[11px] font-bold focus:outline-none focus:border-emerald-400"
-                              />
+                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
+                              >
+                                {renderCrewOptions(['cinema', 'all'])}
+                              </select>
                             </div>
 
                             <div>
                               <label className="block text-[#8A7D5C] text-[9px] uppercase font-mono font-bold mb-1">Drone Pilot</label>
-                              <input
-                                type="text"
-                                placeholder="Type name..."
-                                value={day.dronePilot}
+                              <select
+                                value={day.dronePilot || ''}
                                 onChange={(e) => updateDayField(idx, 'dronePilot', e.target.value)}
-                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-amber-400 text-[11px] focus:outline-none focus:border-amber-400"
-                              />
+                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
+                              >
+                                {renderCrewOptions(['drone'])}
+                              </select>
                             </div>
 
                             <div>
                               <label className="block text-[#8A7D5C] text-[9px] uppercase font-mono font-bold mb-1">Assistant</label>
-                              <input
-                                type="text"
-                                placeholder="Type name..."
-                                value={day.assistant}
+                              <select
+                                value={day.assistant || ''}
                                 onChange={(e) => updateDayField(idx, 'assistant', e.target.value)}
-                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-purple-400 text-[11px] focus:outline-none focus:border-purple-400"
-                              />
+                                className="w-full bg-[#121518] border border-[#2B2519] rounded-lg px-2 py-1.5 text-white text-[11px] focus:outline-none focus:border-[#D4AF37]"
+                              >
+                                {renderCrewOptions(['assist', 'production'])}
+                              </select>
                             </div>
 
                             <div>

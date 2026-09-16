@@ -26,21 +26,31 @@ export async function POST(req) {
     await dbConnect();
     const body = await req.json();
 
-    const count = await WeddingTeamMember.countDocuments();
+    if (!body.name) {
+      return NextResponse.json({ success: false, error: 'Name is required' }, { status: 400 });
+    }
+
+    // Find the maximum orderIndex to safely determine the next index
+    const lastMember = await WeddingTeamMember.findOne().sort({ orderIndex: -1 });
+    const nextOrderIndex = lastMember ? lastMember.orderIndex + 1 : 1;
 
     const newMember = await WeddingTeamMember.create({
-      orderIndex: count + 1,
+      orderIndex: nextOrderIndex,
       name: body.name?.trim(),
-      craftRole: body.craftRole?.trim(),
+      craftRole: (body.role || body.craftRole)?.trim() || 'Unspecified',
+      role: (body.role || body.craftRole)?.trim() || 'Unspecified',
       city: body.city?.trim() || 'Patna',
-      agreedRate: body.agreedRate?.trim() || '₹4,000 / Day',
-      phone: body.phone?.trim(),
-      whatsapp: body.phone?.trim(),
-      availabilityStatus: 'AVAILABLE',
+      agreedRate: (body.payoutRate || body.agreedRate)?.trim() || '₹4,000 / Day',
+      payoutRate: (body.payoutRate || body.agreedRate)?.trim() || '₹4,000 / Day',
+      phone: (body.mobile || body.phone)?.trim() || '',
+      mobile: (body.mobile || body.phone)?.trim() || '',
+      whatsapp: (body.whatsapp || body.mobile || body.phone)?.trim() || '',
+      availabilityStatus: body.availabilityStatus || 'AVAILABLE',
     });
 
     return NextResponse.json({ success: true, member: newMember }, { status: 201 });
   } catch (error) {
+    console.error('Error creating team member:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

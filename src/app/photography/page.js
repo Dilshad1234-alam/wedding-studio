@@ -110,9 +110,9 @@ export default function PortfolioPage() {
                         {item.location}
                       </span>
                       <h3 className="font-serif text-2xl italic">{item.title}</h3>
-                    </div>
                   </div>
-                </Link>
+                </div>
+              </div>
 
                 {/* Premium Card Details Below Image */}
                 <div className="pt-5 pb-3 px-2 sm:px-3 flex items-center justify-between gap-4">

@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useProtectedAction } from '@/hooks/useProtectedAction';
+import InlineVideoPlayer from '@/components/InlineVideoPlayer';
 
 export default function LandingPage({ initialData = null }) {
   const { handleProtectedAction } = useProtectedAction();
@@ -167,10 +168,10 @@ export default function LandingPage({ initialData = null }) {
           </p>
 
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center mt-6 sm:mt-8 w-full sm:w-auto px-4 sm:px-0">
-            <Link onClick={handleProtectedAction()} className="w-full sm:w-auto border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-6 sm:px-9 py-3.5 rounded-full text-[11px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/portfolio">
-              Explore Portfolio
+            <Link className="w-full sm:w-auto border border-[#2B2519] text-[#C5B388] hover:text-white hover:border-[#D4AF37] hover:bg-[#121518] px-6 sm:px-9 py-3.5 rounded-full text-[11px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase font-medium backdrop-blur-sm transition-all duration-300" href="/about">
+              Discover Our Story
             </Link>
-            <Link onClick={handleProtectedAction()} className="w-full sm:w-auto bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 px-6 sm:px-9 py-3.5 rounded-full text-[11px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase font-medium transition-all duration-300 font-black" href="/contact">
+            <Link className="w-full sm:w-auto bg-gradient-to-r from-[#D4AF37] to-[#B89018] text-black hover:from-[#F3E5AB] hover:to-[#D4AF37] shadow-lg shadow-[#D4AF37]/20 px-6 sm:px-9 py-3.5 rounded-full text-[11px] sm:text-xs tracking-[0.2em] sm:tracking-[0.25em] uppercase font-medium transition-all duration-300 font-black" href="/contact">
               Contact Us
             </Link>
           </div>
@@ -253,10 +254,10 @@ export default function LandingPage({ initialData = null }) {
               {/* Action Button */}
               <div className="pt-2">
                 <Link
-                  href="/about"
+                  href="/albums"
                   className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-[#3A311D] hover:border-[#D4AF37] bg-[#121518] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] text-[#C5B388] hover:text-black text-xs uppercase tracking-[0.2em] font-black transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95 cursor-pointer"
                 >
-                  OUR STORY & CREW
+                  Explore Albums
                 </Link>
               </div>
 
@@ -328,11 +329,11 @@ export default function LandingPage({ initialData = null }) {
         <div className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
           
           <div className="text-center mb-16">
-            <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
+            {/* <span className="text-[10px] uppercase tracking-[0.35em] text-[#D4AF37] bg-[#D4AF37]/10 border border-[#D4AF37]/20 px-3 py-1 rounded-full font-semibold inline-block mb-3">
               OUR OFFERINGS
-            </span>
+            </span> */}
             <h2 className="font-serif text-4xl sm:text-5xl text-white italic font-normal">
-              Studio Pillars & Services
+              Studio Pillars & Photography
             </h2>
             <div className="w-16 h-[1px] bg-[#5B6454]/40 mx-auto mt-4"></div>
           </div>
@@ -368,9 +369,9 @@ export default function LandingPage({ initialData = null }) {
                   <div className="mt-auto pt-2">
                     <Link 
                       className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-black hover:border-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] py-3 px-8 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm" 
-                      href={pillar.link || "/services"}
+                      href="/photography"
                     >
-                      Learn More
+                      Explore Gallery
                     </Link>
                   </div>
                 </div>
@@ -398,9 +399,9 @@ export default function LandingPage({ initialData = null }) {
                   <div className="mt-auto pt-2">
                     <Link 
                       className="inline-block border border-[#2B2519] text-[#C5B388] hover:text-black hover:border-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] py-3 px-8 rounded-full text-xs uppercase tracking-[0.2em] font-medium transition-all duration-300 shadow-sm" 
-                      href={pillar.link || "/services"}
+                      href="/photography"
                     >
-                      Learn More
+                      Explore Gallery
                     </Link>
                   </div>
                 </div>
@@ -431,41 +432,35 @@ export default function LandingPage({ initialData = null }) {
           </div>
 
           {/* MAIN FEATURED CINEMA HERO BANNER */}
-          <div className="w-full mb-8">
-            <a
-              href={safeConfig.cinematicFilms?.mainVideoUrl || "https://www.youtube.com/watch?v=3ImICPkGAkg"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative block w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] hover:border-[#D4AF37] hover:shadow-[0_0_40px_rgba(212,175,55,0.35)] transition-all duration-500 bg-black cursor-pointer"
+          <div className="w-full mb-8 relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] hover:border-[#D4AF37] hover:shadow-[0_0_40px_rgba(212,175,55,0.35)] transition-all duration-500 bg-black aspect-[16/9] sm:aspect-[21/9]">
+            <InlineVideoPlayer
+              videoUrl={safeConfig.cinematicFilms?.mainVideoUrl || "https://www.youtube.com/watch?v=3ImICPkGAkg"}
+              posterUrl={safeConfig.cinematicFilms?.mainThumb || "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%202.avif"}
+              className="group absolute inset-0 block w-full h-full cursor-pointer"
+              imageClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+              overlayClassName="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
             >
-              <img
-                src={safeConfig.cinematicFilms?.mainThumb || "https://ik.imagekit.io/Dilshad/Cafe/Yatrikit/wedding-studio/youtube%202.avif"}
-                alt="Nitika weds Abhinav | Darjeeling Pre Wedding"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-
               {/* YouTube Branding & Center Play Button */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-white pointer-events-none">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300 z-20">
                   <svg className="w-7 h-7 sm:w-8 sm:h-8 fill-current ml-1" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 </div>
                 <span className="text-[11px] tracking-[0.3em] uppercase mt-4 text-white/90 font-medium group-hover:text-white">
-                  Watch Teaser on YouTube ↗
+                  Play Video
                 </span>
               </div>
 
               {/* Bottom Film Title Tag */}
-              <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2">
+              <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-2 pointer-events-none">
                 <div>
                   <span className="text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">Featured Teaser • 4K Film</span>
                   <h3 className="font-serif text-2xl sm:text-3xl italic">Nitika weds Abhinav | Darjeeling Pre Wedding</h3>
                 </div>
                 <span className="text-xs text-white/70 tracking-wider">Streaming in 4K UHD</span>
               </div>
-            </a>
+            </InlineVideoPlayer>
           </div>
 
           {/* 4 GRID FILM TEASERS (Direct YouTube Cards) */}
@@ -484,24 +479,17 @@ export default function LandingPage({ initialData = null }) {
                 link: "https://www.youtube.com/watch?v=ioNQNyoh6eQ"
               }
             ]).map((film, idx) => (
-              <a
+              <div
                 key={idx}
-                href={film.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group bg-[#121518] border border-[#2B2519] rounded-3xl p-4 shadow-sm hover:shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:border-[#D4AF37] transition-all duration-300 block cursor-pointer"
+                className="group bg-[#121518] border border-[#2B2519] rounded-3xl p-4 shadow-sm hover:shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:border-[#D4AF37] transition-all duration-300 block"
               >
-                <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black mb-4">
-                  <img
-                    src={film.img}
-                    alt={film.couple}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-                  />
-                  {/* Dark Vignette Overlay */}
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
-
+                <InlineVideoPlayer
+                  videoUrl={film.link}
+                  posterUrl={film.img}
+                  title={film.couple}
+                >
                   {/* YouTube Badge Icon */}
-                  <div className="absolute center inset-0 flex items-center justify-center">
+                  <div className="absolute center inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-12 h-12 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                       <svg className="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
@@ -510,11 +498,10 @@ export default function LandingPage({ initialData = null }) {
                   </div>
 
                   {/* Watch on YouTube Pill */}
-                  <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white flex items-center gap-1.5 font-medium">
-                    <span>Watch on YouTube</span>
-                    <span>↗</span>
+                  <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white flex items-center gap-1.5 font-medium pointer-events-none">
+                    <span>Play Video</span>
                   </div>
-                </div>
+                </InlineVideoPlayer>
 
                 <div className="px-2 pb-2">
                   <h4 className="font-serif text-xl text-white italic mb-1 group-hover:text-[#D4AF37] transition-colors">
@@ -524,7 +511,7 @@ export default function LandingPage({ initialData = null }) {
                     {film.subtitle}
                   </p>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
 

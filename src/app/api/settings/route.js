@@ -19,7 +19,7 @@ const readData = () => {
       operationalCities: "Patna • Bodhgaya • Bhagalpur • Jaipur • Kolkata",
       instagramUrl: "https://instagram.com/weddingpur",
       youtubeUrl: "https://youtube.com/@weddingpur",
-      copyrightText: "© 2026 Weddingpur Studio & Cinema. All Rights Reserved."
+      copyrightText: "© 2026 LENSLOOM PRODUCTION. ALL RIGHTS RESERVED."
     };
   }
   const data = fs.readFileSync(filePath, 'utf8');

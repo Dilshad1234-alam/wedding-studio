@@ -93,10 +93,10 @@ export default function ContactPage() {
         <div className="w-[600px] h-[600px] bg-[#D4AF37]/5 blur-[140px] rounded-full"></div>
       </div>
 
-      <div className="relative w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="relative w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 flex flex-col lg:grid lg:grid-cols-12 gap-12 items-start">
         
         {/* LEFT COLUMN: Editorial Contact Information */}
-        <div className="lg:col-span-5 space-y-10">
+        <div className="lg:col-span-5 space-y-10 order-2 lg:order-1">
           <div>
             <span className="text-[11px] font-black uppercase tracking-[0.3em] text-[#D4AF37] block mb-2">
               CONNECT WITH US
@@ -228,7 +228,7 @@ export default function ContactPage() {
         </div>
 
         {/* RIGHT COLUMN: Inquiry Form Container */}
-        <div className="lg:col-span-7 bg-[#121518] border border-[#2B2519] rounded-3xl p-8 sm:p-10 shadow-2xl">
+        <div className="lg:col-span-7 bg-[#121518] border border-[#2B2519] rounded-3xl p-8 sm:p-10 shadow-2xl order-1 lg:order-2">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl font-serif italic text-white tracking-tight">
               Submit your queries

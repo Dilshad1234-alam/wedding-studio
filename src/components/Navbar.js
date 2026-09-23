@@ -121,6 +121,12 @@ export default function Navbar() {
                     <Link 
                       key={idx} 
                       href={link.href} 
+                      onClick={(e) => {
+                        if (isActive) {
+                          e.preventDefault();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                      }}
                       className={`px-3 xl:px-4 py-2 rounded-full text-[10px] xl:text-[11px] uppercase tracking-[0.2em] transition-all duration-300 font-medium border ${isActive ? 'bg-[#121518] text-white border-[#D4AF37] shadow-sm' : 'text-[#C5B388] border-transparent hover:border-[#D4AF37] hover:text-[#D4AF37] hover:bg-[#121518]'}`}
                     >
                       {link.name}
@@ -195,16 +201,25 @@ export default function Navbar() {
           </div>
 
           <div className="flex-1 overflow-y-auto py-8 px-6 space-y-2">
-            {navLinks.map((link) => (
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
                <Link 
                   key={link.name}
-                  onClick={() => setIsOpen(false)} 
+                  onClick={(e) => {
+                    if (isActive) {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                    setIsOpen(false);
+                  }} 
                   href={link.href} 
-                  className={`block px-4 py-4 text-xs sm:text-sm uppercase tracking-[0.25em] font-medium rounded-xl transition-all duration-300 ${pathname === link.href ? 'bg-[#121518] text-[#D4AF37] border border-[#D4AF37]/30' : 'text-[#C5B388] hover:text-[#D4AF37] hover:bg-[#121518]/50 border border-transparent'}`}
+                  className={`block px-4 py-4 text-xs sm:text-sm uppercase tracking-[0.25em] font-medium rounded-xl transition-all duration-300 ${isActive ? 'bg-[#121518] text-[#D4AF37] border border-[#D4AF37]/30' : 'text-[#C5B388] hover:text-[#D4AF37] hover:bg-[#121518]/50 border border-transparent'}`}
                >
                   {link.name}
                </Link>
-            ))}
+              );
+            })}
           </div>
 
           <div className="p-6 border-t border-[#2B2519] space-y-4 shrink-0">

@@ -35,7 +35,7 @@ export default function Footer() {
   const [settings, setSettings] = useState({
     instagramUrl: "https://www.instagram.com/lensloom_official?stkn=MTc3Zzl0c2c1dWo4ag%3D%3D",
     youtubeUrl: "https://www.youtube.com/@lensloom_official",
-    copyrightText: "© 2026 LensLoom Production. All rights reserved."
+    copyrightText: "© 2026 LENSLOOM PRODUCTION. All rights reserved."
   });
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function Footer() {
     fetchSettings();
 
     const handleStorageChange = (e) => {
-      if (e.key === 'weddingpur_settings_updated' && e.newValue) {
+      if (e.key === 'lensloom_settings_updated' && e.newValue) {
         try {
           setSettings(JSON.parse(e.newValue));
         } catch (err) {}
@@ -146,7 +146,17 @@ export default function Footer() {
         {/* Bottom Row */}
         <div className="border-t border-[#2B2519] pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] sm:text-xs text-[#C5B388] tracking-widest uppercase">
           <p className="text-center md:text-left">{settings.copyrightText}</p>
-          <p className="text-center md:text-right">Designed & Developed with passion</p>
+          <p className="text-center md:text-right">
+            Designed & Developed by{" "}
+            <a 
+              href="https://www.linkedin.com/in/dilshad-alam/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-[#D4AF37] transition-colors underline underline-offset-4"
+            >
+              Dilshad Alam
+            </a>
+          </p>
         </div>
 
       </div>

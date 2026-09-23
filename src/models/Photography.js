@@ -5,6 +5,8 @@ const PhotographySchema = new mongoose.Schema({
   location: { type: String },
   category: { type: String },
   imageUrl: { type: String, required: true },
+  description: { type: String },
+  gallery: { type: [String], default: [] },
 }, { timestamps: true, collection: 'photography' });
 
 export default mongoose.models.Photography || mongoose.model('Photography', PhotographySchema);

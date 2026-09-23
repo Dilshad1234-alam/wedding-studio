@@ -132,10 +132,10 @@ export default function ServicesPage() {
               </div>
 
               {/* 2. MAIN 2-COLUMN VIEW (LEFT: CREW & EXP | RIGHT: PRICE & DELIVERABLES) */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 pt-5 items-start">
+              <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-8 pt-5 items-start">
                 
                 {/* LEFT COLUMN (7 Cols / ~58%) */}
-                <div className="lg:col-span-7 space-y-4">
+                <div className="lg:col-span-7 space-y-4 order-2 lg:order-1">
                   {/* Title & Subtitle */}
                   <div>
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif italic text-white tracking-tight leading-snug">
@@ -210,7 +210,7 @@ export default function ServicesPage() {
                 </div>
 
                 {/* RIGHT COLUMN (5 Cols / ~42%) */}
-                <div className="lg:col-span-5 bg-[#090B0D] border border-[#202630] rounded-2xl p-5 space-y-4">
+                <div className="lg:col-span-5 bg-[#090B0D] border border-[#202630] rounded-2xl p-5 space-y-4 order-1 lg:order-2">
                   
                   {/* Price Header (Inline Compact) */}
                   <div className="flex items-end justify-between border-b border-[#1A2028] pb-3">

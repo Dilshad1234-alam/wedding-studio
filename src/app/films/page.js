@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useProtectedAction } from '@/hooks/useProtectedAction';
+import InlineVideoPlayer from '@/components/InlineVideoPlayer';
 
 export default function FilmsPage() {
   const { handleProtectedAction } = useProtectedAction();
@@ -115,51 +116,46 @@ export default function FilmsPage() {
         </div>
 
         {currentHero && (
-          <a
-            key={currentHero.title}
-            href={currentHero.youtubeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handleProtectedAction()}
-            className="w-full group relative block aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-[#121518] cursor-pointer animate-fadeIn transition-all duration-700 mb-12"
-          >
-            <img
-              src={currentHero.img}
-              alt={currentHero.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"></div>
-
-            {/* Animated Center Play Button */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white pb-8 sm:pb-0">
-              <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-white ml-1" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-              <span className="hidden sm:block text-[11px] uppercase tracking-[0.3em] mt-4 font-medium text-white/90 group-hover:text-white">
-                Watch The Film on YouTube ↗
-              </span>
-            </div>
-
-            {/* Dynamic Film Meta Info */}
-            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-1 sm:gap-2">
-              <div className="flex-1 pr-2">
-                <span className="text-[9px] sm:text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">
-                  {currentHero.tag}
+          <div className="w-full mb-12 relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#2B2519] bg-[#121518] aspect-[16/9] sm:aspect-[21/9]">
+            <InlineVideoPlayer
+              key={currentHero.title}
+              videoUrl={currentHero.youtubeUrl}
+              posterUrl={currentHero.img}
+              className="group absolute inset-0 block w-full h-full cursor-pointer animate-fadeIn transition-all duration-700"
+              imageClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
+              overlayClassName="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"
+            >
+              {/* Animated Center Play Button */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-white pb-8 sm:pb-0 pointer-events-none">
+                <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 fill-white ml-1" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+                <span className="hidden sm:block text-[11px] uppercase tracking-[0.3em] mt-4 font-medium text-white/90 group-hover:text-white">
+                  Play Video
                 </span>
-                <h3 className="font-serif text-xl sm:text-4xl italic leading-tight">
-                  {currentHero.title}
-                </h3>
-                <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70 mt-1">
-                  {currentHero.location}
-                </p>
               </div>
-              <span className="text-[10px] sm:text-xs text-white/80 tracking-wider font-mono shrink-0">
-                Runtime: {currentHero.duration}
-              </span>
-            </div>
-          </a>
+
+              {/* Dynamic Film Meta Info */}
+              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between text-white gap-1 sm:gap-2 pointer-events-none">
+                <div className="flex-1 pr-2">
+                  <span className="text-[9px] sm:text-[10px] tracking-widest uppercase text-[#D4AF37] font-semibold block mb-1">
+                    {currentHero.tag}
+                  </span>
+                  <h3 className="font-serif text-xl sm:text-4xl italic leading-tight">
+                    {currentHero.title}
+                  </h3>
+                  <p className="text-[10px] sm:text-[11px] uppercase tracking-wider text-white/70 mt-1">
+                    {currentHero.location}
+                  </p>
+                </div>
+                <span className="text-[10px] sm:text-xs text-white/80 tracking-wider font-mono shrink-0">
+                  Runtime: {currentHero.duration}
+                </span>
+              </div>
+            </InlineVideoPlayer>
+          </div>
         )}
       </section>
 
@@ -167,32 +163,26 @@ export default function FilmsPage() {
       <section className="w-full max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 w-full">
           {filteredFilms.map((film, idx) => (
-            <a
+            <div
               key={idx}
-              href={film.youtubeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleProtectedAction()}
               className="group bg-[#121518] rounded-3xl p-5 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40/50 transition-all duration-500 block"
             >
-              <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black mb-5">
-                <img
-                  src={film.img}
-                  alt={film.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-                />
-                
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors"></div>
-
-                <div className="absolute top-3.5 left-3.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-medium">
+              <InlineVideoPlayer
+                videoUrl={film.youtubeUrl}
+                posterUrl={film.img}
+                title={film.title}
+                className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-black mb-5 group cursor-pointer"
+                overlayClassName="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors"
+              >
+                <div className="absolute top-3.5 left-3.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-medium pointer-events-none">
                   {film.quality}
                 </div>
 
-                <div className="absolute top-3.5 right-3.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-medium">
+                <div className="absolute top-3.5 right-3.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-medium pointer-events-none">
                   {film.duration}
                 </div>
 
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="w-12 h-12 rounded-full bg-red-600/90 group-hover:bg-red-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                     <svg className="w-5 h-5 fill-white ml-0.5" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
@@ -200,11 +190,10 @@ export default function FilmsPage() {
                   </div>
                 </div>
 
-                <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] text-white flex items-center gap-1.5 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span>Stream on YouTube</span>
-                  <span>↗</span>
+                <div className="absolute bottom-3 right-3 bg-black/70 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] text-white flex items-center gap-1.5 font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <span>Play Video</span>
                 </div>
-              </div>
+              </InlineVideoPlayer>
 
               <div className="px-2 pb-2 flex items-start justify-between gap-4">
                 <div>
@@ -220,7 +209,7 @@ export default function FilmsPage() {
                   ↗
                 </div>
               </div>
-            </a>
+            </div>
           ))}
         </div>
 

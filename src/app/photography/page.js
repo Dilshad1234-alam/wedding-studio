@@ -26,7 +26,7 @@ export default function PortfolioPage() {
             else if (item.category === 'Haldi & Sangeet') catKey = 'haldi-sangeet';
             
             return {
-              id: item.id || Math.random().toString(),
+              id: item._id || item.id,
               title: item.title,
               category: catKey,
               location: item.location,
@@ -90,12 +90,13 @@ export default function PortfolioPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {filteredItems.map((item) => (
-              <div
+              <Link
+                href={`/photography/${item.id}`}
                 key={item.id}
-                className="group flex flex-col justify-between bg-[#121518] rounded-3xl p-3 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40 transition-all duration-500"
+                className="group flex flex-col justify-between bg-[#121518] rounded-3xl p-3 border border-[#2B2519] shadow-xl hover:shadow-xl hover:border-[#D4AF37]/40 transition-all duration-500 block"
               >
                 {/* Strict aspect ratio container locks every card to the identical height */}
-                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#121518]">
+                <div className="relative block aspect-[4/5] w-full rounded-2xl overflow-hidden bg-[#121518]">
                   <img
                     src={item.img}
                     alt={item.title}
@@ -111,7 +112,7 @@ export default function PortfolioPage() {
                       <h3 className="font-serif text-2xl italic">{item.title}</h3>
                     </div>
                   </div>
-                </div>
+                </Link>
 
                 {/* Premium Card Details Below Image */}
                 <div className="pt-5 pb-3 px-2 sm:px-3 flex items-center justify-between gap-4">
@@ -123,15 +124,14 @@ export default function PortfolioPage() {
                       {item.title}
                     </h4>
                   </div>
-                  <Link 
+                  <div 
                     aria-label="View Project" 
                     className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[#D4AF37]/30 bg-[#0B0D0E] flex items-center justify-center text-[#D4AF37] hover:bg-gradient-to-r hover:from-[#F3E5AB] hover:to-[#D4AF37] hover:text-black hover:border-transparent hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all duration-300 text-sm sm:text-base group-hover:scale-110" 
-                    href="/contact"
                   >
                     ↗
-                  </Link>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

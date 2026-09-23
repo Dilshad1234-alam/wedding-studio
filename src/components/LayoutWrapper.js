@@ -28,7 +28,7 @@ export default function LayoutWrapper({ children }) {
           href="https://wa.me/917209886900"
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-full shadow-[0_4px_20px_rgba(16,185,129,0.3)] hover:scale-110 hover:shadow-[0_8px_25px_rgba(16,185,129,0.5)] transition-all duration-300 border border-[#D4AF37]/50 hover:border-[#D4AF37]"
+          className="fixed bottom-20 right-6 md:bottom-24 md:right-8 z-[99] flex items-center justify-center w-14 h-14 bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-full shadow-[0_4px_20px_rgba(16,185,129,0.3)] hover:scale-110 hover:shadow-[0_8px_25px_rgba(16,185,129,0.5)] transition-all duration-300 border border-[#D4AF37]/50 hover:border-[#D4AF37]"
           aria-label="Contact us on WhatsApp"
         >
           <svg className="w-7 h-7 text-white fill-current translate-x-[1px] translate-y-[1px]" viewBox="0 0 24 24">

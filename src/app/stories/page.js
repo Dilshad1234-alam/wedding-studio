@@ -26,7 +26,8 @@ export default function StoriesPage() {
             description: s.desc,
             venue: 'Patna, Bihar', 
             date: 'Sacred Union',
-            photos: [s.mainImage, ...(s.thumbnails || [])].filter(Boolean)
+            mainCoverImageUrl: s.mainImage,
+            thumbnails: (s.thumbnails || []).filter(url => typeof url === 'string' && url.trim().length > 5)
           }));
           setStories(mapped);
         }
@@ -66,41 +67,60 @@ export default function StoriesPage() {
         </p>
       </section>
 
-      {/* 2. EXACT ORIGINAL STORY CARDS */}
-      <main className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12 pb-24 space-y-16">
+      {/* 2. REFINED STORY CARDS WITH COVER LAYOUT */}
+      <main className="max-w-7xl mx-auto px-6 pb-24 space-y-24">
         {stories.map((story) => (
           <div
             key={story.id}
-            className="bg-[#121518] border border-[#20242C] rounded-[32px] p-8 sm:p-12 lg:p-16 space-y-6 shadow-2xl"
+            className="space-y-8"
           >
             {/* Tag & Couple Title */}
-            <div className="space-y-1">
-              <span className="text-[10px] font-mono font-bold tracking-wider text-[#D4AF37] uppercase block">
+            <div className="space-y-2">
+              <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.2em] text-[#D4AF37] uppercase block">
                 📍 {story.venue || "PATNA, BIHAR"} • {story.date || "SACRED UNION"}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-serif text-white tracking-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif italic text-white tracking-wide">
                 {story.title}
               </h2>
             </div>
 
             {/* Narrative Description */}
-            <p className="text-xs sm:text-[13px] text-[#A89D84] leading-relaxed font-light">
+            <p className="text-[13px] sm:text-sm text-[#A89D84] leading-loose font-light max-w-4xl">
               {story.description}
             </p>
 
-            {/* Photo Grid (Matching Original: 4 columns across, wrapping naturally) */}
-            {story.photos && story.photos.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-2">
-                {story.photos.map((imgUrl, idx) => (
+            {/* Main Cover Image */}
+            {story.mainCoverImageUrl && story.mainCoverImageUrl.length > 5 && (
+              <div className="w-full aspect-[21/9] sm:aspect-video rounded-2xl overflow-hidden bg-[#08090A] border border-[#1C1F26] group relative shadow-2xl">
+                <img
+                  src={story.mainCoverImageUrl}
+                  alt={`${story.title} Main Cover`}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+                  onError={(e) => {
+                    e.target.parentElement.style.display = 'none';
+                  }}
+                />
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-700" />
+              </div>
+            )}
+
+            {/* Thumbnails Grid */}
+            {story.thumbnails && story.thumbnails.length > 0 && (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+                {story.thumbnails.map((imgUrl, idx) => (
                   <div
                     key={idx}
-                    className="h-44 sm:h-48 rounded-2xl overflow-hidden bg-black border border-[#1F232B] group"
+                    className="aspect-[4/3] rounded-xl overflow-hidden bg-[#08090A] border border-[#1C1F26] group cursor-pointer relative shadow-lg"
                   >
                     <img
                       src={imgUrl}
-                      alt={`${story.title} capture ${idx + 1}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      alt={`${story.title} thumbnail ${idx + 1}`}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                      onError={(e) => {
+                        e.target.parentElement.style.display = 'none';
+                      }}
                     />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
                   </div>
                 ))}
               </div>
